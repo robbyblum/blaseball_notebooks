@@ -21,3 +21,4 @@ numpy==1.19.1
 pyparsing==2.4.7
 kiwisolver==1.2.0
 matplotlib==3.3.1
+tabulate==0.8.7
