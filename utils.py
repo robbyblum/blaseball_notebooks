@@ -97,3 +97,11 @@ def vibe_to_string(vibe):
     else:
         vibe_str = "▼▼▼ Honestly Terrible"
     return vibe_str
+
+def get_game_by_team(games, team):
+    if isinstance(games, dict):
+        games = games.values()
+    games = [x for x in games if x._away_team_id == team.id or x._home_team_id == team.id]
+    if len(games) == 0:
+        return None
+    return games[0]

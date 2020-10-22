@@ -1,7 +1,8 @@
 """
-Helper functions to display Player info in Junyper Notebooks
+Helper functions to display Player info in Jupyter Notebooks
 """
 from blaseball_mike.models import SimulationData
+#from blaseball_reference.api import
 from IPython.display import HTML, display
 import tabulate
 from utils import *
@@ -29,15 +30,21 @@ def display_vibes(player, day=None):
     print(vibe_to_string(vibe))
 
 def display_season_vibes(player):
-    # TODO: list of players & average
     days = range(1, 100)
-    vibes = [player.get_vibe(x) for x in days]
+    if isinstance(player, list):
+        vibes = [mean([y.get_vibe(x) for y in player]) for x in days]
+    else:
+        vibes = [player.get_vibe(x) for x in days]
 
     pyplot.plot(days, vibes)
-    pyplot.axline(xy1=(1, 0.1), slope=0)
-    pyplot.axline(xy1=(1,-0.1), slope=0)
+    pyplot.axline(xy1=(1, 0.8), slope=0, linestyle=":", color="#888")
+    pyplot.axline(xy1=(1, 0.4), slope=0, linestyle=":", color="#888")
+    pyplot.axline(xy1=(1, 0.1), slope=0, linestyle=":", color="#888")
+    pyplot.axline(xy1=(1, -0.1), slope=0, linestyle=":", color="#888")
+    pyplot.axline(xy1=(1, -0.4), slope=0, linestyle=":", color="#888")
+    pyplot.axline(xy1=(1,-0.8), slope=0, linestyle=":", color="#888")
+    pyplot.yticks(ticks=[0.9, 0.6, 0.25, 0, -0.25, -0.6, -0.9], labels=["Most Excellent", "Excellent", "Quality", "Neutral", "Less Than Ideal", "Far Less Than Ideal", "Honestly Terrible"])
     pyplot.xlabel("Day")
-    pyplot.ylabel("Vibe")
     pyplot.show()
 
 # STLAT DISPLAYS

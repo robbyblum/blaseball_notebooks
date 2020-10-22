@@ -1,5 +1,5 @@
 """
-Helper functions to display things nicely in Junyper Notebooks
+Helper functions to display things nicely in Jupyter Notebooks
 """
 from blaseball_mike.models import Player, Team
 
