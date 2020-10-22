@@ -20,6 +20,9 @@ def display_game_results(game):
 
     weather_style = ""
 
+    home_back_color = game.home_team_color + "80"
+    away_back_color = game.away_team_color + "80"
+
     if game.shame:
         game_status = "SHAME"
         game_status_style = "background:#800878;"
@@ -37,7 +40,7 @@ def display_game_results(game):
         game_status_style = "background:green;"
 
     if len(game.outcomes) > 1:
-        outcomes = "\n".join(game.outcomes)
+        outcomes = "</br>".join(game.outcomes)
     elif len(game.outcomes) > 0:
         outcomes = game.outcomes[0]
     else:
@@ -56,7 +59,7 @@ def display_game_results(game):
 
 
     html = f"""
-    <div style="font-family:"Open Sans","Helvetica Neue",sans-serif;display:flex;flex-direction:column;border-radius:5px;background-color:#111;width:390px;font-size:1rem;font-weight:400;line-height:1.5;color:#fff;box-sizing:border-box;">
+    <div style="display:flex;flex-direction:column;border-radius:5px;background-color:#111;width:390px;font-size:1rem;font-weight:400;line-height:1.5;color:#fff;box-sizing:border-box;">
         <div style="height:32px;display:flex;justify-content:space-between;flex-direction:row;align-items:center;font-size:14px;background:rgba(30,30,30,.64)">
             <div style=" display:flex;flex-direction:row;height:32px">
                 <div style="{game_status_style}display:flex;padding:0 8px;height:100%;border-radius:5px;align-items:center">
@@ -75,7 +78,7 @@ def display_game_results(game):
                 <div style="color:{game.away_team_secondary_color};font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
                     {game.away_team_nickname}
                 </div>
-                <div style="{away_win}display:flex;font-size:24px;font-family:"Lora","Courier New",monospace,serif;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;">
+                <div style="{away_win}display:flex;font-size:24px;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;margin:0 8px 0 0;">
                     {game.away_score}
                 </div>
             </div>
@@ -86,11 +89,19 @@ def display_game_results(game):
                 <div style="color:{game.home_team_secondary_color};font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
                     {game.home_team_nickname}
                 </div>
-                <div style="{home_win}display:flex;font-size:24px;font-family:"Lora","Courier New",monospace,serif;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;">
+                <div style="{home_win}display:flex;font-size:24px;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;margin:0 8px 0 0;">
                     {game.home_score}
                 </div>
             </div>
-            <div style="font-size:14px;">
+            <div style="display:flex;flex-direction:row;align-items:center;justify-content:space-evenly;padding-top:20px;">
+                <div style="background:{away_back_color};align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
+                    {game.away_pitcher_name}
+                </div>
+                <div style="background:{home_back_color};align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
+                    {game.home_pitcher_name}
+                </div>
+            </div>
+            <div style="font-size:12px;line-height:24px;height:100%;text-align:center;padding:5px 0;">
                 {outcomes}
             </div>
         </div>

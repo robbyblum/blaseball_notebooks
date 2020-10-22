@@ -2,7 +2,11 @@
 Helper functions to display things nicely in Jupyter Notebooks
 """
 from blaseball_mike.models import Player, Team
+from IPython.display import HTML, display
+import tabulate
 
+def _display_table(header, table):
+    display(HTML(tabulate.tabulate(table, headers=header, tablefmt='html')))
 
 def _display_name(value):
     if isinstance(value, Player):
