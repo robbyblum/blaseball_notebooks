@@ -14,9 +14,11 @@ def _display_name(value):
     elif isinstance(value, Team):
         print(value.full_name)
 
-def display_name(values):
+def display_name(values, pre="", post=""):
     if isinstance(values, list):
+        print(pre)
         for x in values:
             _display_name(x)
+        print(post)
     else:
-        _display_name(values)
+        _display_name(pre, values, post)

@@ -2,7 +2,13 @@ from blaseball_mike.models import Player
 from blaseball_mike.tables import Modification
 from statistics import mean
 
+# The average stats of a rerolled player
 NEW_PLAYER = {"batting": 2, "pitching": 1.5, "baserunning": 2.5, "defense": 2.5}
+
+# Teams that cannot be the targets or recipients of blessings
+INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
+                 "Baltimore Crabs": "8d87c468-699a-47a8-b40d-cfb73a5660ad",
+                 "The Shelled One's Pods": "40b9ec2a-cb43-4dbb-b836-5accb62e7c20"}
 
 def worst_lineup(team, num=1):
     """
@@ -98,6 +104,29 @@ def vibe_to_string(vibe):
         vibe_str = "▼▼▼ Honestly Terrible"
     return vibe_str
 
+def vibe_to_color(vibe):
+    if vibe > 0.8:
+        vibe_str = "#15d400"
+    elif vibe > 0.4:
+        vibe_str = "#5de04f"
+    elif vibe > 0.1:
+        vibe_str = "#8fdb88"
+    elif vibe > -0.1:
+        vibe_str = "#d1d1d1"
+    elif vibe > -0.4:
+        vibe_str = "#d97373"
+    elif vibe > -0.8:
+        vibe_str = "#de3c3c"
+    else:
+        vibe_str = "#e00000"
+    return vibe_str
+
+def stars_to_string(stars):
+    star_str = "★" * int(stars)
+    if stars % 1 != 0:
+        star_str += "☆"
+    return star_str
+
 def get_game_by_team(games, team):
     if isinstance(games, dict):
         games = games.values()
@@ -105,3 +134,9 @@ def get_game_by_team(games, team):
     if len(games) == 0:
         return None
     return games[0]
+
+def parse_emoji(val):
+    try:
+        return chr(int(val, 16))
+    except ValueError:
+        return val

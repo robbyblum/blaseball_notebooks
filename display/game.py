@@ -1,22 +1,15 @@
 ## GAME DISPLAY
 
-from blaseball_mike.models import Player, Team, Game, SimulationData
+from blaseball_mike.models import Game
 from IPython.display import HTML, display
-import tabulate
 from utils import *
-
-def _emoji_parse(val):
-    try:
-        return chr(int(val, 16))
-    except ValueError:
-        return val
 
 def display_game_results(game):
     if not isinstance(game, Game):
         return
 
-    away_emoji = _emoji_parse(game.away_team_emoji)
-    home_emoji = _emoji_parse(game.home_team_emoji)
+    away_emoji = parse_emoji(game.away_team_emoji)
+    home_emoji = parse_emoji(game.home_team_emoji)
 
     weather_style = ""
 
@@ -94,10 +87,10 @@ def display_game_results(game):
                 </div>
             </div>
             <div style="display:flex;flex-direction:row;align-items:center;justify-content:space-evenly;padding-top:20px;">
-                <div style="background:{away_back_color};align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
+                <div style="background:{away_back_color};font-size:14px;align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
                     {game.away_pitcher_name}
                 </div>
-                <div style="background:{home_back_color};align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
+                <div style="background:{home_back_color};font-size:14px;align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
                     {game.home_pitcher_name}
                 </div>
             </div>
