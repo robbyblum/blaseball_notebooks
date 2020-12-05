@@ -1,20 +1,22 @@
 from blaseball_mike.models import Player, Team, Game, Idol
-from blaseball_mike.tables import Modification
 from statistics import mean
 from matplotlib import pyplot
 from utils import *
+
 
 def horde_hallucinations(team, amount):
     """
     Improve Team Baserunning from between -8% and +24%
     Configurable by setting amount to between -0.08 and 0.24
     """
-    changes = []
-    for player in team.lineup:
-        new_player = player.simulated_copy(buffs={'baserunning_rating': amount})
-        changes.append((player.name, new_player.defense_stars, player.defense_stars))
+    current = team.lineup
 
-    return changes
+    new = improve_team_baserunning(team, amount)
+    table = pandas.DataFrame([{"Name":x.name, "old_baserunning_stars":x.baserunning_rating * 5} for x in current]).set_index("Name")
+    table = table.join(pandas.DataFrame([{"Name": x.name, "new_baserunning_stars": x.baserunning_rating * 5} for x in new]).set_index("Name"))
+    table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_baserunning_stars - row.old_baserunning_stars, axis=1)
+
+    return table
 
 def katamari(team, amount):
     """
@@ -247,7 +249,7 @@ def new_recruit(team, bat_star, run_star, def_star):
     """
     Calculate average star rating change if adding an additional batter with star values of bat_star, run_star, and def_star
     """
-    base_lineup = [x for x in team.lineup if Modification.SHELLED not in x.perm_attr]
+    base_lineup = [x for x in team.lineup]
 
     size = len(base_lineup)
 
@@ -265,8 +267,8 @@ def downsizing(team, player=None):
         worst = min(team.lineup, key=lambda x: x.batting_rating)
     else:
         worst = player
-    new_lineup = [x for x in team.lineup if x.id != worst.id and Modification.SHELLED not in x.perm_attr]
-    base_lineup = [x for x in team.lineup if Modification.SHELLED not in x.perm_attr]
+    new_lineup = [x for x in team.lineup if x.id != worst.id]
+    base_lineup = [x for x in team.lineup]
 
     bat_stars = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in base_lineup])
     baserun_stars = mean([x.baserunning_stars for x in new_lineup]) - mean([x.baserunning_stars for x in base_lineup])

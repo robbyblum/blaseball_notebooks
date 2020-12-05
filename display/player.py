@@ -2,10 +2,10 @@
 Helper functions to display Player info in Jupyter Notebooks
 """
 from blaseball_mike.models import SimulationData, Player
-from blaseball_reference.api import player_stats
+from statistics import mean
+import blaseball_reference.api as datablase
 from IPython.display import HTML, display
 from utils import *
-from .general import _display_table
 from matplotlib import pyplot
 
 def display_vibes(player, day=None):
@@ -33,19 +33,16 @@ def display_season_vibes(player):
     pyplot.xlabel("Day")
     pyplot.show()
 
-def display_stars(values):
-    header = ["Name", "Batting Stars", "Pitching Stars", "Baserunning Stars", "Defense Stars"]
+def get_stars(values):
     if not isinstance(values, (Player, list)):
         return
 
     if not isinstance(values, list):
         values = [values]
+    return pandas.DataFrame([{"Name":x.name, "Batting": x.batting_stars, "Pitching":x.pitching_stars,
+                              "Baserunning":x.baserunning_stars, "Defense":x.defense_stars} for x in values]).set_index("Name")
 
-    _display_table(header,
-                   [[x.name, x.batting_stars, x.pitching_stars, x.baserunning_stars, x.defense_stars] for x in values])
-
-def display_batting_stats(values, season=None):
-    header = ["Name", "PA", "AB", "H", "2B", "3B", "HR", "RBI", "BB", "SO", "BA", "BA/RISP", "OBP", "SLG", "OPS", "TB", "GDP", "SH"]
+def get_batting_stats(values, season=None):
     if not isinstance(values, (Player, list)):
         return
 
@@ -57,16 +54,10 @@ def display_batting_stats(values, season=None):
     if season:
         season = season - 1
 
-    ret = player_stats(ids, "batting", season)
-    _display_table(header,
-        [[x["player_name"], x["plate_appearances"], x["at_bats"], x["hits"], x["doubles"],
-          x["triples"], x["home_runs"], x["runs_batted_in"], x["walks"], x["strikeouts"],
-          x["batting_average"], x["batting_average_risp"], x["on_base_percentage"], x["slugging"], x["on_base_slugging"],
-          x["total_bases"], x["gidps"], x["sacrifices"]]
-         for x in ret])
+    ret = datablase.player_stats(ids, "batting", season)
+    return pandas.DataFrame(ret).set_index("player_id")
 
-def display_pitching_stats(values, season=None):
-    header = ["Name", "ERA", "IP", "H", "R", "HR", "BB", "SO", "SO/9"]
+def get_pitching_stats(values, season=None):
     if not isinstance(values, (Player, list)):
         return
 
@@ -78,61 +69,68 @@ def display_pitching_stats(values, season=None):
     if season:
         season = season - 1
 
-    ret = player_stats(ids, "pitching", season)
-    _display_table(header,
-        [[x["player_id"], x["era"], x["innings"], x["hits_allowed"], x["runs_allowed"], x["hrs_allowed"], x["walks"],
-          x["strikeouts"], x["k_per_9"]]
-         for x in ret])
+    ret = datablase.player_stats(ids, "pitching", season)
+    return pandas.DataFrame(ret).set_index("player_id")
 
-def display_batting_stlats(values):
-    header = ["Name", "Batting Rating", "Divinity", "Martyrdom", "Moxie", "Musclitude", "Patheticism", "Thwackability"]
+def get_batting_stlats(values):
     if not isinstance(values, (Player, list)):
         return
 
     if not isinstance(values, list):
         values = [values]
 
-    _display_table(header,
-        [[x.name, x.hitting_rating, x.divinity, x.martyrdom, x.moxie, x.musclitude, x.patheticism, x.thwackability]
-         for x in values])
+    return pandas.DataFrame([{"Name": x.name, "Batting Rating": x.hitting_rating, "Buoyancy":x.buoyancy,
+                                       "Divinity": x.divinity, "Martyrdom": x.martyrdom, "Moxie": x.moxie,
+                                       "Musclitude": x.musclitude, "Patheticism": x.patheticism,
+                                       "Thwackability": x.thwackability} for x in values]).set_index("Name")
 
-def display_pitching_stlats(values):
-    header = ["Name", "Pitching Rating", "Coldness", "Overpowerment", "Ruthlessness", "Shakespearianism", "Suppression", "Unthwackability", "Number of Fingers"]
+def get_pitching_stlats(values):
     if not isinstance(values, (Player, list)):
         return
 
     if not isinstance(values, list):
         values = [values]
 
-    _display_table(header,
-        [[x.name, x.pitching_rating, x.coldness, x.overpowerment, x.ruthlessness, x.shakespearianism, x.suppression,
-          x.unthwackability, x.total_fingers] for x in values])
+    return pandas.DataFrame([{"Name": x.name, "Pitching Rating": x.pitching_rating, "Coldness": x.coldness,
+                                       "Overpowerment": x.overpowerment, "Ruthlessness": x.ruthlessness,
+                                       "Shakespearianism": x.shakespearianism, "Suppression": x.suppression,
+                                       "Unthwackability": x.unthwackability,
+                                       "Number of Fingers": x.total_fingers} for x in values]).set_index("Name")
 
-def display_baserunning_stlats(values):
-    header = ["Name", "Baserunning Rating", "Base Thirst", "Continuation", "Ground Friction", "Indulgence", "Laserlikeness"]
+def get_baserunning_stlats(values):
     if not isinstance(values, (Player, list)):
         return
 
     if not isinstance(values, list):
         values = [values]
 
-    _display_table(header,
-        [[x.name, x.baserunning_rating, x.base_thirst, x.continuation, x.ground_friction, x.indulgence, x.laserlikeness]
-         for x in values])
+    return pandas.DataFrame([{"Name": x.name, "Baserunning Rating": x.baserunning_rating,
+                                       "Base Thirst": x.base_thirst, "Continuation": x.continuation,
+                                       "Ground Friction": x.ground_friction, "Indulgence": x.indulgence,
+                                       "Laserlikeness": x.laserlikeness} for x in values]).set_index("Name")
 
-
-def display_defense_stlats(values):
-    header = ["Name", "Defense Rating", "Anticapitalism", "Chasiness", "Omniscience", "Tenaciousness", "Watchfulness"]
+def get_defense_stlats(values):
     if not isinstance(values, (Player, list)):
         return
 
     if not isinstance(values, list):
         values = [values]
 
-    _display_table(header,
-        [[x.name, x.defense_rating, x.anticapitalism, x.chasiness, x.omniscience, x.tenaciousness, x.watchfulness]
-         for x in values])
+    return pandas.DataFrame([{"Name": x.name, "Defense Rating": x.defense_rating,
+                                       "Anticapitalism": x.anticapitalism, "Chasiness": x.chasiness,
+                                       "Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
+                                       "Watchfulness": x.watchfulness} for x in values]).set_index("Name")
 
+def _html_attr(attr_list, border_color):
+    ret = ""
+    for attr in attr_list:
+        ret += \
+            f"""
+            <div style="font-weight:700;display:flex;margin-right:10px;padding-left:5px;padding-right:5px;height:32px;border-radius:5px;align-items:center;justify-content:center;color:{attr.color};background:{attr.background} none repeat scroll 0% 0%;border:2px solid {border_color}">
+                {attr.title}
+            </div>
+        """
+    return ret
 
 def display_player(player, day=None):
     if not isinstance(player, Player):
@@ -142,34 +140,70 @@ def display_player(player, day=None):
         sim = SimulationData.load()
         day = sim.day + 1
 
-    #TODO:  TEAM (somehow)
-    #       ATTRIBUTES (somehow)
-    #       SOULSONG (this one easy)
+    retired = "RETIRED" in player._perm_attr_ids
 
-    soul_name = "Soulscream"
-    soul_color = "#F00"
+    player_team = ""
+    if player.league_team and not retired:
+        player_team = f"""
+            <div style="display:flex;flex-direction:row;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="font-size:18px;display:flex;align-items:center;border-radius:50%;height:30px;width:30px;justify-content:center;flex-shrink:0;background-color:{player.league_team.main_color};">
+                    {parse_emoji(player.league_team.emoji)}
+                </div>
+                <div style="padding:0 10px;">
+                    {player.league_team.full_name}
+                </div>
+            </div>"""
+
+    if retired or "COFFEE_EXIT" in player._perm_attr_ids:
+        soul_name = "Soulsong"
+    else:
+        soul_name = "Soulscream"
+
+    if retired:
+        soul_color = "#5988ff"
+    else:
+        soul_color = "#F00"
 
     vibe = player.get_vibe(day)
 
     if player.deceased:
-        player_status = f"""
-        <div style="padding:15px 40px;display:flex;flex-direction:row;justify-content:space-between;align-items:center;background:#111;border-bottom:1px solid #fff;">
+        player_status = f"""<div style="padding:15px 40px;display:flex;flex-direction:row;justify-content:space-between;align-items:center;background:#111;border-bottom:1px solid #fff;">
             <div style="padding:0 10px;display:flex;align-items:center;font-size:18px;">
                 Deceased
             </div>
-        </div>
-        """
+        </div>"""
     else:
         player_status = ""
 
+    # ATTRIBUTES
+    player_attributes = ""
+    if len(player.perm_attr) > 0 or len(player.seas_attr) > 0 or len(player.week_attr) > 0 or len(player.game_attr) > 0 or player.bat.attr or player.armor.attr:
+        player_attributes += """<div style="padding:5px 40px;display:flex;flex-direction:row;background:#111;border-bottom:1px solid #fff;">
+        <div style="display:flex;flex-direction:row;padding:5px;border-radius:5px;background:#222;">"""
+        if len(player.perm_attr) > 0:
+            player_attributes += _html_attr(player.perm_attr, "#dbbc0b")
+        if len(player.seas_attr) > 0:
+            player_attributes += _html_attr(player.seas_attr, "#c2157a")
+        if len(player.week_attr) > 0:
+            player_attributes += _html_attr(player.week_attr, "#0a78a3")
+        if len(player.game_attr) > 0:
+            player_attributes += _html_attr(player.game_attr, "#639e47")
+        if player.bat.attr:
+            player_attributes += _html_attr([player.bat.attr], "#bababa")
+        if player.armor.attr:
+            player_attributes += _html_attr([player.armor.attr], "#bababa")
+        player_attributes += "</div></div>"
+
     html = f"""
     <div style="width:500px;background:#000;border:1px solid #fff;color:#fff;display:flex;flex-direction:column;box-sizing:border-box;font-size:14px;">
-        <div style="border-bottom: 1px solid #fff;display:flex;dlex-direction:column;align-items:flex-start;justify-content:space-between;padding:40px 40px 20px;">
+        <div style="border-bottom:1px solid #fff;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:40px 40px 20px;">
             <div style="font-size:24px;">
                 {player.name}
             </div>
+            {player_team}
         </div>
         {player_status}
+        {player_attributes}
         <div style="padding:20px 0;">
             <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
                 <div style="width:180px;font-weight:700;">
@@ -217,7 +251,7 @@ def display_player(player, day=None):
                         ITEM
                     </div>
                     <div>
-                        {player.bat.text}
+                        {player.bat.name}
                     </div>
                 </div>
                 <div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;width:auto;min-width:150px;height:80px;margin:5px;padding:10px 0;background:#111;border-radius:5px;">
@@ -225,7 +259,7 @@ def display_player(player, day=None):
                         ARMOR
                     </div>
                     <div>
-                        {player.armor.text}
+                        {player.armor.name}
                     </div>
                 </div>
             </div>
@@ -250,7 +284,7 @@ def display_player(player, day=None):
                     Coffee Style
                 </div>
                 <span>
-                    {player.coffee.text}
+                    {player.coffee}
                 </span>
             </div>
             <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;">
@@ -258,7 +292,7 @@ def display_player(player, day=None):
                     Blood Type
                 </div>
                 <span>
-                    {player.blood.text}
+                    {player.blood}
                 </span>
             </div>
             <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
@@ -280,4 +314,5 @@ def display_player(player, day=None):
         </div>
     </div>
     """
+
     display(HTML(html))

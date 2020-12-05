@@ -1,6 +1,5 @@
-from blaseball_mike.models import Player
-from blaseball_mike.tables import Modification
-from statistics import mean
+from blaseball_mike.models import Base, Player
+import pandas
 
 # The average stats of a rerolled player
 NEW_PLAYER = {"batting": 2, "pitching": 1.5, "baserunning": 2.5, "defense": 2.5}
@@ -10,82 +9,126 @@ INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
                  "Baltimore Crabs": "8d87c468-699a-47a8-b40d-cfb73a5660ad",
                  "The Shelled One's Pods": "40b9ec2a-cb43-4dbb-b836-5accb62e7c20"}
 
-def worst_lineup(team, num=1):
+def blaseball_to_pandas(values):
     """
-    Get the worst X players in a teams lineup
+    Convert Blaseball objects to Pandas Dataframes
+    :param values: Blaseball-Mike object or list of Blaseball-Mike objects
+    :return: pandas.DataFrame
     """
+    if not values:
+        return None
+
+    if not isinstance(values, list):
+        values = [values]
+
+    if len(values) == 0:
+        return None
+
+    if isinstance(values[0], Base):
+        return pandas.DataFrame([x.json() for x in values]).set_index("id")
+    return None
+
+def sort_lineup(team, num=None, order="worst"):
+    if order == "best":
+        reverse=True
+    else:
+        reverse=False
+
     batters = team.lineup
-    batters.sort(key=lambda x: x.batting_rating)
+    batters.sort(key=lambda x: x.batting_rating, reverse=reverse)
+
+    if num is None or num > len(batters):
+        num = len(batters)
     return batters[0:num]
 
-def worst_rotation(team, num=1):
-    """
-    Get the worst X players in a teams rotation
-    """
+def sort_rotation(team, num=None, order="worst"):
+    if order.lower() == "best":
+        reverse=True
+    else:
+        reverse=False
+
     pitchers = team.rotation
-    pitchers.sort(key=lambda x: x.pitching_rating)
+    pitchers.sort(key=lambda x: x.pitching_rating, reverse=reverse)
+
+    if num is None or num > len(pitchers):
+        num = len(pitchers)
     return pitchers[0:num]
 
-def worst_overall(team, num=1):
-    """
-    Get the worst X players on a team
-    """
-    line_ids = [(x.id, x.batting_rating) for x in worst_lineup(team, num)]
-    rot_ids = [(x.id, x.pitching_rating) for x in worst_rotation(team, num)]
+def sort_bench(team, num=None, order="worst"):
+    if order == "best":
+        reverse=True
+    else:
+        reverse=False
+
+    batters = team.bench
+    batters.sort(key=lambda x: x.batting_rating, reverse=reverse)
+
+    if num is None or num > len(batters):
+        num = len(batters)
+    return batters[0:num]
+
+def sort_bullpen(team, num=None, order="worst"):
+    if order.lower() == "best":
+        reverse=True
+    else:
+        reverse=False
+
+    pitchers = team.bullpen
+    pitchers.sort(key=lambda x: x.pitching_rating, reverse=reverse)
+
+    if num is None or num > len(pitchers):
+        num = len(pitchers)
+    return pitchers[0:num]
+
+def sort_overall(team, num=None, order="worst"):
+    if order.lower() == "best":
+        reverse=True
+    else:
+        reverse=False
+
+    lineup_sorted = sort_lineup(team, num)
+    rotation_sorted = sort_rotation(team, num)
+    player_dict = {x.id: x for x in lineup_sorted + rotation_sorted}
+
+    # Sort by different ratings depending on position
+    line_ids = [(x.id, x.batting_rating) for x in lineup_sorted]
+    rot_ids = [(x.id, x.pitching_rating) for x in rotation_sorted]
     sorted_ids = line_ids + rot_ids
-    sorted_ids.sort(key=lambda x: x[1])
-    return [Player.load_one(x[0]) for x in sorted_ids[0:num]]
+    sorted_ids.sort(key=lambda x: x[1], reverse=reverse)
 
-def avg_stars(player_list):
-    """
-    Calculate average stars for a list of players
-    This does not include shelled players for any stats except defense
-    """
-    ret = {}
-    ret["batting"] = mean([x.batting_stars for x in player_list if Modification.SHELLED not in x.perm_attr])
-    ret["baserunning"] = mean([x.baserunning_stars for x in player_list if Modification.SHELLED not in x.perm_attr])
-    ret["defense"] = mean([x.defense_stars for x in player_list])
-    ret["pitching"] = mean([x.pitching_stars for x in player_list if Modification.SHELLED not in x.perm_attr])
-    return ret
+    if num is None or num > len(sorted_ids):
+        num = len(sorted_ids)
+    return [player_dict[k[0]] for k in sorted_ids[0:num]]
 
-def team_avg_stars(team):
-    """
-    Calculate average stars for a team
-    """
-    line_avg = avg_stars(team.lineup)
-    rot_avg = avg_stars(team.rotation)
-    all_avg = avg_stars(team.rotation + team.lineup)
+def improve_team_batting(team, amount):
+    new_team = []
+    for player in team.lineup:
+        new_team.append(player.simulated_copy(buffs={"batting_rating": amount}))
+    return new_team
 
-    return {"batting": line_avg["batting"], "pitching": rot_avg["pitching"],
-            "baserunning": line_avg["baserunning"], "defense": all_avg["defense"]}
+def improve_team_pitching(team, amount):
+    new_team = []
+    for player in team.rotation:
+        new_team.append(player.simulated_copy(buffs={"pitching_rating": amount}))
+    return new_team
 
-def total_stars(player_list):
-    """
-    Calculate total stars for a list of players
-    This does not include shelled players for any stats except defense
-    """
-    ret = {}
-    ret["batting"] = sum([x.batting_stars for x in player_list])
-    ret["baserunning"] = sum([x.baserunning_stars for x in player_list])
-    ret["defense"] = sum([x.defense_stars for x in player_list])
-    ret["pitching"] = sum([x.pitching_stars for x in player_list])
-    return ret
+def improve_team_baserunning(team, amount):
+    new_team = []
+    for player in team.lineup:
+        new_team.append(player.simulated_copy(buffs={"baserunning_rating": amount}))
+    return new_team
 
-def team_total_stars(team):
-    """
-    Calculate total stars for a team
-    """
-    line_total = total_stars(team.lineup)
-    rot_total = total_stars(team.rotation)
+def improve_team_defense(team, amount):
+    new_team = []
+    for player in team.lineup + team.rotation:
+        new_team.append(player.simulated_copy(buffs={"defense_rating": amount}))
+    return new_team
 
-    return {"batting": line_total["batting"], "pitching": rot_total["pitching"],
-            "baserunning": line_total["baserunning"], "defense": line_total["defense"] + rot_total["defense"]}
-
-def star_compare(new_dict, old_dict):
-    """
-    Determine the delta between two star dicts (see above functions)
-    """
-    return {k:v - old_dict[k] for k, v in new_dict.items()}
+def improve_team_overall(team, amount):
+    new_team = []
+    for player in team.lineup + team.rotation:
+        new_team.append(player.simulated_copy(buffs={"overall_rating": amount}))
+    return new_team
 
 def vibe_to_string(vibe):
     if vibe > 0.8:
@@ -127,6 +170,12 @@ def stars_to_string(stars):
         star_str += "☆"
     return star_str
 
+def parse_emoji(val):
+    try:
+        return chr(int(val, 16))
+    except ValueError:
+        return val
+
 def get_game_by_team(games, team):
     if isinstance(games, dict):
         games = games.values()
@@ -134,9 +183,3 @@ def get_game_by_team(games, team):
     if len(games) == 0:
         return None
     return games[0]
-
-def parse_emoji(val):
-    try:
-        return chr(int(val, 16))
-    except ValueError:
-        return val

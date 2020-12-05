@@ -53,7 +53,7 @@ def display_game_results(game):
 
     html = f"""
     <div style="display:flex;flex-direction:column;border-radius:5px;background-color:#111;width:390px;font-size:1rem;font-weight:400;line-height:1.5;color:#fff;box-sizing:border-box;">
-        <div style="height:32px;display:flex;justify-content:space-between;flex-direction:row;align-items:center;font-size:14px;background:rgba(30,30,30,.64)">
+        <div style="height:32px;display:flex;justify-content:space-between;flex-direction:row;align-items:center;font-size:14px;background:rgba(30,30,30,.64);border-radius:5px 5px 0 0;">
             <div style=" display:flex;flex-direction:row;height:32px">
                 <div style="{game_status_style}display:flex;padding:0 8px;height:100%;border-radius:5px;align-items:center">
                     {game_status}
@@ -64,7 +64,7 @@ def display_game_results(game):
             </div>
         </div>
         <div style="display:flex;flex:1 0 auto;flex-direction:column;justify-content:space-around;padding:10px 0 10px 10px;">
-            <div style="display:grid;grid-template-columns:60px auto 15%;grid-gap:10px;gap:10px;width:100%;align-items:center">
+            <div style="display:grid;grid-template-columns:60px auto 15%;grid-gap:10px;gap:10px;width:100%;align-items:center;padding-bottom:10px;">
                 <div style="background:{game.away_team_color};display:flex;width:50px;height:50px;margin-left:8px;border-radius:50%;font-size:29px;justify-content:center;align-items:center;">
                     {away_emoji}
                 </div>

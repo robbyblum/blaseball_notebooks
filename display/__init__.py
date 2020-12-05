@@ -1,4 +1,4 @@
-from .general import display_name
+from .general import *
 from .player import *
 from .game import *
 from .team import *
