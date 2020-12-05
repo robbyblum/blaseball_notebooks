@@ -13,7 +13,7 @@ typing-extensions==3.7.4.3
 ujson==3.1.0
 urllib3==1.25.10
 yarl==1.5.1
-blaseball-mike==3.2.1
+blaseball-mike==4.2.0
 blaseball-reference==2.1.0
 cycler==0.10.0
 python-dateutil==2.8.1
@@ -21,4 +21,5 @@ numpy==1.19.1
 pyparsing==2.4.7
 kiwisolver==1.2.0
 matplotlib==3.3.1
-tabulate==0.8.7
+beakerx==2.0.1
+beakerx_table_display==2.0.1
