@@ -12,7 +12,7 @@ typing-extensions==3.7.4.3
 ujson==3.1.0
 urllib3==1.25.10
 yarl==1.5.1
-blaseball-mike==4.2.0
+blaseball-mike==4.2.2
 blaseball-reference==2.1.0
 cycler==0.10.0
 python-dateutil==2.8.1

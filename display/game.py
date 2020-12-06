@@ -5,8 +5,18 @@ from IPython.display import HTML, display
 from utils import *
 
 def display_game_results(game):
+    if isinstance(game, list):
+        if len(game) > 1:
+            raise ValueError("Can only display one game at a time")
+        game = game[0]
+
+    if isinstance(game, dict):
+        if len(game) > 1:
+            raise ValueError("Can only display one game at a time")
+        game = list(game.values())[0]
+
     if not isinstance(game, Game):
-        return
+        raise ValueError("Game is not a game")
 
     away_emoji = parse_emoji(game.away_team_emoji)
     home_emoji = parse_emoji(game.home_team_emoji)

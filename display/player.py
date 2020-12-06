@@ -9,6 +9,9 @@ from utils import *
 from matplotlib import pyplot
 
 def display_vibes(player, day=None):
+    if not isinstance(player, Player):
+        return
+
     if not day:
         day = SimulationData.load().day + 1
 
@@ -19,6 +22,8 @@ def display_season_vibes(player):
     days = range(1, 100)
     if isinstance(player, list):
         vibes = [mean([y.get_vibe(x) for y in player]) for x in days]
+    elif isinstance(player, dict):
+        vibes = [mean([y.get_vibe(x) for y in player.values()]) for x in days]
     else:
         vibes = [player.get_vibe(x) for x in days]
 
@@ -34,20 +39,25 @@ def display_season_vibes(player):
     pyplot.show()
 
 def get_stars(values):
-    if not isinstance(values, (Player, list)):
+    if not isinstance(values, (Player, list, dict)):
         return
 
-    if not isinstance(values, list):
+    if isinstance(values, Player):
         values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
+
     return pandas.DataFrame([{"Name":x.name, "Batting": x.batting_stars, "Pitching":x.pitching_stars,
                               "Baserunning":x.baserunning_stars, "Defense":x.defense_stars} for x in values]).set_index("Name")
 
 def get_batting_stats(values, season=None):
-    if not isinstance(values, (Player, list)):
+    if not isinstance(values, (Player, list, dict)):
         return
 
     if isinstance(values, list):
         ids = [x.id for x in values]
+    elif isinstance(values, dict):
+        ids = values.keys()
     else:
         ids = values.id
 
@@ -55,14 +65,16 @@ def get_batting_stats(values, season=None):
         season = season - 1
 
     ret = datablase.player_stats(ids, "batting", season)
-    return pandas.DataFrame(ret).set_index("player_id")
+    return pandas.DataFrame(ret).set_index("player_id").drop(labels=["team_id", "team_ids", "season"], axis=1, errors='ignore')
 
 def get_pitching_stats(values, season=None):
-    if not isinstance(values, (Player, list)):
+    if not isinstance(values, (Player, list, dict)):
         return
 
     if isinstance(values, list):
         ids = [x.id for x in values]
+    elif isinstance(values, dict):
+        ids = values.keys()
     else:
         ids = values.id
 
@@ -70,14 +82,16 @@ def get_pitching_stats(values, season=None):
         season = season - 1
 
     ret = datablase.player_stats(ids, "pitching", season)
-    return pandas.DataFrame(ret).set_index("player_id")
+    return pandas.DataFrame(ret).set_index("player_id").drop(labels=["team_id", "team_ids", "season"], axis=1, errors='ignore')
 
 def get_batting_stlats(values):
-    if not isinstance(values, (Player, list)):
+    if not isinstance(values, (Player, list, dict)):
         return
 
-    if not isinstance(values, list):
+    if isinstance(values, Player):
         values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
 
     return pandas.DataFrame([{"Name": x.name, "Batting Rating": x.hitting_rating, "Buoyancy":x.buoyancy,
                                        "Divinity": x.divinity, "Martyrdom": x.martyrdom, "Moxie": x.moxie,
@@ -85,11 +99,13 @@ def get_batting_stlats(values):
                                        "Thwackability": x.thwackability} for x in values]).set_index("Name")
 
 def get_pitching_stlats(values):
-    if not isinstance(values, (Player, list)):
+    if not isinstance(values, (Player, list, dict)):
         return
 
-    if not isinstance(values, list):
+    if isinstance(values, Player):
         values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
 
     return pandas.DataFrame([{"Name": x.name, "Pitching Rating": x.pitching_rating, "Coldness": x.coldness,
                                        "Overpowerment": x.overpowerment, "Ruthlessness": x.ruthlessness,
@@ -98,11 +114,13 @@ def get_pitching_stlats(values):
                                        "Number of Fingers": x.total_fingers} for x in values]).set_index("Name")
 
 def get_baserunning_stlats(values):
-    if not isinstance(values, (Player, list)):
+    if not isinstance(values, (Player, list, dict)):
         return
 
-    if not isinstance(values, list):
+    if isinstance(values, Player):
         values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
 
     return pandas.DataFrame([{"Name": x.name, "Baserunning Rating": x.baserunning_rating,
                                        "Base Thirst": x.base_thirst, "Continuation": x.continuation,
@@ -110,11 +128,13 @@ def get_baserunning_stlats(values):
                                        "Laserlikeness": x.laserlikeness} for x in values]).set_index("Name")
 
 def get_defense_stlats(values):
-    if not isinstance(values, (Player, list)):
+    if not isinstance(values, (Player, list, dict)):
         return
 
-    if not isinstance(values, list):
+    if isinstance(values, Player):
         values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
 
     return pandas.DataFrame([{"Name": x.name, "Defense Rating": x.defense_rating,
                                        "Anticapitalism": x.anticapitalism, "Chasiness": x.chasiness,
@@ -133,14 +153,33 @@ def _html_attr(attr_list, border_color):
     return ret
 
 def display_player(player, day=None):
+    if isinstance(player, list):
+        if len(player) > 1:
+            raise ValueError("Can only display one player at a time")
+        player = player[0]
+
+    if isinstance(player, dict):
+        if len(player) > 1:
+            raise ValueError("Can only display one player at a time")
+        player = list(player.values())[0]
+
     if not isinstance(player, Player):
-        return
+        raise ValueError("Player is not a player")
 
     if not day:
         sim = SimulationData.load()
         day = sim.day + 1
 
-    retired = "RETIRED" in player._perm_attr_ids
+    if getattr(player, "_perm_attr_ids", None):
+        retired = "RETIRED" in player._perm_attr_ids
+
+        if retired or "COFFEE_EXIT" in player._perm_attr_ids:
+            soul_name = "Soulsong"
+        else:
+            soul_name = "Soulscream"
+    else:
+        retired = False
+        soul_name = "Soulscream"
 
     player_team = ""
     if player.league_team and not retired:
@@ -154,17 +193,15 @@ def display_player(player, day=None):
                 </div>
             </div>"""
 
-    if retired or "COFFEE_EXIT" in player._perm_attr_ids:
-        soul_name = "Soulsong"
-    else:
-        soul_name = "Soulscream"
-
     if retired:
         soul_color = "#5988ff"
     else:
         soul_color = "#F00"
 
-    vibe = player.get_vibe(day)
+    try:
+        vibe = player.get_vibe(day)
+    except AttributeError:
+        vibe = 0
 
     if player.deceased:
         player_status = f"""<div style="padding:15px 40px;display:flex;flex-direction:row;justify-content:space-between;align-items:center;background:#111;border-bottom:1px solid #fff;">
@@ -174,6 +211,16 @@ def display_player(player, day=None):
         </div>"""
     else:
         player_status = ""
+
+    if getattr(player, "ritual", None):
+        ritual = player.ritual
+    else:
+        ritual = "None?"
+
+    if getattr(player, "fate", None):
+        fate = player.fate
+    else:
+        fate = "????"
 
     # ATTRIBUTES
     player_attributes = ""
@@ -276,7 +323,7 @@ def display_player(player, day=None):
                     Pregame Ritual
                 </div>
                 <span>
-                    {player.ritual}
+                    {ritual}
                 </span>
             </div>
             <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
@@ -300,7 +347,7 @@ def display_player(player, day=None):
                     Fate
                 </div>
                 <span>
-                    {player.fate}
+                    {fate}
                 </span>
             </div>
             <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;">

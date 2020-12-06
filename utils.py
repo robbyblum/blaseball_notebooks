@@ -130,6 +130,56 @@ def improve_team_overall(team, amount):
         new_team.append(player.simulated_copy(buffs={"overall_rating": amount}))
     return new_team
 
+def maximize(player, position="lineup", overall=False):
+    if position in ("lineup", "bench"):
+        compare = "batting_stars"
+    elif position in ("rotation", "bullpen"):
+        compare = "pitching_stars"
+    else:
+        raise ValueError("invalid position")
+
+    if overall:
+        increase = "overall_rating"
+    else:
+        increase = compare[:-5] + "rating"
+
+    while getattr(player, compare, 5.0) < 5.0:
+        player = player.simulated_copy(buffs={increase: 0.01})
+        if increase in ("pitching_rating", "overall_rating"): player.total_fingers = player.total_fingers + 1
+
+    if not overall:
+        player = player.simulated_copy(buffs={increase: 0.01})
+        if increase in ("pitching_rating", "overall_rating"): player.total_fingers = player.total_fingers + 1
+
+    return player
+
+def minimize(player, position, overall=False):
+    if position in ("lineup", "bench"):
+        compare = "batting_rating"
+    elif position in ("rotation", "bullpen"):
+        compare = "pitching_rating"
+    else:
+        raise ValueError("invalid position")
+
+    if overall:
+        decrease = "overall_rating"
+    else:
+        decrease = compare
+
+    while getattr(player, compare, 0.03) > 0.03:
+        player = player.simulated_copy(buffs={decrease: -0.01})
+        if decrease in ("pitching_rating", "overall_rating"): player.total_fingers = player.total_fingers + 1
+
+    return player
+
+
+def clone(player):
+    player = player.simulated_copy(buffs={"overall_rating": -0.05})
+    player.total_fingers = player.total_fingers + 1
+    player.name = player.name + " II"
+    return player
+
+
 def vibe_to_string(vibe):
     if vibe > 0.8:
         vibe_str = "▲▲▲ Most Excellent"

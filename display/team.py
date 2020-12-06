@@ -22,7 +22,6 @@ def _vibe_to_arrow(vibe):
     return vibe_str
 
 def _get_player_html(player, day, index, lineup=True):
-    vibe = player.get_vibe(day)
     if lineup:
         stars = player.batting_stars
     else:
@@ -33,14 +32,20 @@ def _get_player_html(player, day, index, lineup=True):
     else:
         background = ""
 
+    try:
+        vibe = player.get_vibe(day)
+        vibes_html = f"""<div style="display:flex;flex-direction:row;justify-content:center;">
+                {_vibe_to_arrow(vibe)}
+            </div>"""
+    except AttributeError:
+        vibes_html = ""
+
     player_html = f"""
         <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;{background}">
             <div>
                 {player.name}
             </div>
-            <div style="display:flex;flex-direction:row;justify-content:center;">
-                {_vibe_to_arrow(vibe)}
-            </div>
+            {vibes_html}
             <div>
                 {stars_to_string(stars)}
             </div>
@@ -60,8 +65,18 @@ def _html_attr(attr_list, border_color):
     return ret
 
 def display_team(team, day=None):
+    if isinstance(team, list):
+        if len(team) > 1:
+            raise ValueError("Can only display one team at a time")
+        team = team[0]
+
+    if isinstance(team, dict):
+        if len(team) > 1:
+            raise ValueError("Can only display one team at a time")
+        team = list(team.values())[0]
+
     if not isinstance(team, Team):
-        return
+        raise ValueError("Team is not a team")
 
     if not day:
         sim = SimulationData.load()
@@ -71,6 +86,13 @@ def display_team(team, day=None):
 
     lineup_html = "".join([_get_player_html(x, day, i, True) for i, x in enumerate(team.lineup)])
     rotation_html = "".join([_get_player_html(x, day, i, False) for i, x in enumerate(team.rotation)])
+
+    if getattr(team, "card", None):
+        card_html = f"""<div style="margin-top:5px;margin-left:auto;border:1px solid #fff;padding:4px 10px;border-radius:5px;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;color:#fff">
+                        {team.card.text}
+                    </div>"""
+    else:
+        card_html = ""
 
     # ATTRIBUTES
     team_attributes = ""
@@ -101,9 +123,7 @@ def display_team(team, day=None):
                     <div>
                         <i>"{team.slogan}"</i>
                     </div>
-                    <div style="margin-top:5px;margin-left:auto;border:1px solid #fff;padding:4px 10px;border-radius:5px;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;color:#fff">
-                        {team.card.text}
-                    </div>
+                    {card_html}
                 </div>
             </div>
         </div>
