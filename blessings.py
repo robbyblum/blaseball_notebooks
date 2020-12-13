@@ -4,58 +4,6 @@ from matplotlib import pyplot
 from utils import *
 
 
-def horde_hallucinations(team, amount):
-    """
-    Improve Team Baserunning from between -8% and +24%
-    Configurable by setting amount to between -0.08 and 0.24
-    """
-    current = team.lineup
-
-    new = improve_team_baserunning(team, amount)
-    table = pandas.DataFrame([{"Name":x.name, "old_baserunning_stars":x.baserunning_rating * 5} for x in current]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_baserunning_stars": x.baserunning_rating * 5} for x in new]).set_index("Name"))
-    table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_baserunning_stars - row.old_baserunning_stars, axis=1)
-
-    return table
-
-def katamari(team, amount):
-    """
-    Improve Team Defense from between -8% and +24%
-    Configurable by setting amount to between -0.08 and 0.24
-    """
-    changes = []
-    for player in team.lineup:
-        new_player = player.simulated_copy(buffs={'defense_rating': amount})
-        changes.append((player.name, new_player.defense_stars, player.defense_stars))
-
-    return changes
-
-def rollback(team, amount):
-    """
-    Improve Overall rating by -3% to +9%
-    Configurable by setting amount to between -0.03 and 0.09
-    """
-    changes = []
-    all = team.lineup + team.rotation
-    for player in all:
-        new_player = player.simulated_copy(buffs={'overall_rating': amount})
-        changes.append({
-            "name": player.name,
-            "batting": (new_player.batting_stars, player.batting_stars),
-            "pitching": (new_player.pitching_stars, player.pitching_stars),
-            "baserunning": (new_player.baserunning_stars, player.baserunning_stars),
-            "defense": (new_player.defense_stars, player.defense_stars)
-        })
-    return changes
-
-def plan(team):
-    """
-    Get the best Hitting pitcher and best Pitching hitter of a team
-    """
-    best_hitting_pitcher = max(team.rotation, key=lambda x: x.batting_rating)
-    best_pitching_hitter = max(team.lineup, key=lambda x: x.pitching_rating)
-
-    return(best_hitting_pitcher, best_pitching_hitter)
 
 def vulture(division):
     """
@@ -87,68 +35,56 @@ def headhunter(subleague):
 
 def mutual_aid(team):
     """
-    Swap a teams worst hitter and pitcher, returns affected players and change in stars
+    Swap a teams worst hitter and pitcher
     """
-    worst_hitter = min(team.lineup, key=lambda x: x.batting_rating)
-    worst_pitcher = min(team.rotation, key=lambda x: x.pitching_rating)
+    worst_hitter = sort_lineup(team, num=1)[0]
+    worst_pitcher = sort_rotation(team, num=1)[0]
 
-    batting_delta = worst_pitcher.batting_stars - worst_hitter.batting_stars
-    pitching_delta = worst_hitter.pitching_stars - worst_pitcher.pitching_stars
-    baserunning_delta = worst_pitcher.baserunning_stars - worst_hitter.baserunning_stars
-    defense_delta = worst_pitcher.defense_stars - worst_hitter.defense_stars
+    table = pandas.Series({"batting_change": (worst_pitcher.batting_rating - worst_hitter.batting_rating) * 5,
+                           "pitching_change": (worst_hitter.pitching_rating - worst_pitcher.pitching_rating) * 5,
+                           "baserunning_change": (worst_pitcher.baserunning_rating - worst_hitter.baserunning_rating) * 5})
 
-    return (worst_pitcher.name, worst_hitter.name, batting_delta, pitching_delta, baserunning_delta, defense_delta)
+    return table, worst_hitter.name, worst_pitcher.name
 
 def tbd(team):
     """
-    Swap best hitting pitcher with worst hitter, returns affected players and change in stars
+    Swap best hitting pitcher with worst hitter
     """
-    best_hitting_pitcher = max(team.rotation, key=lambda x: x.batting_rating)
-    worst_hitter = min(team.lineup, key=lambda x: x.batting_rating)
+    new_hitter = best_hitting_pitcher(team)
+    worst_hitter = sort_lineup(team, num=1)[0]
 
-    batting_delta = best_hitting_pitcher.batting_stars - worst_hitter.batting_stars
-    pitching_delta = worst_hitter.pitching_stars - best_hitting_pitcher.pitching_stars
-    baserunning_delta = best_hitting_pitcher.baserunning_stars - worst_hitter.baserunning_stars
-    defense_delta = best_hitting_pitcher.defense_stars - worst_hitter.defense_stars
+    table = pandas.Series({"batting_change": (new_hitter.batting_rating - worst_hitter.batting_rating) * 5,
+                           "pitching_change": (worst_hitter.pitching_rating - new_hitter.pitching_rating) * 5,
+                           "baserunning_change": (new_hitter.baserunning_rating - worst_hitter.baserunning_rating) * 5})
 
-    return (best_hitting_pitcher.name, worst_hitter.name, batting_delta, pitching_delta, baserunning_delta, defense_delta)
+    return table, worst_hitter.name, new_hitter.name
 
 def tbo(team):
     """
-    Swap best pitching hitter with worst pitcher, returns affected players and change in stars
+    Swap best pitching hitter with worst pitcher
     """
-    best_pitching_hitter = max(team.lineup, key=lambda x: x.pitching_rating)
-    worst_pitcher = min(team.rotation, key=lambda x: x.pitching_rating)
+    new_pitcher = best_pitching_hitter(team)
+    worst_pitcher = sort_rotation(team, num=1)[0]
 
-    batting_delta = worst_pitcher.batting_stars - best_pitching_hitter.batting_stars
-    pitching_delta = best_pitching_hitter.pitching_stars - worst_pitcher.pitching_stars
-    baserunning_delta = worst_pitcher.baserunning_stars - best_pitching_hitter.baserunning_stars
-    defense_delta = worst_pitcher.defense_stars - best_pitching_hitter.defense_stars
+    table = pandas.Series({"batting_change": (worst_pitcher.batting_rating - new_pitcher.batting_rating) * 5,
+                           "pitching_change": (new_pitcher.pitching_rating - worst_pitcher.pitching_rating) * 5,
+                           "baserunning_change": (worst_pitcher.baserunning_rating - new_pitcher.baserunning_rating) * 5})
 
-    return (best_pitching_hitter.name, worst_pitcher.name, batting_delta, pitching_delta, baserunning_delta, defense_delta)
+    return table, worst_pitcher.name, new_pitcher.name
 
-def ooze(team):
+def ooze(team, amount=0.10):
     """
     Boost power by 10%
     """
-    changes = []
-    for player in team.lineup:
-        new_player = player.simulated_copy(buffs={'divinity': 0.10, 'musclitude': 0.10})
-        changes.append((player.name, new_player.batting_stars, player.batting_stars))
+    new = improve_team_power(team, amount)
+    table = pandas.DataFrame([{"Name": x.name, "old_batting_stars": x.batting_rating * 5} for x in team.lineup]).set_index("Name")
+    table = table.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5} for x in new]).set_index("Name"))
+    table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
 
-    return changes
+    total = table.sum(axis=0)
+    avg = table.mean(axis=0)
 
-def spin_attack(team):
-    """
-    Boost speed by 15%
-    """
-    #TODO: determine which attributes this actually changed
-    changes = []
-    for player in team.lineup:
-        new_player = player.simulated_copy(buffs={'laserlikeness': 0.15, 'groundFriction': 0.15})
-        changes.append((player.name, new_player.baserunning_stars, player.baserunning_stars))
-
-    return changes
+    return table, total, avg
 
 def sharing_signs(division):
     """
@@ -202,79 +138,27 @@ def mutually_arising(division):
 
     return results
 
-def paracausal(team):
-    """
-    Get worst 3 hitters
-    """
-    hitters = team.lineup
-    hitters.sort(key=lambda x: x.batting_rating)
-    return hitters[0:3]
-
-def pretty_plz(team, amount):
-    """
-    Improve Team Hitting from between -5% and +15%
-    Configurable by setting amount to between -0.05 and 0.15
-    """
-    changes = []
-    for player in team.lineup:
-        new_player = player.simulated_copy(buffs={'batting_rating': amount})
-        changes.append((player.name, new_player.batting_stars, player.batting_stars))
-    return changes
-
-def exploratory(team):
-    """
-    Get 3 worst pitchers
-    """
-    pitchers = team.rotation
-    pitchers.sort(key=lambda x: x.pitching_rating)
-    return pitchers[0:3]
-
-def jelly_legs(team):
-    """
-    Get 3 worst baserunners
-    """
-    runners = team.lineup
-    runners.sort(key=lambda x: x.baserunning_rating)
-    return runners[0:3]
-
-def stickum(team):
-    """
-    Get 3 worst defenders
-    """
-    defenders = team.lineup + team.rotation
-    defenders.sort(key=lambda x: x.defense_rating)
-    return defenders[0:3]
-
 def new_recruit(team, bat_star, run_star, def_star):
     """
     Calculate average star rating change if adding an additional batter with star values of bat_star, run_star, and def_star
     """
-    base_lineup = [x for x in team.lineup]
+    bat_mean = mean([x.batting_stars for x in team.lineup] + [bat_star]) - mean([x.batting_stars for x in team.lineup])
+    baserun_mean = mean([x.baserunning_stars for x in team.lineup] + [run_star]) - mean([x.baserunning_stars for x in team.lineup])
+    defense_mean = mean([x.defense_stars for x in team.lineup + team.rotation] + [def_star]) - mean([x.defense_stars for x in team.lineup + team.rotation])
 
-    size = len(base_lineup)
+    return pandas.Series({"batting_change":bat_mean, "baserunning_change":baserun_mean, "defense_change":defense_mean})
 
-    bat_stars = mean([x.batting_stars for x in base_lineup] + [bat_star]) - mean([x.batting_stars for x in base_lineup])
-    baserun_stars = mean([x.baserunning_stars for x in base_lineup] + [run_star]) - mean([x.baserunning_stars for x in base_lineup])
-    defense_stars = mean([x.defense_stars for x in base_lineup] + [def_star]) - mean([x.defense_stars for x in base_lineup])
-
-    return {"batting": bat_stars, "baserunning": baserun_stars, "defense": defense_stars}
-
-def downsizing(team, player=None):
+def downsizing(team, player):
     """
     Calculate average star rating change if removing a batter (either worst or passed player)
     """
-    if player is None:
-        worst = min(team.lineup, key=lambda x: x.batting_rating)
-    else:
-        worst = player
-    new_lineup = [x for x in team.lineup if x.id != worst.id]
-    base_lineup = [x for x in team.lineup]
+    new_lineup = [x for x in team.lineup if x.id != player.id]
 
-    bat_stars = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in base_lineup])
-    baserun_stars = mean([x.baserunning_stars for x in new_lineup]) - mean([x.baserunning_stars for x in base_lineup])
-    defense_stars = mean([x.defense_stars for x in new_lineup]) - mean([x.defense_stars for x in base_lineup])
+    bat_mean = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in team.lineup])
+    baserun_mean = mean([x.baserunning_stars for x in new_lineup]) - mean([x.baserunning_stars for x in team.lineup])
+    defense_mean = mean([x.defense_stars for x in new_lineup + team.rotation]) - mean([x.defense_stars for x in team.lineup + team.rotation])
 
-    return (bat_stars, baserun_stars, defense_stars)
+    return pandas.Series({"batting_change": bat_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean})
 
 def idol_stars():
     """
@@ -305,26 +189,6 @@ def idol_stars():
             "avg": mean([p.defense_stars for p in players])
         }
     }
-
-def bullpen(team):
-    """
-    Get bullpen players
-    """
-    all = list()
-    for player in team.bullpen:
-        all.append((player.name, player.batting_stars, player.pitching_stars, player.baserunning_stars, player.defense_stars))
-    return all
-
-def replacement_elbows(team):
-    """
-    Improve pitching by 20%
-    Blessing affects 3 random, but calculates change for all players
-    """
-    pitchers = team.rotation
-    new_pitchers = []
-    for p in pitchers:
-        new_pitchers.append((p, p.simulated_copy(buffs={"pitching_rating": 0.2})))
-    return new_pitchers
 
 def promo_code(team, pitch_star):
     """
