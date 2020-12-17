@@ -96,7 +96,8 @@ def get_batting_stlats(values):
     return pandas.DataFrame([{"Name": x.name, "Batting Rating": x.hitting_rating, "Buoyancy":x.buoyancy,
                                        "Divinity": x.divinity, "Martyrdom": x.martyrdom, "Moxie": x.moxie,
                                        "Musclitude": x.musclitude, "Patheticism": x.patheticism,
-                                       "Thwackability": x.thwackability} for x in values]).set_index("Name")
+                                       "Thwackability": x.thwackability,
+                                       "Tragicness": x.tragicness} for x in values]).set_index("Name")
 
 def get_pitching_stlats(values):
     if not isinstance(values, (Player, list, dict)):
@@ -110,8 +111,7 @@ def get_pitching_stlats(values):
     return pandas.DataFrame([{"Name": x.name, "Pitching Rating": x.pitching_rating, "Coldness": x.coldness,
                                        "Overpowerment": x.overpowerment, "Ruthlessness": x.ruthlessness,
                                        "Shakespearianism": x.shakespearianism, "Suppression": x.suppression,
-                                       "Unthwackability": x.unthwackability,
-                                       "Number of Fingers": x.total_fingers} for x in values]).set_index("Name")
+                                       "Unthwackability": x.unthwackability} for x in values]).set_index("Name")
 
 def get_baserunning_stlats(values):
     if not isinstance(values, (Player, list, dict)):

@@ -1,5 +1,6 @@
 from blaseball_mike.models import Base, Player
 import pandas
+from beakerx import ThreeColorHeatmapHighlighter, HighlightStyle, TableDisplay
 
 # The average stats of a rerolled player
 NEW_PLAYER = {"batting": 2, "pitching": 1.5, "baserunning": 2.5, "defense": 2.5}
@@ -7,7 +8,23 @@ NEW_PLAYER = {"batting": 2, "pitching": 1.5, "baserunning": 2.5, "defense": 2.5}
 # Teams that cannot be the targets or recipients of blessings
 INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
                  "Baltimore Crabs": "8d87c468-699a-47a8-b40d-cfb73a5660ad",
-                 "The Shelled One's Pods": "40b9ec2a-cb43-4dbb-b836-5accb62e7c20"}
+                 "The Shelled One's Pods": "40b9ec2a-cb43-4dbb-b836-5accb62e7c20",
+                 "Real Game Band": "7fcb63bc-11f2-40b9-b465-f1d458692a63",
+                 "FWXBC": "e3f90fa1-0bbe-40df-88ce-578d0723a23b",
+                 "Club de Calf": "a3ea6358-ce03-4f23-85f9-deb38cb81b20",
+                 "BC Noir": "f29d6e60-8fce-4ac6-8bc2-b5e3cabc5696",
+                 "Atlético Latte": "49181b72-7f1c-4f1c-929f-928d763ad7fb",
+                 "Cold Brew Crew": "4d921519-410b-41e2-882e-9726a4e54a6a",
+                 "Royal PoS": "9a5ab308-41f2-4889-a3c3-733b9aab806e",
+                 "Cream & Sugar United": "b3b9636a-f88a-47dc-a91d-86ecc79f9934",
+                 "Pandemonium Artists": "3b0a289b-aebd-493c-bc11-96793e7216d5",
+                 "Society Data Witches": "d2634113-b650-47b9-ad95-673f8e28e687",
+                 "Inter Xpresso": "d8f82163-2e74-496b-8e4b-2ab35b2d3ff1",
+                 "Milk Proxy Society": "a7592bd7-1d3c-4ffb-8b3a-0b1e4bc321fd",
+                 "Macchiato City": "9e42c12a-7561-42a2-b2d0-7cf81a817a5e",
+                 "Light & Sweet Electric Co.": "70eab4ab-6cb1-41e7-ac8b-1050ee12eecc",
+                 "Americano Water Works": "4e5d0063-73b4-440a-b2d1-214a7345cf16",
+                 "Heavy FC": "e8f7ffee-ec53-4fe0-8e87-ea8ff1d0b4a9"}
 
 def blaseball_to_pandas(values):
     """
@@ -27,6 +44,28 @@ def blaseball_to_pandas(values):
     if isinstance(values[0], Base):
         return pandas.DataFrame([x.json() for x in values]).set_index("id")
     return None
+
+def set_heatmap(table, maxVal=None):
+    """Set a heatmap on each individual column"""
+    goodColor = "#74d8b4"
+    midColor = "#ffdac1"
+    badColor = "#ff4857"
+
+    for column in table.chart.columnNames:
+        if column.lower() in ("patheticism", "tragicness"):
+            maxC = badColor
+            minC = goodColor
+        else:
+            maxC = goodColor
+            minC = badColor
+
+        if maxVal:
+            midVal = maxVal/2
+        else:
+            midVal = None
+
+        table.addCellHighlighter(ThreeColorHeatmapHighlighter(column, style=HighlightStyle.SINGLE_COLUMN, minVal=0, midVal=midVal, maxVal=maxVal, maxColor=maxC, midColor=midColor, minColor=minC))
+    return table
 
 def sort_lineup(team, num=None, order="worst"):
     if order == "best":
