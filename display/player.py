@@ -5,10 +5,17 @@ from blaseball_mike.models import SimulationData, Player
 from statistics import mean
 import blaseball_reference.api as datablase
 from IPython.display import HTML, display
-from utils import *
+from display.general import *
 from matplotlib import pyplot
 
 def display_vibes(player, day=None):
+    """
+    Display a player's current vibes
+
+    :param player: Player
+    :param day: Game Day to get vibes for, defaults to current day
+    :return: vibes str
+    """
     if not isinstance(player, Player):
         return
 
@@ -19,6 +26,7 @@ def display_vibes(player, day=None):
     print(vibe_to_string(vibe))
 
 def display_season_vibes(player):
+    # TODO: Finish this
     days = range(1, 100)
     if isinstance(player, list):
         vibes = [mean([y.get_vibe(x) for y in player]) for x in days]
@@ -39,6 +47,12 @@ def display_season_vibes(player):
     pyplot.show()
 
 def get_stars(values):
+    """
+    Display player stars
+
+    :param values: Player or list of Players
+    :return: pandas DataFrame
+    """
     if not isinstance(values, (Player, list, dict)):
         return
 
@@ -51,6 +65,13 @@ def get_stars(values):
                               "Baserunning":x.baserunning_stars, "Defense":x.defense_stars} for x in values]).set_index("Name")
 
 def get_batting_stats(values, season=None):
+    """
+    Display player batting stats (from Blaseball-Reference)
+
+    :param values: Player or list of Players
+    :param season: Season to get stats for. Default is Career stats
+    :return: pandas DataFrame
+    """
     if not isinstance(values, (Player, list, dict)):
         return
 
@@ -68,6 +89,13 @@ def get_batting_stats(values, season=None):
     return pandas.DataFrame(ret).set_index("player_name").drop(labels=["team_id", "team", "team_ids", "season", "player_id"], axis=1, errors='ignore')
 
 def get_pitching_stats(values, season=None):
+    """
+    Display player pitching stats (from Blaseball-Reference)
+
+    :param values: Player or list of Players
+    :param season: Season to get stats for. Default is Career stats
+    :return: pandas DataFrame
+    """
     if not isinstance(values, (Player, list, dict)):
         return
 
@@ -85,6 +113,12 @@ def get_pitching_stats(values, season=None):
     return pandas.DataFrame(ret).set_index("player_name").drop(labels=["team_id", "team", "team_ids", "season", "player_id"], axis=1, errors='ignore')
 
 def get_batting_stlats(values):
+    """
+    Display player batting stlats (FK attributes)
+
+    :param values: Player or list of Players
+    :return: pandas DataFrame
+    """
     if not isinstance(values, (Player, list, dict)):
         return
 
@@ -100,6 +134,12 @@ def get_batting_stlats(values):
                                        "Tragicness": x.tragicness} for x in values]).set_index("Name")
 
 def get_pitching_stlats(values):
+    """
+    Display player pitching stlats (FK attributes)
+
+    :param values: Player or list of Players
+    :return: pandas DataFrame
+    """
     if not isinstance(values, (Player, list, dict)):
         return
 
@@ -114,6 +154,12 @@ def get_pitching_stlats(values):
                                        "Unthwackability": x.unthwackability} for x in values]).set_index("Name")
 
 def get_baserunning_stlats(values):
+    """
+    Display player baserunning stlats (FK attributes)
+
+    :param values: Player or list of Players
+    :return: pandas DataFrame
+    """
     if not isinstance(values, (Player, list, dict)):
         return
 
@@ -128,6 +174,12 @@ def get_baserunning_stlats(values):
                                        "Laserlikeness": x.laserlikeness} for x in values]).set_index("Name")
 
 def get_defense_stlats(values):
+    """
+    Display player defense stlats (FK attributes)
+
+    :param values: Player or list of Players
+    :return: pandas DataFrame
+    """
     if not isinstance(values, (Player, list, dict)):
         return
 
@@ -153,6 +205,13 @@ def _html_attr(attr_list, border_color):
     return ret
 
 def display_player(player, day=None):
+    """
+    Display a player page similarly to the Blaseball website
+
+    :param player: Player
+    :param day: gameday for vibes. defaults to current day
+    :return: ipython Display
+    """
     if isinstance(player, list):
         if len(player) > 1:
             raise ValueError("Can only display one player at a time")

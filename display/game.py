@@ -2,9 +2,15 @@
 
 from blaseball_mike.models import Game
 from IPython.display import HTML, display
-from utils import *
+from display.general import *
 
 def display_game_results(game):
+    """
+    Display a game overview similarly to the Blaseball website
+
+    :param game: Game
+    :return: ipython Display
+    """
     if isinstance(game, list):
         if len(game) > 1:
             raise ValueError("Can only display one game at a time")
@@ -60,6 +66,13 @@ def display_game_results(game):
         home_win = ""
         away_win = ""
 
+    try:
+        away_font_color = game.away_team_secondary_color
+        home_font_color = game.home_team_secondary_color
+    except AttributeError:
+        away_font_color = game.away_team_color
+        home_font_color = game.home_team_color
+
 
     html = f"""
     <div style="display:flex;flex-direction:column;border-radius:5px;background-color:#111;width:390px;font-size:1rem;font-weight:400;line-height:1.5;color:#fff;box-sizing:border-box;">
@@ -78,7 +91,7 @@ def display_game_results(game):
                 <div style="background:{game.away_team_color};display:flex;width:50px;height:50px;margin-left:8px;border-radius:50%;font-size:29px;justify-content:center;align-items:center;">
                     {away_emoji}
                 </div>
-                <div style="color:{game.away_team_secondary_color};font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
+                <div style="color:{away_font_color};font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
                     {game.away_team_nickname}
                 </div>
                 <div style="{away_win}display:flex;font-size:24px;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;margin:0 8px 0 0;">
@@ -89,7 +102,7 @@ def display_game_results(game):
                 <div style="background:{game.home_team_color};display:flex;width:50px;height:50px;margin-left:8px;border-radius:50%;font-size:29px;justify-content:center;align-items:center;">
                     {home_emoji}
                 </div>
-                <div style="color:{game.home_team_secondary_color};font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
+                <div style="color:{home_font_color};font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
                     {game.home_team_nickname}
                 </div>
                 <div style="{home_win}display:flex;font-size:24px;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;margin:0 8px 0 0;">

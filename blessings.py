@@ -1,83 +1,241 @@
-from blaseball_mike.models import Player, Team, Game, Idol
+"""
+Various functions to apply either generic or blessing-specific changes to players or teams
+"""
+
+from blaseball_mike.models import Team
 from statistics import mean
-from matplotlib import pyplot
-from utils import *
+import pandas
+
+# Teams that cannot be the targets or recipients of blessings
+INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
+                 "Baltimore Crabs": "8d87c468-699a-47a8-b40d-cfb73a5660ad",
+                 "The Shelled One's Pods": "40b9ec2a-cb43-4dbb-b836-5accb62e7c20",
+                 "Real Game Band": "7fcb63bc-11f2-40b9-b465-f1d458692a63",
+                 "FWXBC": "e3f90fa1-0bbe-40df-88ce-578d0723a23b",
+                 "Club de Calf": "a3ea6358-ce03-4f23-85f9-deb38cb81b20",
+                 "BC Noir": "f29d6e60-8fce-4ac6-8bc2-b5e3cabc5696",
+                 "Atlético Latte": "49181b72-7f1c-4f1c-929f-928d763ad7fb",
+                 "Cold Brew Crew": "4d921519-410b-41e2-882e-9726a4e54a6a",
+                 "Royal PoS": "9a5ab308-41f2-4889-a3c3-733b9aab806e",
+                 "Cream & Sugar United": "b3b9636a-f88a-47dc-a91d-86ecc79f9934",
+                 "Pandemonium Artists": "3b0a289b-aebd-493c-bc11-96793e7216d5",
+                 "Society Data Witches": "d2634113-b650-47b9-ad95-673f8e28e687",
+                 "Inter Xpresso": "d8f82163-2e74-496b-8e4b-2ab35b2d3ff1",
+                 "Milk Proxy Society": "a7592bd7-1d3c-4ffb-8b3a-0b1e4bc321fd",
+                 "Macchiato City": "9e42c12a-7561-42a2-b2d0-7cf81a817a5e",
+                 "Light & Sweet Electric Co.": "70eab4ab-6cb1-41e7-ac8b-1050ee12eecc",
+                 "Americano Water Works": "4e5d0063-73b4-440a-b2d1-214a7345cf16",
+                 "Heavy FC": "e8f7ffee-ec53-4fe0-8e87-ea8ff1d0b4a9"}
 
 
-
-def vulture(division):
+def sort_lineup(team, num=None, order="worst"):
     """
-    Get list of best pitchers and best hitters in the division
+    Sort a teams lineup by batting stars
+
+    :param team: Team
+    :param num: number of desired results, returns all by default
+    :param order: sort by 'best' or 'worst', default 'worst'
+    :return: list of Players
     """
-    all_pitchers = []
-    all_hitters = []
-    for team in division.teams.values():
-        all_hitters.extend(team.lineup)
-        all_pitchers.extend(team.rotation)
+    if order == "best":
+        reverse=True
+    else:
+        reverse=False
 
-    all_hitters.sort(key=lambda x: x.batting_rating, reverse=True)
-    all_pitchers.sort(key=lambda x: x.pitching_rating, reverse=True)
+    batters = team.lineup
+    batters.sort(key=lambda x: x.batting_rating, reverse=reverse)
 
-    return all_hitters[0:3] + all_pitchers[0:3]
+    if num is None or num > len(batters):
+        num = len(batters)
+    return batters[0:num]
 
-def headhunter(subleague):
+def sort_rotation(team, num=None, order="worst"):
     """
-    Get list of best hitters in a subleague
+    Sort a teams rotation by pitching stars
+
+    :param team: Team
+    :param num: number of desired results, returns all by default
+    :param order: sort by 'best' or 'worst', default 'worst'
+    :return: list of Players
     """
-    all_hitters = []
-    for div in subleague.divisions.values():
-        for team in div.teams.values():
-            all_hitters.extend(team.lineup)
+    if order.lower() == "best":
+        reverse=True
+    else:
+        reverse=False
 
-    all_hitters.sort(key=lambda x: x.batting_rating, reverse=True)
+    pitchers = team.rotation
+    pitchers.sort(key=lambda x: x.pitching_rating, reverse=reverse)
 
-    return all_hitters[0:3]
+    if num is None or num > len(pitchers):
+        num = len(pitchers)
+    return pitchers[0:num]
 
-def mutual_aid(team):
+def sort_bench(team, num=None, order="worst"):
     """
-    Swap a teams worst hitter and pitcher
+    Sort a teams bench (hitting shadows) by batting stars
+
+    :param team: Team
+    :param num: number of desired results, returns all by default
+    :param order: sort by 'best' or 'worst', default 'worst'
+    :return: list of Players
     """
-    worst_hitter = sort_lineup(team, num=1)[0]
-    worst_pitcher = sort_rotation(team, num=1)[0]
+    if order == "best":
+        reverse=True
+    else:
+        reverse=False
 
-    table = pandas.Series({"batting_change": (worst_pitcher.batting_rating - worst_hitter.batting_rating) * 5,
-                           "pitching_change": (worst_hitter.pitching_rating - worst_pitcher.pitching_rating) * 5,
-                           "baserunning_change": (worst_pitcher.baserunning_rating - worst_hitter.baserunning_rating) * 5})
+    batters = team.bench
+    batters.sort(key=lambda x: x.batting_rating, reverse=reverse)
 
-    return table, worst_hitter.name, worst_pitcher.name
+    if num is None or num > len(batters):
+        num = len(batters)
+    return batters[0:num]
 
-def tbd(team):
+def sort_bullpen(team, num=None, order="worst"):
     """
-    Swap best hitting pitcher with worst hitter
+    Sort a teams bullpen (pitching shadows) by pitching stars
+
+    :param team: Team
+    :param num: number of desired results, returns all by default
+    :param order: sort by 'best' or 'worst', default 'worst'
+    :return: list of Players
     """
-    new_hitter = best_hitting_pitcher(team)
-    worst_hitter = sort_lineup(team, num=1)[0]
+    if order.lower() == "best":
+        reverse=True
+    else:
+        reverse=False
 
-    table = pandas.Series({"batting_change": (new_hitter.batting_rating - worst_hitter.batting_rating) * 5,
-                           "pitching_change": (worst_hitter.pitching_rating - new_hitter.pitching_rating) * 5,
-                           "baserunning_change": (new_hitter.baserunning_rating - worst_hitter.baserunning_rating) * 5})
+    pitchers = team.bullpen
+    pitchers.sort(key=lambda x: x.pitching_rating, reverse=reverse)
 
-    return table, worst_hitter.name, new_hitter.name
+    if num is None or num > len(pitchers):
+        num = len(pitchers)
+    return pitchers[0:num]
 
-def tbo(team):
+def sort_overall(team, num=None, order="worst"):
     """
-    Swap best pitching hitter with worst pitcher
-    """
-    new_pitcher = best_pitching_hitter(team)
-    worst_pitcher = sort_rotation(team, num=1)[0]
+    Sort a teams players by stars depending on position
 
-    table = pandas.Series({"batting_change": (worst_pitcher.batting_rating - new_pitcher.batting_rating) * 5,
-                           "pitching_change": (new_pitcher.pitching_rating - worst_pitcher.pitching_rating) * 5,
-                           "baserunning_change": (worst_pitcher.baserunning_rating - new_pitcher.baserunning_rating) * 5})
-
-    return table, worst_pitcher.name, new_pitcher.name
-
-def ooze(team, amount=0.10):
+    :param team: Team
+    :param num: number of desired results, returns all by default
+    :param order: sort by 'best' or 'worst', default 'worst'
+    :return: list of Players
     """
-    Boost power by 10%
+    if order.lower() == "best":
+        reverse=True
+    else:
+        reverse=False
+
+    lineup_sorted = sort_lineup(team, num)
+    rotation_sorted = sort_rotation(team, num)
+    player_dict = {x.id: x for x in lineup_sorted + rotation_sorted}
+
+    # Sort by different ratings depending on position
+    line_ids = [(x.id, x.batting_rating) for x in lineup_sorted]
+    rot_ids = [(x.id, x.pitching_rating) for x in rotation_sorted]
+    sorted_ids = line_ids + rot_ids
+    sorted_ids.sort(key=lambda x: x[1], reverse=reverse)
+
+    if num is None or num > len(sorted_ids):
+        num = len(sorted_ids)
+    return [player_dict[k[0]] for k in sorted_ids[0:num]]
+
+def improve_team_batting(team, amount):
     """
-    new = improve_team_power(team, amount)
-    table = pandas.DataFrame([{"Name": x.name, "old_batting_stars": x.batting_rating * 5} for x in team.lineup]).set_index("Name")
+    Improve a Team's batting
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: list of improved players
+    """
+    new_team = []
+    for player in team.lineup:
+        new_team.append(player.simulated_copy(buffs={"batting_rating": amount}))
+    return new_team
+
+def improve_team_pitching(team, amount):
+    """
+    Improve a Team's pitching
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: list of improved players
+    """
+    new_team = []
+    for player in team.rotation:
+        new_team.append(player.simulated_copy(buffs={"pitching_rating": amount}))
+    return new_team
+
+def improve_team_baserunning(team, amount):
+    """
+    Improve a Team's baserunning
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: list of improved players
+    """
+    new_team = []
+    for player in team.lineup:
+        new_team.append(player.simulated_copy(buffs={"baserunning_rating": amount}))
+    return new_team
+
+def improve_team_defense(team, amount):
+    """
+    Improve a Team's defense
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: list of improved players
+    """
+    new_team = []
+    for player in team.lineup + team.rotation:
+        new_team.append(player.simulated_copy(buffs={"defense_rating": amount}))
+    return new_team
+
+def improve_team_power(team, amount):
+    """
+    Improve a Team's power
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: list of improved players
+    """
+    new_team = []
+    for player in team.lineup:
+        new_team.append(player.simulated_copy(buffs={"divinity": amount, "musclitude": amount}))
+    return new_team
+
+def improve_team_overall(team, amount, position="all"):
+    """
+    Improve a Team's overall stats
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :param postion: whether to improve 'lineup', 'rotation', or 'all'. Default is 'all'
+    :return: list of improved players
+    """
+    new_team = []
+    if position == "lineup":
+        vals = team.lineup
+    elif position == "rotation":
+        vals = team.rotation
+    else:
+        vals = team.lineup + team.rotation
+
+    for player in vals:
+        new_team.append(player.simulated_copy(buffs={"overall_rating": amount}))
+    return new_team
+
+def improve_team_batting_pandas(team, amount):
+    """
+    Improve a Team's batting
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
+    """
+    new = improve_team_batting(team, amount)
+    table = pandas.DataFrame([{"Name":x.name, "old_batting_stars":x.batting_rating * 5} for x in team.lineup]).set_index("Name")
     table = table.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5} for x in new]).set_index("Name"))
     table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
 
@@ -86,173 +244,258 @@ def ooze(team, amount=0.10):
 
     return table, total, avg
 
-def sharing_signs(division):
+def improve_team_pitching_pandas(team, amount):
     """
-    Improve division by +10% hitting, -5% pitching
+    Improve a Team's pitching
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
-    results = []
-    for team in division.teams.values():
-        new_lineup = [x.simulated_copy(buffs={'batting_rating': 0.10}) for x in team.lineup]
-        new_rotation = [x.simulated_copy(buffs={'pitching_rating': -0.05}) for x in team.rotation]
+    new = improve_team_pitching(team, amount)
+    table = pandas.DataFrame([{"Name":x.name, "old_pitching_stars":x.pitching_rating * 5} for x in team.rotation]).set_index("Name")
+    table = table.join(pandas.DataFrame([{"Name": x.name, "new_pitching_stars": x.pitching_rating * 5} for x in new]).set_index("Name"))
+    table['change_in_pitching_stars'] = table.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
 
-        bat_total = sum([x.batting_stars for x in new_lineup]) - sum([x.batting_stars for x in team.lineup])
-        pitch_total = sum([x.pitching_stars for x in new_rotation]) - sum([x.pitching_stars for x in team.rotation])
-        bat_avg = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in team.lineup])
-        pitch_avg = mean([x.pitching_stars for x in new_rotation]) - mean([x.pitching_stars for x in team.rotation])
+    total = table.sum(axis=0)
+    avg = table.mean(axis=0)
 
-        results.append((team.nickname, bat_total, pitch_total, bat_avg, pitch_avg))
+    return table, total, avg
 
-    return results
-
-def move_mounds(division):
+def improve_team_baserunning_pandas(team, amount):
     """
-    Improve division by +10% pitching, -5% hitting
+    Improve a Team's baserunning
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
-    results = []
-    for team in division.teams.values():
-        new_lineup = [x.simulated_copy(buffs={'batting_rating': -0.05}) for x in team.lineup]
-        new_rotation = [x.simulated_copy(buffs={'pitching_rating': 0.10}) for x in team.rotation]
+    new = improve_team_baserunning(team, amount)
+    table = pandas.DataFrame([{"Name":x.name, "old_baserunning_stars":x.baserunning_rating * 5} for x in team.lineup]).set_index("Name")
+    table = table.join(pandas.DataFrame([{"Name": x.name, "new_baserunning_stars": x.baserunning_rating * 5} for x in new]).set_index("Name"))
+    table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_baserunning_stars - row.old_baserunning_stars, axis=1)
 
-        bat_stars = sum([x.batting_stars for x in new_lineup]) - sum([x.batting_stars for x in team.lineup])
-        pitch_stars = sum([x.pitching_stars for x in new_rotation]) - sum([x.pitching_stars for x in team.rotation])
+    total = table.sum(axis=0)
+    avg = table.mean(axis=0)
 
-        results.append((team.nickname, bat_stars, pitch_stars))
+    return table, total, avg
 
-    return results
-
-def mutually_arising(division):
+def improve_team_defense_pandas(team, amount):
     """
-    Improve division by 2% overall
+    Improve a Team's defense
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
-    results = []
-    for team in division.teams.values():
-        new_lineup = [x.simulated_copy(buffs={'overall_rating': 0.02}) for x in team.lineup]
-        new_rotation = [x.simulated_copy(buffs={'overall_rating': 0.02}) for x in team.rotation]
+    new = improve_team_defense(team, amount)
+    table = pandas.DataFrame([{"Name": x.name, "old_defense_stars": x.defense_rating * 5} for x in team.lineup]).set_index("Name")
+    table = table.join(pandas.DataFrame([{"Name": x.name, "new_defense_stars": x.defense_rating * 5} for x in new]).set_index("Name"))
+    table['change_in_defense_stars'] = table.apply(lambda row: row.new_defense_stars - row.old_defense_stars, axis=1)
 
-        bat_stars = sum([x.batting_stars for x in new_lineup]) - sum([x.batting_stars for x in team.lineup])
-        pitch_stars = sum([x.pitching_stars for x in new_rotation]) - sum([x.pitching_stars for x in team.rotation])
-        baserun_stars = sum([x.baserunning_stars for x in new_lineup]) - sum([x.baserunning_stars for x in team.lineup])
-        defense_stars = sum([x.defense_stars for x in new_lineup + new_rotation]) - sum([x.defense_stars for x in team.lineup + team.rotation])
+    total = table.sum(axis=0)
+    avg = table.mean(axis=0)
 
-        results.append((team.nickname, bat_stars, pitch_stars, baserun_stars, defense_stars))
+    return table, total, avg
 
-    return results
+def improve_team_overall_pandas(team, amount):
+    """
+    Improve a Team's overall stats
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
+    """
+    # Gaze upon my works ye mighty, and despair
+
+    new_lineup = improve_team_overall(team, amount, position="lineup")
+    new_rotation = improve_team_overall(team, amount, position="rotation")
+
+    # Generate total change table
+    table = pandas.DataFrame([{"Name": x.name, "old_batting_stars": x.batting_rating * 5,
+                                      "old_pitching_stars": x.pitching_rating * 5,
+                                      "old_baserunning_stars": x.baserunning_rating * 5,
+                                      "old_defense_stars": x.defense_rating * 5} for x in team.lineup + team.rotation]).set_index("Name")
+    table = table.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5,
+                                      "new_pitching_stars": x.pitching_rating * 5,
+                                      "new_baserunning_stars": x.baserunning_rating * 5,
+                                      "new_defense_stars": x.defense_rating * 5} for x in new_lineup + new_rotation]).set_index("Name"))
+    table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
+    table['change_in_pitching_stars'] = table.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
+    table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
+    table['change_in_defense_stars'] = table.apply(lambda row: row.new_defense_stars - row.old_defense_stars, axis=1)
+
+    # To calculate Total & Average Stars, we need to do some magic:
+    #   Not all stats are useful for all players, depending on position, so generate DataFrames that only include the correct columns
+    #   THEN join the two (with NaNs filling the empty cells) to do the sum & mean calls on
+    table_lineup = pandas.DataFrame([{"Name": x.name, "old_batting_stars": x.batting_rating * 5,
+                                      "old_baserunning_stars": x.baserunning_rating * 5,
+                                      "old_defense_stars": x.defense_rating * 5} for x in team.lineup]).set_index("Name")
+    table_lineup = table_lineup.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5,
+                                          "new_baserunning_stars": x.baserunning_rating * 5,
+                                          "new_defense_stars": x.defense_rating * 5} for x in new_lineup]).set_index("Name"))
+    table_lineup['change_in_batting_stars'] = table_lineup.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
+    table_lineup['change_in_baserunning_stars'] = table_lineup.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
+
+    table_rotation = pandas.DataFrame([{"Name": x.name, "old_pitching_stars": x.pitching_rating * 5,
+                                      "old_defense_stars": x.defense_rating * 5} for x in team.rotation]).set_index("Name")
+    table_rotation = table_rotation.join(pandas.DataFrame([{"Name": x.name, "new_pitching_stars": x.pitching_rating * 5,
+                                            "new_defense_stars": x.defense_rating * 5} for x in new_rotation]).set_index("Name"))
+    table_rotation['change_in_pitching_stars'] = table_rotation.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
+
+    table_relative = table_lineup.append(table_rotation)
+    table_relative['change_in_defense_stars'] = table_lineup.apply(lambda row: row.new_defense_stars - row.old_defense_stars, axis=1)
+
+    total = table_relative.sum(axis=0)
+    avg = table_relative.mean(axis=0)
+
+    return table, total, avg
+
+def maximize(player, position="lineup", overall=False):
+    """
+    Maximize a player
+
+    :param player: Player
+    :param position: player's position ('lineup', 'rotation', 'bench', 'bullpen'). default is 'lineup'
+    :param overall: whether to maximize all stats. default is False
+    :return: maximized Player
+    """
+    if position in ("lineup", "bench"):
+        compare = "batting_stars"
+    elif position in ("rotation", "bullpen"):
+        compare = "pitching_stars"
+    else:
+        raise ValueError("invalid position")
+
+    if overall:
+        increase = "overall_rating"
+    else:
+        increase = compare[:-5] + "rating"
+
+    while getattr(player, compare, 5.0) < 5.0:
+        player = player.simulated_copy(buffs={increase: 0.01})
+        if increase in ("pitching_rating", "overall_rating"): player.total_fingers = player.total_fingers + 1
+
+    if not overall:
+        player = player.simulated_copy(buffs={increase: 0.01})
+        if increase in ("pitching_rating", "overall_rating"): player.total_fingers = player.total_fingers + 1
+
+    return player
+
+def minimize(player, position, overall=False):
+    """
+    Minimize a player
+
+    :param player: Player
+    :param position: player's position ('lineup', 'rotation', 'bench', 'bullpen'). default is 'lineup'
+    :param overall: whether to minimize all stats. default is False
+    :return: minimized Player
+    """
+    if position in ("lineup", "bench"):
+        compare = "batting_rating"
+    elif position in ("rotation", "bullpen"):
+        compare = "pitching_rating"
+    else:
+        raise ValueError("invalid position")
+
+    if overall:
+        decrease = "overall_rating"
+    else:
+        decrease = compare
+
+    while getattr(player, compare, 0.03) > 0.03:
+        player = player.simulated_copy(buffs={decrease: -0.01})
+        if decrease in ("pitching_rating", "overall_rating"): player.total_fingers = player.total_fingers + 1
+
+    return player
+
+def clone(player):
+    """
+    Clone a player
+
+    :param player: Player
+    :return: cloned Player
+    """
+    player = player.simulated_copy(buffs={"overall_rating": -0.05})
+    player.total_fingers = player.total_fingers + 1
+    player.name = player.name + " II"
+    return player
+
+def best_pitching_hitter(team):
+    """
+    Get the best Pitching Hitter on a team (highest pitching stars in lineup)
+    """
+    return max(team.lineup, key=lambda x: x.pitching_rating)
+
+def best_hitting_pitcher(team):
+    """
+    Get the best Hitting Pitcher on a team (highest batting stars in rotation)
+    """
+    return max(team.rotation, key=lambda x: x.batting_rating)
 
 def replace_player(team, player, bat_star, pitch_star, run_star, def_star):
+    """
+    Replace a player on the team with a new player, with star values defined
+    :return: Pandas Series containing change in average stars
+    """
     bat_mean = mean([x.batting_stars for x in team.lineup if x.id != player.id] + [bat_star]) - mean([x.batting_stars for x in team.lineup])
     pitch_mean = mean([x.pitching_stars for x in team.rotation if x.id != player.id] + [pitch_star]) - mean([x.pitching_stars for x in team.rotation])
     baserun_mean = mean([x.baserunning_stars for x in team.lineup if x.id != player.id] + [run_star]) - mean([x.baserunning_stars for x in team.lineup])
     defense_mean = mean([x.defense_stars for x in team.lineup + team.rotation if x.id != player.id] + [def_star]) - mean([x.defense_stars for x in team.lineup + team.rotation])
 
-    return pandas.DataFrame([{"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}])
+    return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
 
 def add_player(team, bat_star, run_star, def_star):
+    """
+    Add a new player, with star values defined
+    :return: Pandas Series containing change in average stars
+    """
     bat_mean = mean([x.batting_stars for x in team.lineup] + [bat_star]) - mean([x.batting_stars for x in team.lineup])
     baserun_mean = mean([x.baserunning_stars for x in team.lineup] + [run_star]) - mean([x.baserunning_stars for x in team.lineup])
     defense_mean = mean([x.defense_stars for x in team.lineup + team.rotation] + [def_star]) - mean([x.defense_stars for x in team.lineup + team.rotation])
 
-    return pandas.DataFrame([{"batting_change":bat_mean, "baserunning_change":baserun_mean, "defense_change":defense_mean}])
+    return pandas.Series({"batting_change":bat_mean, "baserunning_change":baserun_mean, "defense_change":defense_mean}).rename(team.nickname)
 
 def remove_player(team, player):
+    """
+    Remove a player on the team
+    :return: Pandas Series containing change in average stars
+    """
     new_lineup = [x for x in team.lineup if x.id != player.id]
 
     bat_mean = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in team.lineup])
     baserun_mean = mean([x.baserunning_stars for x in new_lineup]) - mean([x.baserunning_stars for x in team.lineup])
     defense_mean = mean([x.defense_stars for x in new_lineup + team.rotation]) - mean([x.defense_stars for x in team.lineup + team.rotation])
 
-    return pandas.DataFrame([{"batting_change": bat_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}])
+    return pandas.Series({"batting_change": bat_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
 
-def idol_stars():
+def night_thief(home_team):
     """
-    Get the min, max, and average stars of the top 20 idol board players
+    Get average stars for players in division bullpens (ignoring the home_team)
     """
-    list = Idol.load()
-    players = [i.player for i in list.values()]
-
-    return {
-        "batting": {
-            "max": max([p.batting_stars for p in players]),
-            "min": min([p.batting_stars for p in players]),
-            "avg": mean([p.batting_stars for p in players])
-        },
-        "pitching": {
-            "max": max([p.pitching_stars for p in players]),
-            "min": min([p.pitching_stars for p in players]),
-            "avg": mean([p.pitching_stars for p in players])
-        },
-        "baserunning": {
-            "max": max([p.baserunning_stars for p in players]),
-            "min": min([p.baserunning_stars for p in players]),
-            "avg": mean([p.baserunning_stars for p in players])
-        },
-        "defense": {
-            "max": max([p.defense_stars for p in players]),
-            "min": min([p.defense_stars for p in players]),
-            "avg": mean([p.defense_stars for p in players])
-        }
-    }
-
-def promo_code(team, pitch_star):
-    """
-    Calculate average star rating change if adding an additional pitcher with star value of pitch_star
-    """
-    pitching_stars = mean([x.pitching_stars for x in team.rotation] + [pitch_star]) - mean([x.pitching_stars for x in team.rotation])
-
-    return pitching_stars
-
-def composite(team, player=None):
-    """
-    Calculate average star rating change if removing a pitcher (either worst or passed player)
-    """
-    if player is None:
-        worst = min(team.rotation, key=lambda x: x.pitching_rating)
-    else:
-        worst = player
-    new_rotation = [x for x in team.rotation if x.id != worst.id]
-
-    pitch_stars = mean([x.pitching_stars for x in new_rotation]) - mean([x.pitching_stars for x in team.rotation])
-    return pitch_stars
-
-def night_thief(division, home_team):
-    """
-    Get average pitching stars for players in division bullpens & graph all star values
-    """
-    teams = list(division.teams.values())
+    teams = [x for x in Team.load_all().values() if x.id not in INVALID_TEAMS.values()]
     teams = [x for x in teams if x.id != home_team.id]
-    avg = 0
-    num = 0
-    number = {
-        0: 0,
-        0.5: 0,
-        1: 0,
-        1.5: 0,
-        2: 0,
-        2.5: 0,
-        3: 0,
-        3.5: 0,
-        4: 0,
-        4.5: 0,
-        5: 0
-    }
-    for t in teams:
-        for p in t.bullpen:
-            num += 1
-            number[p.pitching_stars] += 1
-            avg += p.pitching_stars
 
-    vals = list(number.values())
-    ticks = list(number.keys())
-    tick_pos = [i for i, _ in enumerate(ticks)]
-    pyplot.bar(tick_pos, vals)
-    pyplot.xticks(tick_pos, ticks)
-    pyplot.show()
+    pitching = {}
+    defense = {}
+    for team in teams:
+        stars = [x.pitching_stars for x in team.bullpen]
+        pitching[team.nickname] = {x: stars.count(x) for x in stars}
 
-    avg = avg / num
-    return avg
+        stars = [x.defense_stars for x in team.bullpen]
+        defense[team.nickname] = {x: stars.count(x) for x in stars}
+
+    pitch_table = pandas.DataFrame(pitching).fillna(0).sort_index()
+    pitch_table["Total"] = pitch_table.sum(axis=1)
+
+    def_table = pandas.DataFrame(defense).fillna(0).sort_index()
+    def_table["Total"] = def_table.sum(axis=1)
+
+    return pitch_table, def_table
 
 def grab_and_smash(home_team):
     """
-    Get average batting stars for players in division bullpens & graph all star values
+    Get average stars for players in division benches (ignoring the home_team)
     """
     teams = [x for x in Team.load_all().values() if x.id not in INVALID_TEAMS.values()]
     teams = [x for x in teams if x.id != home_team.id]
@@ -261,13 +504,13 @@ def grab_and_smash(home_team):
     baserunning = {}
     defense = {}
     for team in teams:
-        stars = [x.batting_stars for x in team.bullpen]
+        stars = [x.batting_stars for x in team.bench]
         batting[team.nickname] = {x:stars.count(x) for x in stars}
 
-        stars = [x.baserunning_stars for x in team.bullpen]
+        stars = [x.baserunning_stars for x in team.bench]
         baserunning[team.nickname] = {x:stars.count(x) for x in stars}
 
-        stars = [x.defense_stars for x in team.bullpen]
+        stars = [x.defense_stars for x in team.bench]
         defense[team.nickname] = {x: stars.count(x) for x in stars}
 
     bat_table = pandas.DataFrame(batting).fillna(0).sort_index()
@@ -280,173 +523,3 @@ def grab_and_smash(home_team):
     def_table["Total"] = def_table.sum(axis=1)
 
     return bat_table, base_table, def_table
-
-def precognition(team):
-    """
-    Improve batting by 20%
-    Blessing affects 3 random, but calculates change for all players
-    """
-    batters = team.lineup
-    new_batters = []
-    for p in batters:
-        new_batters.append((p, p.simulated_copy(buffs={"batting_rating": 0.2})))
-    return new_batters
-
-def relief_averages():
-    """
-    Calculate star averages for all players INCLUDING bullpen players
-    """
-    teams = Team.load_all()
-    avgs = {}
-    for t in teams.values():
-        all = t.rotation + t.bullpen
-        avgs[t.nickname] = (mean([x.pitching_stars for x in all]), mean([x.pitching_stars for x in t.rotation]))
-    return avgs
-
-def home_field(team):
-    """
-    Get number of games where was home and either lost by one or went into overtime
-    """
-    # Get all games, this will take a while
-    affected_games = []
-    for day in range(1, 100):
-        games = list(Game.load_by_day(season=7, day=day).values())
-        games = [x for x in games if x.home_team.id == team.id]
-        if len(games) == 0:
-            continue
-        home_game = games[0]
-        if home_game.away_score - home_game.home_score == 1 or \
-            home_game.inning > 9:
-            affected_games.append(home_game)
-
-    return affected_games
-
-def bird_up(team):
-    """
-    Calculate change in player stars with Affinity for Crows stat boost
-    """
-    # TODO: Not sure this is actually how it works on the backend
-    for p in team.lineup:
-        t = p.simulated_copy(multipliers={'batting_rating': 0.5})
-        print(t.name, t.batting_stars)
-    for p in team.rotation:
-        t = p.simulated_copy(multipliers={'pitching_rating': 0.5})
-        print(t.name, t.pitching_stars)
-
-
-def tag_team_pitching(team, opponent):
-    """
-    Improve Team and worst subleague opponent pitching by 10%
-    """
-    this_team = []
-    for player in team.rotation:
-        this_team.append(player.simulated_copy(buffs={'pitching_rating': 0.1}))
-
-    opp_team = []
-    for player in opponent.rotation:
-        opp_team.append(player.simulated_copy(buffs={'pitching_rating': 0.1}))
-
-    table = pandas.DataFrame([{"Name": x.name, "old_pitching_stars": x.pitching_rating * 5} for x in team.rotation]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_pitching_stars": x.pitching_rating * 5} for x in this_team]).set_index("Name"))
-    table['change_in_pitching_stars'] = table.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
-
-    total = table.sum(axis=0)
-    avg = table.mean(axis=0)
-
-    return table, total, avg
-
-
-def tag_team_hitting(team, opponent):
-    """
-    Improve Team and worst subleague opponent pitching by 10%
-    """
-    this_team = []
-    for player in team.lineup:
-        this_team.append(player.simulated_copy(buffs={'batting_rating': 0.1}))
-
-    opp_team = []
-    for player in opponent.lineup:
-        opp_team.append(player.simulated_copy(buffs={'batting_rating': 0.1}))
-
-    return this_team, opp_team
-
-def out_of_sight(team):
-    """
-    Replace worst 2 pitchers with top 2 pitchers from Shadows
-    """
-    relief = team.bullpen[0:2]
-    worst_ids = [x.id for x in worst_rotation(team, 2)]
-    new_rotation = [x for x in team.rotation if x.id not in worst_ids] + relief
-
-    return total_stars(new_rotation)["pitching"] - total_stars(team.rotation)["pitching"], \
-           avg_stars(new_rotation)["pitching"] - avg_stars(team.rotation)["pitching"]
-
-def disappearing_acts(team):
-    """
-    Replace worst 3 batters with top 3 batters from Shadows
-    """
-    relief = team.bench[0:3]
-    worst_ids = [x.id for x in worst_lineup(team, 3)]
-    new_lineup = [x for x in team.lineup if x.id not in worst_ids] + relief
-
-    new_total = total_stars(new_lineup)
-    old_total = total_stars(team.lineup)
-
-    new_avg = avg_stars(new_lineup)
-    old_avg = avg_stars(team.lineup)
-
-    return star_compare(new_total, old_total), star_compare(new_avg, old_avg)
-
-def nut_button(team):
-    """
-    Return the number of players and percentage of the team that is allergic to peanuts
-    """
-    all = team.rotation + team.lineup
-    x = sum([x.peanut_allergy for x in all])
-    return x, x/len(all)
-
-def black_hole(team):
-    """
-    Get number of games where a team won or lost by 10 points
-    """
-    # Get all games, this will take a while
-    win_games = []
-    lose_games = []
-    for day in range(1, 100):
-        games = list(Game.load_by_day(season=9, day=day).values())
-        games = [x for x in games if x.home_team.id == team.id or x.away_team.id == team.id]
-        if len(games) == 0:
-            continue
-        game = games[0]
-
-        if game.away_score >= 10 or game.home_score >= 10:
-            if (game.away_score >= 10 and game.away_team.id == team.id) or\
-               (game.home_score >= 10 and game.home_team.id == team.id):
-                win_games.append(game)
-            else:
-                lose_games.append(game)
-
-    return win_games, lose_games
-
-def selfdestruct(team):
-    """
-    Get number of games where a team shamed or was shamed
-    """
-    # Get all games, this will take a while
-    win_games = []
-    lose_games = []
-    for day in range(1, 100):
-        games = list(Game.load_by_day(season=9, day=day).values())
-        games = [x for x in games if x.home_team.id == team.id or x.away_team.id == team.id]
-        if len(games) == 0:
-            continue
-        game = games[0]
-
-        if game.shame:
-            if (game.away_score > game.home_score and game.away_team.id == team.id) or\
-               (game.home_score > game.away_score and game.home_team.id == team.id):
-                win_games.append(game)
-            else:
-                lose_games.append(game)
-
-    return win_games, lose_games

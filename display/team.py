@@ -2,7 +2,7 @@
 
 from blaseball_mike.models import Team, SimulationData
 from IPython.display import HTML, display
-from utils import *
+from display.general import *
 
 def _vibe_to_arrow(vibe):
     if vibe > 0.8:
@@ -34,7 +34,10 @@ def _get_player_html(player, day, index, lineup=True):
 
     try:
         vibe = player.get_vibe(day)
-        vibes_html = f"""<div style="display:flex;flex-direction:row;justify-content:center;">
+        if vibe is None:
+            vibes_html = ""
+        else:
+            vibes_html = f"""<div style="display:flex;flex-direction:row;justify-content:center;">
                 {_vibe_to_arrow(vibe)}
             </div>"""
     except AttributeError:
@@ -65,6 +68,13 @@ def _html_attr(attr_list, border_color):
     return ret
 
 def display_team(team, day=None):
+    """
+    Display a team page similarly to the Blaseball website
+
+    :param team: Team
+    :param day: gameday for vibes. defaults to current day
+    :return: ipython Display
+    """
     if isinstance(team, list):
         if len(team) > 1:
             raise ValueError("Can only display one team at a time")
