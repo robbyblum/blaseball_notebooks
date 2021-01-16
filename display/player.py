@@ -127,11 +127,12 @@ def get_batting_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Name": x.name, "Batting Rating": x.hitting_rating, "Buoyancy":x.buoyancy,
-                                       "Divinity": x.divinity, "Martyrdom": x.martyrdom, "Moxie": x.moxie,
-                                       "Musclitude": x.musclitude, "Patheticism": x.patheticism,
-                                       "Thwackability": x.thwackability,
-                                       "Tragicness": x.tragicness} for x in values]).set_index("Name")
+    return pandas.DataFrame([{"Name": x.name, "Batting Rating": x.hitting_rating,
+                              "Thwackability": x.thwackability, "Divinity": x.divinity,
+                              "Musclitude": x.musclitude, "Moxie": x.moxie,
+                              "Patheticism": x.patheticism, "Martyrdom": x.martyrdom,
+                              "Tragicness": x.tragicness, "Buoyancy":x.buoyancy
+                              } for x in values]).set_index("Name")
 
 def get_pitching_stlats(values):
     """
@@ -148,10 +149,11 @@ def get_pitching_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Name": x.name, "Pitching Rating": x.pitching_rating, "Coldness": x.coldness,
-                                       "Overpowerment": x.overpowerment, "Ruthlessness": x.ruthlessness,
-                                       "Shakespearianism": x.shakespearianism, "Suppression": x.suppression,
-                                       "Unthwackability": x.unthwackability} for x in values]).set_index("Name")
+    return pandas.DataFrame([{"Name": x.name, "Pitching Rating": x.pitching_rating,
+                              "Unthwackability": x.unthwackability, "Ruthlessness": x.ruthlessness,
+                              "Overpowerment": x.overpowerment, "Shakespearianism": x.shakespearianism,
+                              "Coldness": x.coldness, "Suppression": x.suppression
+                              } for x in values]).set_index("Name")
 
 def get_baserunning_stlats(values):
     """
@@ -169,9 +171,10 @@ def get_baserunning_stlats(values):
         values = list(values.values())
 
     return pandas.DataFrame([{"Name": x.name, "Baserunning Rating": x.baserunning_rating,
-                                       "Base Thirst": x.base_thirst, "Continuation": x.continuation,
-                                       "Ground Friction": x.ground_friction, "Indulgence": x.indulgence,
-                                       "Laserlikeness": x.laserlikeness} for x in values]).set_index("Name")
+                              "Laserlikeness": x.laserlikeness, "Continuation": x.continuation,
+                              "Base Thirst": x.base_thirst, "Indulgence": x.indulgence,
+                              "Ground Friction": x.ground_friction,
+                              } for x in values]).set_index("Name")
 
 def get_defense_stlats(values):
     """
@@ -189,9 +192,10 @@ def get_defense_stlats(values):
         values = list(values.values())
 
     return pandas.DataFrame([{"Name": x.name, "Defense Rating": x.defense_rating,
-                                       "Anticapitalism": x.anticapitalism, "Chasiness": x.chasiness,
-                                       "Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
-                                       "Watchfulness": x.watchfulness} for x in values]).set_index("Name")
+                              "Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
+                              "Watchfulness": x.watchfulness, "Anticapitalism": x.anticapitalism,
+                              "Chasiness": x.chasiness
+                              } for x in values]).set_index("Name")
 
 def _html_attr(attr_list, border_color):
     ret = ""
