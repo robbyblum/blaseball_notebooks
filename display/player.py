@@ -61,8 +61,8 @@ def get_stars(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Name":x.name, "Batting": x.batting_stars, "Pitching":x.pitching_stars,
-                              "Baserunning":x.baserunning_stars, "Defense":x.defense_stars} for x in values]).set_index("Name")
+    return pandas.DataFrame([{"Batting": x.batting_stars, "Pitching":x.pitching_stars,
+                              "Baserunning":x.baserunning_stars, "Defense":x.defense_stars} for x in values], index=[x.name for x in values])
 
 def get_batting_stats(values, season=None):
     """
@@ -86,7 +86,8 @@ def get_batting_stats(values, season=None):
         season = season - 1
 
     ret = datablase.player_stats(ids, "batting", season)
-    return pandas.DataFrame(ret).set_index("player_name").drop(labels=["team_id", "team", "team_ids", "season", "player_id", "first_appearance"], axis=1, errors='ignore')
+    return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
+        "player_name", "team_id", "team", "team_ids", "season", "player_id", "first_appearance"], axis=1, errors='ignore')
 
 def get_pitching_stats(values, season=None):
     """
@@ -110,7 +111,8 @@ def get_pitching_stats(values, season=None):
         season = season - 1
 
     ret = datablase.player_stats(ids, "pitching", season)
-    return pandas.DataFrame(ret).set_index("player_name").drop(labels=["team_id", "team", "team_ids", "season", "player_id", "pitch_count", "batters_faced"], axis=1, errors='ignore')
+    return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
+        "player_name", "team_id", "team", "team_ids", "season", "player_id"], axis=1, errors='ignore')
 
 def get_batting_stlats(values):
     """
@@ -127,12 +129,11 @@ def get_batting_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Name": x.name,
-                              "Thwackability": x.thwackability, "Divinity": x.divinity,
+    return pandas.DataFrame([{"Thwackability": x.thwackability, "Divinity": x.divinity,
                               "Musclitude": x.musclitude, "Moxie": x.moxie,
                               "Patheticism": x.patheticism, "Martyrdom": x.martyrdom,
                               "Tragicness": x.tragicness, "Buoyancy":x.buoyancy
-                              } for x in values]).set_index("Name")
+                              } for x in values], index=[x.name for x in values])
 
 def get_pitching_stlats(values):
     """
@@ -149,11 +150,10 @@ def get_pitching_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Name": x.name,
-                              "Unthwackability": x.unthwackability, "Ruthlessness": x.ruthlessness,
+    return pandas.DataFrame([{"Unthwackability": x.unthwackability, "Ruthlessness": x.ruthlessness,
                               "Overpowerment": x.overpowerment, "Shakespearianism": x.shakespearianism,
                               "Coldness": x.coldness, "Suppression": x.suppression
-                              } for x in values]).set_index("Name")
+                              } for x in values], index=[x.name for x in values])
 
 def get_baserunning_stlats(values):
     """
@@ -170,11 +170,10 @@ def get_baserunning_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Name": x.name,
-                              "Laserlikeness": x.laserlikeness, "Continuation": x.continuation,
+    return pandas.DataFrame([{"Laserlikeness": x.laserlikeness, "Continuation": x.continuation,
                               "Base Thirst": x.base_thirst, "Indulgence": x.indulgence,
                               "Ground Friction": x.ground_friction,
-                              } for x in values]).set_index("Name")
+                              } for x in values], index=[x.name for x in values])
 
 def get_defense_stlats(values):
     """
@@ -191,11 +190,10 @@ def get_defense_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Name": x.name,
-                              "Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
+    return pandas.DataFrame([{"Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
                               "Watchfulness": x.watchfulness, "Anticapitalism": x.anticapitalism,
                               "Chasiness": x.chasiness
-                              } for x in values]).set_index("Name")
+                              } for x in values], index=[x.name for x in values])
 
 def _html_attr(attr_list, border_color):
     ret = ""

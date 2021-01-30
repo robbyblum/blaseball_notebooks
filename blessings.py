@@ -235,8 +235,8 @@ def improve_team_batting_pandas(team, amount):
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
     new = improve_team_batting(team, amount)
-    table = pandas.DataFrame([{"Name":x.name, "old_batting_stars":x.batting_rating * 5} for x in team.lineup]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5} for x in new]).set_index("Name"))
+    table = pandas.DataFrame([{"old_batting_stars":x.batting_rating * 5} for x in team.lineup], index=[x.name for x in team.lineup])
+    table = table.join(pandas.DataFrame([{"new_batting_stars": x.batting_rating * 5} for x in new], index=[x.name for x in new]))
     table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
 
     total = table.sum(axis=0)
@@ -253,8 +253,8 @@ def improve_team_pitching_pandas(team, amount):
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
     new = improve_team_pitching(team, amount)
-    table = pandas.DataFrame([{"Name":x.name, "old_pitching_stars":x.pitching_rating * 5} for x in team.rotation]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_pitching_stars": x.pitching_rating * 5} for x in new]).set_index("Name"))
+    table = pandas.DataFrame([{"old_pitching_stars":x.pitching_rating * 5} for x in team.rotation], index=[x.name for x in team.rotation])
+    table = table.join(pandas.DataFrame([{"new_pitching_stars": x.pitching_rating * 5} for x in new], index=[x.name for x in new]))
     table['change_in_pitching_stars'] = table.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
 
     total = table.sum(axis=0)
@@ -271,8 +271,8 @@ def improve_team_baserunning_pandas(team, amount):
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
     new = improve_team_baserunning(team, amount)
-    table = pandas.DataFrame([{"Name":x.name, "old_baserunning_stars":x.baserunning_rating * 5} for x in team.lineup]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_baserunning_stars": x.baserunning_rating * 5} for x in new]).set_index("Name"))
+    table = pandas.DataFrame([{"old_baserunning_stars":x.baserunning_rating * 5} for x in team.lineup], index=[x.name for x in team.lineup])
+    table = table.join(pandas.DataFrame([{"new_baserunning_stars": x.baserunning_rating * 5} for x in new], index=[x.name for x in new]))
     table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_baserunning_stars - row.old_baserunning_stars, axis=1)
 
     total = table.sum(axis=0)
@@ -289,8 +289,8 @@ def improve_team_defense_pandas(team, amount):
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
     new = improve_team_defense(team, amount)
-    table = pandas.DataFrame([{"Name": x.name, "old_defense_stars": x.defense_rating * 5} for x in team.lineup]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_defense_stars": x.defense_rating * 5} for x in new]).set_index("Name"))
+    table = pandas.DataFrame([{"old_defense_stars": x.defense_rating * 5} for x in team.lineup + team.rotation], index=[x.name for x in team.lineup + team.rotation])
+    table = table.join(pandas.DataFrame([{"new_defense_stars": x.defense_rating * 5} for x in new], index=[x.name for x in new]))
     table['change_in_defense_stars'] = table.apply(lambda row: row.new_defense_stars - row.old_defense_stars, axis=1)
 
     total = table.sum(axis=0)
@@ -307,8 +307,8 @@ def make_team_big_pandas(team):
     """
     new = improve_team_power(team, 0.6)
     new = [x.simulated_copy(buffs={"baserunning_rating": -0.4}) for x in new]
-    table = pandas.DataFrame([{"Name":x.name, "old_batting_stars":x.batting_rating * 5, "old_baserunning_stars":x.baserunning_rating * 5} for x in team.lineup]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5, "new_baserunning_stars":x.baserunning_rating * 5} for x in new]).set_index("Name"))
+    table = pandas.DataFrame([{"old_batting_stars":x.batting_rating * 5, "old_baserunning_stars":x.baserunning_rating * 5} for x in team.lineup], index=[x.name for x in team.lineup])
+    table = table.join(pandas.DataFrame([{"new_batting_stars": x.batting_rating * 5, "new_baserunning_stars":x.baserunning_rating * 5} for x in new], index=[x.name for x in new]))
     table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
     table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_baserunning_stars - row.old_baserunning_stars, axis=1)
 
@@ -331,14 +331,14 @@ def improve_team_overall_pandas(team, amount):
     new_rotation = improve_team_overall(team, amount, position="rotation")
 
     # Generate total change table
-    table = pandas.DataFrame([{"Name": x.name, "old_batting_stars": x.batting_rating * 5,
+    table = pandas.DataFrame([{"old_batting_stars": x.batting_rating * 5,
                                       "old_pitching_stars": x.pitching_rating * 5,
                                       "old_baserunning_stars": x.baserunning_rating * 5,
-                                      "old_defense_stars": x.defense_rating * 5} for x in team.lineup + team.rotation]).set_index("Name")
-    table = table.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5,
+                                      "old_defense_stars": x.defense_rating * 5} for x in team.lineup + team.rotation], index=[x.name for x in team.lineup + team.rotation])
+    table = table.join(pandas.DataFrame([{"new_batting_stars": x.batting_rating * 5,
                                       "new_pitching_stars": x.pitching_rating * 5,
                                       "new_baserunning_stars": x.baserunning_rating * 5,
-                                      "new_defense_stars": x.defense_rating * 5} for x in new_lineup + new_rotation]).set_index("Name"))
+                                      "new_defense_stars": x.defense_rating * 5} for x in new_lineup + new_rotation], index=[x.name for x in new_lineup + new_rotation]))
     table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
     table['change_in_pitching_stars'] = table.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
     table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
@@ -347,19 +347,19 @@ def improve_team_overall_pandas(team, amount):
     # To calculate Total & Average Stars, we need to do some magic:
     #   Not all stats are useful for all players, depending on position, so generate DataFrames that only include the correct columns
     #   THEN join the two (with NaNs filling the empty cells) to do the sum & mean calls on
-    table_lineup = pandas.DataFrame([{"Name": x.name, "old_batting_stars": x.batting_rating * 5,
+    table_lineup = pandas.DataFrame([{"old_batting_stars": x.batting_rating * 5,
                                       "old_baserunning_stars": x.baserunning_rating * 5,
-                                      "old_defense_stars": x.defense_rating * 5} for x in team.lineup]).set_index("Name")
-    table_lineup = table_lineup.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5,
+                                      "old_defense_stars": x.defense_rating * 5} for x in team.lineup], index=[x.name for x in team.lineup])
+    table_lineup = table_lineup.join(pandas.DataFrame([{"new_batting_stars": x.batting_rating * 5,
                                           "new_baserunning_stars": x.baserunning_rating * 5,
-                                          "new_defense_stars": x.defense_rating * 5} for x in new_lineup]).set_index("Name"))
+                                          "new_defense_stars": x.defense_rating * 5} for x in new_lineup], index=[x.name for x in new_lineup]))
     table_lineup['change_in_batting_stars'] = table_lineup.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
     table_lineup['change_in_baserunning_stars'] = table_lineup.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
 
-    table_rotation = pandas.DataFrame([{"Name": x.name, "old_pitching_stars": x.pitching_rating * 5,
-                                      "old_defense_stars": x.defense_rating * 5} for x in team.rotation]).set_index("Name")
-    table_rotation = table_rotation.join(pandas.DataFrame([{"Name": x.name, "new_pitching_stars": x.pitching_rating * 5,
-                                            "new_defense_stars": x.defense_rating * 5} for x in new_rotation]).set_index("Name"))
+    table_rotation = pandas.DataFrame([{"old_pitching_stars": x.pitching_rating * 5,
+                                      "old_defense_stars": x.defense_rating * 5} for x in team.rotation], index=[x.name for x in team.rotation])
+    table_rotation = table_rotation.join(pandas.DataFrame([{"new_pitching_stars": x.pitching_rating * 5,
+                                            "new_defense_stars": x.defense_rating * 5} for x in new_rotation], index=[x.name for x in new_rotation]))
     table_rotation['change_in_pitching_stars'] = table_rotation.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
 
     table_relative = table_lineup.append(table_rotation)
