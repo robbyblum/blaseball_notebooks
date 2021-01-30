@@ -298,6 +298,25 @@ def improve_team_defense_pandas(team, amount):
 
     return table, total, avg
 
+def make_team_big_pandas(team):
+    """
+    Simulate making a team "big". This is +0.6 to power, -0.4 to baserunning (and some change to cinnamon)
+
+    :param team: Team
+    :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
+    """
+    new = improve_team_power(team, 0.6)
+    new = [x.simulated_copy(buffs={"baserunning_rating": -0.4}) for x in new]
+    table = pandas.DataFrame([{"Name":x.name, "old_batting_stars":x.batting_rating * 5, "old_baserunning_stars":x.baserunning_rating * 5} for x in team.lineup]).set_index("Name")
+    table = table.join(pandas.DataFrame([{"Name": x.name, "new_batting_stars": x.batting_rating * 5, "new_baserunning_stars":x.baserunning_rating * 5} for x in new]).set_index("Name"))
+    table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
+    table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_baserunning_stars - row.old_baserunning_stars, axis=1)
+
+    total = table.sum(axis=0)
+    avg = table.mean(axis=0)
+
+    return table, total, avg
+
 def improve_team_overall_pandas(team, amount):
     """
     Improve a Team's overall stats

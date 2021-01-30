@@ -4,8 +4,8 @@ Generic functions for displaying things in Jupyter Notebooks
 
 from blaseball_mike.models import Base, Player, Team
 import pandas
-from beakerx import ThreeColorHeatmapHighlighter, HighlightStyle, EasyForm
 from ipywidgets import *
+import matplotlib
 
 # The average stats of a rerolled player
 NEW_PLAYER = {"batting": 2, "pitching": 1.5, "baserunning": 2.5, "defense": 2.5}
@@ -24,27 +24,6 @@ def display_name(values, pre="", post=""):
         print(post)
     else:
         _display_name(pre, values, post)
-
-def player_gen_UI(form_name, tag_name):
-    """
-    Generate a UI Form for modifying replacement player stars
-    :param form_name: Name of form
-    :param tag_name: Tag of jupyter notebook cell to update
-    :return: beakerx EasyForm
-    """
-    batting = FloatSlider(value=NEW_PLAYER["batting"], min=0.0, max=5.0, description="Batting Stars:")
-    pitching = FloatSlider(value=NEW_PLAYER["pitching"], min=0.0, max=5.0, description="Pitching Stars:")
-    baserunning = FloatSlider(value=NEW_PLAYER["baserunning"],min=0.0, max=5.0, description="Baserunning Stars:")
-    defense = FloatSlider(value=NEW_PLAYER["defense"],min=0.0, max=5.0, description="Defense Stars:")
-
-    form = EasyForm(form_name)
-    form.addWidget("batting", batting)
-    form.addWidget("pitching", pitching)
-    form.addWidget("baserunning", baserunning)
-    form.addWidget("defense", defense)
-    form.addButton("Update", tag=tag_name)
-    return form
-
 
 def blaseball_to_pandas(values):
     """
@@ -65,33 +44,25 @@ def blaseball_to_pandas(values):
         return pandas.DataFrame([x.json() for x in values]).set_index("id")
     return None
 
-def set_heatmap(table, maxVal=None):
+def set_heatmap(table, maxVal=None, colormap="RdYlGn"):
     """
-    Add a heatmap to a beakerx TableDisplay
+    Add a heatmap to a pandas DataFrame
     :param table: input TableDisplay
     :param maxVal: highest expected value
+    :param: colormap: string matching a [matplotlib colormap](https://matplotlib.org/tutorials/colors/colormaps.html)
     :return:
     """
-    goodColor = "#74d8b4"
-    midColor = "#ffdac1"
-    badColor = "#ff4857"
 
-    for column in table.chart.columnNames:
-        if column.lower() in ("patheticism", "tragicness"):
-            maxC = badColor
-            minC = goodColor
-        else:
-            maxC = goodColor
-            minC = badColor
+    table_style = table.style.background_gradient(colormap, vmin=0, vmax=maxVal, axis=None)
 
-        if maxVal:
-            midVal = maxVal/2
-        else:
-            midVal = None
+    # Handle inverted properties (patheticism/tragicness)
+    reverse = matplotlib.cm.get_cmap(colormap).reversed()
+    if 'Patheticism' in table:
+        table_style = table_style.background_gradient(reverse, vmin=0, vmax=maxVal, subset='Patheticism', axis=None)
+    if 'Tragicness' in table:
+        table_style = table_style.background_gradient(reverse, vmin=0, vmax=maxVal, subset='Tragicness', axis=None)
 
-        table.addCellHighlighter(ThreeColorHeatmapHighlighter(column, style=HighlightStyle.SINGLE_COLUMN, minVal=0, midVal=midVal, maxVal=maxVal, maxColor=maxC, midColor=midColor, minColor=minC))
-    return table
-
+    return table_style
 
 # Various Helper Functions
 def vibe_to_string(vibe):
