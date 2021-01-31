@@ -123,4 +123,4 @@ def display_game_results(game):
         </div>
     </div>
     """
-    display(HTML(html))
+    return HTML(html)

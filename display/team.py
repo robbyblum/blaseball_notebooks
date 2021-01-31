@@ -158,4 +158,5 @@ def display_team(team, day=None):
         </div>
     </div>
     """
-    display(HTML(html))
+
+    return HTML(html)
