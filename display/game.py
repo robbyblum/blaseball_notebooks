@@ -1,7 +1,6 @@
 ## GAME DISPLAY
 
 from blaseball_mike.models import Game
-from IPython.display import HTML, display
 from display.general import *
 
 def display_game_results(game):
@@ -123,4 +122,4 @@ def display_game_results(game):
         </div>
     </div>
     """
-    return HTML(html)
+    return HTMLWrapper(html)

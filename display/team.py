@@ -1,7 +1,6 @@
 ## TEAM DISPLAY
 
 from blaseball_mike.models import Team, SimulationData
-from IPython.display import HTML, display
 from display.general import *
 
 def _vibe_to_arrow(vibe):
@@ -159,4 +158,4 @@ def display_team(team, day=None):
     </div>
     """
 
-    return HTML(html)
+    return HTMLWrapper(html)

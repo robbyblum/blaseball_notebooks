@@ -4,11 +4,20 @@ Generic functions for displaying things in Jupyter Notebooks
 
 from blaseball_mike.models import Base, Player, Team
 import pandas
-from ipywidgets import *
 import matplotlib
 
 # The average stats of a rerolled player
 NEW_PLAYER = {"batting": 2, "pitching": 1.5, "baserunning": 2.5, "defense": 2.5}
+
+
+class HTMLWrapper():
+    """For some reason IPython's HTML wrapper is busted, make our own"""
+    def __init__(self, html_string):
+        self.html = html_string
+
+    def _repr_html_(self):
+        return self.html
+
 
 def _display_name(value):
     if isinstance(value, Player):

@@ -4,7 +4,6 @@ Helper functions to display Player info in Jupyter Notebooks
 from blaseball_mike.models import SimulationData, Player
 from statistics import mean
 import blaseball_reference.api as datablase
-from IPython.display import HTML
 from display.general import *
 from matplotlib import pyplot
 
@@ -423,4 +422,4 @@ def display_player(player, day=None):
     </div>
     """
 
-    return HTML(html)
+    return HTMLWrapper(html)
