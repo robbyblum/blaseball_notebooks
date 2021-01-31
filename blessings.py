@@ -202,7 +202,22 @@ def improve_team_power(team, amount):
     """
     new_team = []
     for player in team.lineup:
-        new_team.append(player.simulated_copy(buffs={"divinity": amount, "musclitude": amount}))
+        new_team.append(player.simulated_copy(buffs={"divinity": amount, "musclitude": amount,
+                                                     "groundFriction": amount*0.5}))
+    return new_team
+
+def improve_team_speed(team, amount):
+    """
+    Improve a Team's speed
+
+    :param team: Team
+    :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :return: list of improved players
+    """
+    new_team = []
+    for player in team.lineup:
+        new_team.append(player.simulated_copy(buffs={"laserlikeness": amount*0.8, "continuation": amount*0.5,
+                                                     "groundFriction": amount*0.5, "musclitude": amount*0.15}))
     return new_team
 
 def improve_team_overall(team, amount, position="all"):
