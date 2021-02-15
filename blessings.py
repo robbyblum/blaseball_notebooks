@@ -241,7 +241,7 @@ def improve_team_overall(team, amount, position="all"):
         new_team.append(player.simulated_copy(buffs={"overall_rating": amount}))
     return new_team
 
-def improve_team_batting_pandas(team, amount):
+def improve_team_batting_table(team, amount):
     """
     Improve a Team's batting
 
@@ -259,7 +259,7 @@ def improve_team_batting_pandas(team, amount):
 
     return table, total, avg
 
-def improve_team_pitching_pandas(team, amount):
+def improve_team_pitching_table(team, amount):
     """
     Improve a Team's pitching
 
@@ -277,7 +277,7 @@ def improve_team_pitching_pandas(team, amount):
 
     return table, total, avg
 
-def improve_team_baserunning_pandas(team, amount):
+def improve_team_baserunning_table(team, amount):
     """
     Improve a Team's baserunning
 
@@ -295,7 +295,7 @@ def improve_team_baserunning_pandas(team, amount):
 
     return table, total, avg
 
-def improve_team_defense_pandas(team, amount):
+def improve_team_defense_table(team, amount):
     """
     Improve a Team's defense
 
@@ -313,7 +313,7 @@ def improve_team_defense_pandas(team, amount):
 
     return table, total, avg
 
-def make_team_big_pandas(team):
+def make_team_big_table(team):
     """
     Simulate making a team "big". This is +0.6 to power, -0.4 to baserunning (and some change to cinnamon)
 
@@ -332,7 +332,7 @@ def make_team_big_pandas(team):
 
     return table, total, avg
 
-def improve_team_overall_pandas(team, amount):
+def improve_team_overall_table(team, amount):
     """
     Improve a Team's overall stats
 
