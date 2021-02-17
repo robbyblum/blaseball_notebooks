@@ -2,3 +2,4 @@ blaseball-mike
 blaseball-reference
 pandas
 plotly
+matplotlib
