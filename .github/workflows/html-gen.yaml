@@ -18,7 +18,7 @@ jobs:
 
     - name: Build
       run: |
-        find . -path "*.ipynb_checkpoints" -prune -false -o -name "*.ipynb" -exec jupyter nbconvert --to html --output-dir docs {} --no-input \;
+        jupyter nbconvert --config nbconfig.py
 
     - name: Deploy to GitHub Pages
       uses: Cecilapp/GitHub-Pages-deploy@v3
