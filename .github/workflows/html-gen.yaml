@@ -22,6 +22,8 @@ jobs:
     - name: Build
       run: |
         jupyter nbconvert --config nbconfig.py
+        jupyter nbconvert --config misc_notebooks/nbconfig.py
+        jupyter nbconvert --config election_notes/nbconfig.py
 
     - name: Deploy to GitHub Pages
       uses: Cecilapp/GitHub-Pages-deploy@v3

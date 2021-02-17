@@ -13,8 +13,6 @@
 <title>{{nb_title}}</title>
 
 {%- block html_head_js -%}
-<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
 {%- block html_head_js_requirejs -%}
 <script src="{{ resources.require_js_url }}"></script>
 {%- endblock html_head_js_requirejs -%}
@@ -28,16 +26,6 @@
 
 {% block extra_css %}
 <style>
-.jp-RenderedHTMLCommon blockquote {
-  margin: 1em 4em;
-  padding: 0.5em;
-  border: solid var(--jp-border-color2);
-}
-
-.jp-RenderedHTMLCommon blockquote > p {
-  text-align: center;
-}
-
 .jp-OutputPrompt {
   display: none;
 }
@@ -49,52 +37,7 @@
 .jp-Notebook {
   max-width: 1024px;
   width: 100%;
-  position: absolute;
-  left: calc((100% - (1024px + 220px))/2);
-}
-
-.js-toc {
-  position: fixed;
-  top: 10px;
-  width: 240px;
-  transform: translateX(0);
-  right: calc((100% - (1024px + 220px))/2);
-  z-index: 1;
-}
-
-.js-toc > .toc-list li {
-  list-style: none;
-}
-
-.toc-link::before {
-    background-color: #333333;
-    content: ' ';
-    display: inline-block;
-    height: inherit;
-    left: 0;
-    margin-top: -1px;
-    position: absolute;
-    width: 2px;
-}
-
-a.is-active-link {
-  font-weight: 700;
-}
-
-.is-active-link::before {
-    background-color: red;
-}
-
-@media screen and (max-width: 1279px) {
-  .js-toc {
-    display: none !important;
-  }
-
-  .jp-Notebook {
-    position: relative;
-    margin: auto;
-    right: 0;
-  }
+  margin: auto;
 }
 </style>
 {% endblock extra_css %}
@@ -148,28 +91,14 @@ a.anchor-link {
 {%- endblock header -%}
 
 {%- block body_header -%}
-<body>
-<div class="js-toc">
-</div>
 {% if resources.theme == 'dark' %}
-<div class="jp-Notebook" data-jp-theme-light="false" data-jp-theme-name="JupyterLab Dark">
+<body class="jp-Notebook" data-jp-theme-light="false" data-jp-theme-name="JupyterLab Dark">
 {% else %}
-<div class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 {% endif %}
 {%- endblock body_header -%}
 
 {% block body_footer %}
-</div>
-
-<script>
-  tocbot.init({
-    tocSelector: '.js-toc',
-    contentSelector: '.jp-Notebook',
-    headingSelector: 'h2, h3',
-    hasInnerContainers: true,
-  });
-  anchors.add();
-</script>
 </body>
 {% endblock body_footer %}
 
