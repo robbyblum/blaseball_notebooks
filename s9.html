@@ -4,10 +4,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>s9</title><script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 <style>
+
+/* Style overrides */
+.jp-Notebook {
+  max-width: 1024px;
+  width: 100%;
+  position: absolute;
+  left: calc((100% - (1024px + 220px))/2);
+}
+
 .jp-RenderedHTMLCommon blockquote {
   margin: 1em 4em;
   padding: 0.5em;
@@ -26,13 +36,7 @@
   display: none;
 }
 
-.jp-Notebook {
-  max-width: 1024px;
-  width: 100%;
-  position: absolute;
-  left: calc((100% - (1024px + 220px))/2);
-}
-
+/* TOC */
 .js-toc {
   position: fixed;
   top: 10px;
@@ -65,6 +69,7 @@ a.is-active-link {
     background-color: red;
 }
 
+/* Reactive */
 @media screen and (max-width: 1279px) {
   .js-toc {
     display: none !important;
@@ -73,7 +78,7 @@ a.is-active-link {
   .jp-Notebook {
     position: relative;
     margin: auto;
-    right: 0;
+    left: 0;
   }
 }
 </style>
@@ -16656,7 +16661,6 @@ if (outputEl) {{
 </div>
 </div>
 </div>
-
 <script>
   tocbot.init({
     tocSelector: '.js-toc',
