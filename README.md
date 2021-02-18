@@ -2,6 +2,8 @@
 
 Various python scripts and Jupyter Notebooks for Blaseball things.
 
+https://edgarware.github.io/blaseball_notebooks/
+
 ## Running Locally
 If running Python 3.8+
 ```shell
