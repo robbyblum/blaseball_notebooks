@@ -5,13 +5,23 @@ import urllib.parse
 from pathlib import Path
 
 
-def make_notebook(file_info, outdir_root='', binder_base=None, github_base=None):
+def get_title(cell, fallback=''):
+    out = fallback
+    data = cell["source"].split('\n')
+    for line in data:
+        if line.startswith('#'):
+            out = line.lstrip('# ')
+            break
+    return out
+
+
+def make_notebook(file_info, build_dir='', binder_base=None, github_base=None):
     fname, _ = os.path.splitext(os.path.basename(file_info['file']))
     outname = fname + '.html'
 
     book = nbformat.read(file_info['file'], as_version=4)
-    # TODO: do title better
-    book["metadata"]["title"] = fname
+    title = get_title(book.cells[0], fname)
+    book["metadata"]["title"] = title
     if github_base:
         book["metadata"]["github_url"] = github_base + file_info['file']
     if binder_base:
@@ -21,16 +31,21 @@ def make_notebook(file_info, outdir_root='', binder_base=None, github_base=None)
     e = HTMLExporter(config=file_info['config'])
     (body, resources) = e.from_notebook_node(book)
 
-    outfile = os.path.join(outdir_root, file_info['outdir'], outname)
-    os.makedirs(os.path.dirname(outfile), exist_ok=True)
+    out_file = Path(file_info['outdir'], outname)
+    build_file = Path(build_dir).joinpath(out_file)
+    os.makedirs(os.path.dirname(build_file), exist_ok=True)
 
-    with open(outfile, 'w', encoding='utf8') as fp:
+    with open(build_file, 'w', encoding='utf8') as fp:
         fp.write(body)
+
+    return out_file, title
 
 
 template_dir = ".jupyter/templates"
 binder_url_base = "https://mybinder.org/v2/gh/Edgarware/blaseball_notebooks/main?filepath="
 github_url_base = "https://github.com/Edgarware/blaseball_notebooks/blob/main/"
+github_pages_url_base = "https://edgarware.github.io/blaseball_notebooks/"
+build_dir = "docs"
 
 configs = [
     {
@@ -72,6 +87,8 @@ configs = [
         }
     }
 ]
+
+output_files = []
 for config_info in configs:
     p = Path('.')
     files = [x.as_posix() for x in p.glob(config_info['files']) if '.ipynb_checkpoints' not in x.as_posix()]
@@ -79,5 +96,29 @@ for config_info in configs:
     for file in files:
         file_info = config_info
         file_info['file'] = file
-        make_notebook(file_info, outdir_root='docs', github_base=github_url_base, binder_base=binder_url_base)
-        print(f"Converted {file}")
+        out_file = make_notebook(file_info, build_dir=build_dir, github_base=github_url_base, binder_base=binder_url_base)
+        output_files.append(out_file)
+        print(f"Converted {file} -> {out_file[0].as_posix()}")
+
+
+HTML_start = """<!DOCTYPE html>
+<html>
+<body style="line-height:2;font-size:18px;font-weight:400;font-family:sans-serif;">
+<div style="width:1000px; margin:auto;">
+<h1>Blaseball Notebooks</h1>
+<p>Directory of files:</p>
+"""
+
+HTML_end = """</div>
+</body>
+</html>"""
+
+links = ""
+for file, title in output_files:
+    file = github_pages_url_base + file.as_posix()
+    links += f"<a href={file}>{title}</a></br>\n"
+
+HTML = HTML_start + links + HTML_end
+with open(os.path.join(build_dir, 'index.html'), 'w', encoding='utf8') as fp:
+    fp.write(HTML)
+print("Wrote index.html")

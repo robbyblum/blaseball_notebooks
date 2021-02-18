@@ -11,6 +11,7 @@ jupyter notebook
 ```
 
 ## Generating HTML
+Requires Jupyter 6.0+
 ```shell
 python nb_build.py
 ```

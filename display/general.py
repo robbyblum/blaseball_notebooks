@@ -34,25 +34,6 @@ def display_name(values, pre="", post=""):
     else:
         _display_name(pre, values, post)
 
-def blaseball_to_pandas(values):
-    """
-    Convert Blaseball objects to Pandas Dataframes
-    :param values: Blaseball-Mike object or list of Blaseball-Mike objects
-    :return: pandas.DataFrame
-    """
-    if not values:
-        return None
-
-    if not isinstance(values, list):
-        values = [values]
-
-    if len(values) == 0:
-        return None
-
-    if isinstance(values[0], Base):
-        return pandas.DataFrame([x.json() for x in values]).set_index("id")
-    return None
-
 def set_heatmap(table, maxVal=None, colormap="RdYlGn"):
     """
     Add a heatmap to a pandas DataFrame
@@ -119,11 +100,3 @@ def parse_emoji(val):
         return chr(int(val, 16))
     except ValueError:
         return val
-
-def get_game_by_team(games, team):
-    if isinstance(games, dict):
-        games = games.values()
-    games = [x for x in games if x._away_team_id == team.id or x._home_team_id == team.id]
-    if len(games) == 0:
-        return None
-    return games[0]
