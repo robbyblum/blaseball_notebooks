@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Election Notes Tutorial</title><script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<title>Blaseball Notebooks Tutorial</title><script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
@@ -14402,19 +14402,21 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Election-Notes-Tutorial">Election Notes Tutorial<a class="anchor-link" href="#Election-Notes-Tutorial"> </a></h1><p>Welcome to the Philly Pies Election Notes tutorial! Here we'll go into details about the
+<h1 id="Blaseball-Notebooks-Tutorial">Blaseball Notebooks Tutorial<a class="anchor-link" href="#Blaseball-Notebooks-Tutorial"> </a></h1><p>Welcome to the Blaseball Notebooks tutorial! Here we'll go into details about the
 scripts used and how you can modify them to perform your own data analysis. This tutorial
-is entirely optional, you can still read the Seasonal Election Notes without having to modify
+is entirely optional, you can still read the static notebooks without having to modify
 them yourself!</p>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Basic-Operation">Basic Operation<a class="anchor-link" href="#Basic-Operation"> </a></h2><p>These notes operate as snippets of Python code that run in order. All the scripts ran when
-this document was opened, but you can also run individual snippets one at a time with
-the ▶ button. Changing the snippets only modifies it on your copy, so feel free to
-experiment without fear of breaking things!</p>
+<h2 id="Basic-Operation">Basic Operation<a class="anchor-link" href="#Basic-Operation"> </a></h2><p>All the notebooks operate as snippets of Python code that run in order. All the data
+in this file was generated when I ran it, but you can rerun them yourself using Binder.
+Click the "Open in Binder" icon in the top-right corner and wait until it loads. Then you
+can modify and run individual snippets of code by using the provided interface. A quick rundown
+of it can be found <a href="https://jupyter-notebook.readthedocs.io/en/stable/ui_components.html">here</a>.
+Changes wont be saved in Binder, so download a copy if needed!</p>
 <p>Note that the snippets are meant to be run in order, so you may run into problems if you
 only run one at a time. All Election Notes will start with a setup snippet to get
 everything un and running, like below.</p>
@@ -14447,7 +14449,6 @@ examples for each type of data as we go.</p>
 is down. It also tends to take longer when games are running as there is more strain
 on the servers.</p>
 <p>For more information, documentation can be found below:</p>
-<p><a href="https://github.com/jmaliksi/blaseball-mike">https://github.com/jmaliksi/blaseball-mike</a></p>
 <p><a href="https://jmaliksi.github.io/blaseball-mike/docs/blaseball_mike/index.html">https://jmaliksi.github.io/blaseball-mike/docs/blaseball_mike/index.html</a></p>
 <p><a href="https://docs.sibr.dev/docs/apis/reference/Blaseball-API.v1.yaml">https://docs.sibr.dev/docs/apis/reference/Blaseball-API.v1.yaml</a></p>
 
@@ -14903,6 +14904,8 @@ also be collected based on timestamp</p>
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>team_valid_from</th>
+      <th>team_valid_until</th>
       <th>appearances</th>
       <th>batting_average</th>
       <th>on_base_percentage</th>
@@ -14934,6 +14937,8 @@ also be collected based on timestamp</p>
   <tbody>
     <tr>
       <th>Beasley Day</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
       <td>99</td>
       <td>0.268</td>
       <td>0.300</td>
@@ -14951,9 +14956,9 @@ also be collected based on timestamp</p>
       <td>80</td>
       <td>3</td>
       <td>2</td>
-      <td>236</td>
-      <td>128</td>
-      <td>0.542</td>
+      <td>89</td>
+      <td>23</td>
+      <td>0.258</td>
       <td>0.785</td>
       <td>259</td>
       <td>0</td>
@@ -15366,6 +15371,8 @@ and <code>rotation</code> for pitchers.</p>
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>team_valid_from</th>
+      <th>team_valid_until</th>
       <th>games</th>
       <th>wins</th>
       <th>losses</th>
@@ -15394,6 +15401,8 @@ and <code>rotation</code> for pitchers.</p>
   <tbody>
     <tr>
       <th>Bright Zimmerman</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
       <td>20</td>
       <td>8</td>
       <td>12</td>
@@ -15420,6 +15429,8 @@ and <code>rotation</code> for pitchers.</p>
     </tr>
     <tr>
       <th>Elvis Figueroa</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
       <td>19</td>
       <td>9</td>
       <td>10</td>
@@ -15446,6 +15457,8 @@ and <code>rotation</code> for pitchers.</p>
     </tr>
     <tr>
       <th>Henry Marshallow</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
       <td>20</td>
       <td>8</td>
       <td>12</td>
@@ -15472,6 +15485,8 @@ and <code>rotation</code> for pitchers.</p>
     </tr>
     <tr>
       <th>Nicholas Mora</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
       <td>20</td>
       <td>6</td>
       <td>14</td>
@@ -15498,6 +15513,8 @@ and <code>rotation</code> for pitchers.</p>
     </tr>
     <tr>
       <th>Ruslan Greatness</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
       <td>20</td>
       <td>9</td>
       <td>11</td>
