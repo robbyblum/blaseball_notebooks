@@ -479,16 +479,17 @@ def replace_player(team, player, bat_star, pitch_star, run_star, def_star):
 
     return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
 
-def add_player(team, bat_star, run_star, def_star):
+def add_player(team, bat_star, pitch_star, run_star, def_star):
     """
     Add a new player, with star values defined
     :return: Pandas Series containing change in average stars
     """
     bat_mean = mean([x.batting_stars for x in team.lineup] + [bat_star]) - mean([x.batting_stars for x in team.lineup])
+    pitch_mean = mean([x.pitching_stars for x in team.rotation] + [pitch_star]) - mean([x.pitching_stars for x in team.rotation])
     baserun_mean = mean([x.baserunning_stars for x in team.lineup] + [run_star]) - mean([x.baserunning_stars for x in team.lineup])
     defense_mean = mean([x.defense_stars for x in team.lineup + team.rotation] + [def_star]) - mean([x.defense_stars for x in team.lineup + team.rotation])
 
-    return pandas.Series({"batting_change":bat_mean, "baserunning_change":baserun_mean, "defense_change":defense_mean}).rename(team.nickname)
+    return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
 
 def remove_player(team, player):
     """
@@ -496,12 +497,14 @@ def remove_player(team, player):
     :return: Pandas Series containing change in average stars
     """
     new_lineup = [x for x in team.lineup if x.id != player.id]
+    new_rotation = [x for x in team.rotation if x.id != player.id]
 
     bat_mean = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in team.lineup])
+    pitch_mean = mean([x.pitching_stars for x in new_rotation]) - mean([x.pitching_stars for x in team.rotation])
     baserun_mean = mean([x.baserunning_stars for x in new_lineup]) - mean([x.baserunning_stars for x in team.lineup])
-    defense_mean = mean([x.defense_stars for x in new_lineup + team.rotation]) - mean([x.defense_stars for x in team.lineup + team.rotation])
+    defense_mean = mean([x.defense_stars for x in new_lineup + new_rotation]) - mean([x.defense_stars for x in team.lineup + team.rotation])
 
-    return pandas.Series({"batting_change": bat_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
+    return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
 
 def night_thief(home_team):
     """
