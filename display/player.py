@@ -128,7 +128,8 @@ def get_batting_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Thwackability": x.thwackability, "Divinity": x.divinity,
+    return pandas.DataFrame([{"Batting Rating": x.batting_rating,
+                              "Thwackability": x.thwackability, "Divinity": x.divinity,
                               "Musclitude": x.musclitude, "Moxie": x.moxie,
                               "Patheticism": x.patheticism, "Martyrdom": x.martyrdom,
                               "Tragicness": x.tragicness, "Buoyancy":x.buoyancy
@@ -149,7 +150,8 @@ def get_pitching_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Unthwackability": x.unthwackability, "Ruthlessness": x.ruthlessness,
+    return pandas.DataFrame([{"Pitching Rating": x.pitching_rating,
+                              "Unthwackability": x.unthwackability, "Ruthlessness": x.ruthlessness,
                               "Overpowerment": x.overpowerment, "Shakespearianism": x.shakespearianism,
                               "Coldness": x.coldness, "Suppression": x.suppression
                               } for x in values], index=[x.name for x in values])
@@ -169,7 +171,8 @@ def get_baserunning_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Laserlikeness": x.laserlikeness, "Continuation": x.continuation,
+    return pandas.DataFrame([{"Baserunning Rating": x.baserunning_rating,
+                              "Laserlikeness": x.laserlikeness, "Continuation": x.continuation,
                               "Base Thirst": x.base_thirst, "Indulgence": x.indulgence,
                               "Ground Friction": x.ground_friction,
                               } for x in values], index=[x.name for x in values])
@@ -189,7 +192,8 @@ def get_defense_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
+    return pandas.DataFrame([{"Defense Rating": x.defense_rating,
+                              "Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
                               "Watchfulness": x.watchfulness, "Anticapitalism": x.anticapitalism,
                               "Chasiness": x.chasiness
                               } for x in values], index=[x.name for x in values])
