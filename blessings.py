@@ -370,15 +370,13 @@ def improve_team_overall_table(team, amount):
                                           "new_defense_stars": x.defense_rating * 5} for x in new_lineup], index=[x.name for x in new_lineup]))
     table_lineup['change_in_batting_stars'] = table_lineup.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
     table_lineup['change_in_baserunning_stars'] = table_lineup.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
+    table_lineup['change_in_defense_stars'] = table_lineup.apply(lambda row: row.new_defense_stars - row.old_defense_stars, axis=1)
 
-    table_rotation = pandas.DataFrame([{"old_pitching_stars": x.pitching_rating * 5,
-                                      "old_defense_stars": x.defense_rating * 5} for x in team.rotation], index=[x.name for x in team.rotation])
-    table_rotation = table_rotation.join(pandas.DataFrame([{"new_pitching_stars": x.pitching_rating * 5,
-                                            "new_defense_stars": x.defense_rating * 5} for x in new_rotation], index=[x.name for x in new_rotation]))
+    table_rotation = pandas.DataFrame([{"old_pitching_stars": x.pitching_rating * 5} for x in team.rotation], index=[x.name for x in team.rotation])
+    table_rotation = table_rotation.join(pandas.DataFrame([{"new_pitching_stars": x.pitching_rating * 5} for x in new_rotation], index=[x.name for x in new_rotation]))
     table_rotation['change_in_pitching_stars'] = table_rotation.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
 
     table_relative = table_lineup.append(table_rotation)
-    table_relative['change_in_defense_stars'] = table_lineup.apply(lambda row: row.new_defense_stars - row.old_defense_stars, axis=1)
 
     total = table_relative.sum(axis=0)
     avg = table_relative.mean(axis=0)
@@ -478,15 +476,21 @@ def replace_player(team, player, bat_star=None, pitch_star=None, run_star=None, 
     defense_mean = 0.0
 
     if bat_star is not None:
-        bat_mean = mean([x.batting_stars for x in team.lineup if x.id != player.id] + [bat_star]) - mean([x.batting_stars for x in team.lineup])
+        bat_mean = mean([x.batting_rating for x in team.lineup if x.id != player.id] + [bat_star/5.0]) - mean([x.batting_rating for x in team.lineup])
     if pitch_star is not None:
-        pitch_mean = mean([x.pitching_stars for x in team.rotation if x.id != player.id] + [pitch_star]) - mean([x.pitching_stars for x in team.rotation])
+        pitch_mean = mean([x.pitching_rating for x in team.rotation if x.id != player.id] + [pitch_star/5.0]) - mean([x.pitching_rating for x in team.rotation])
     if run_star is not None:
-        baserun_mean = mean([x.baserunning_stars for x in team.lineup if x.id != player.id] + [run_star]) - mean([x.baserunning_stars for x in team.lineup])
+        baserun_mean = mean([x.baserunning_rating for x in team.lineup if x.id != player.id] + [run_star/5.0]) - mean([x.baserunning_rating for x in team.lineup])
     if def_star is not None:
-        defense_mean = mean([x.defense_stars for x in team.lineup + team.rotation if x.id != player.id] + [def_star]) - mean([x.defense_stars for x in team.lineup + team.rotation])
+        defense_mean = mean([x.defense_rating for x in team.lineup if x.id != player.id] + [def_star/5.0]) - mean([x.defense_rating for x in team.lineup])
 
-    return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
+    bat_str = "{:+.4f}%".format(bat_mean * 100)
+    pitch_str = "{:+.4f}%".format(pitch_mean * 100)
+    baserun_str = "{:+.4f}%".format(baserun_mean * 100)
+    defense_str = "{:+.4f}%".format(defense_mean * 100)
+
+    return pandas.Series({"batting_change": bat_str, "pitching_change": pitch_str, "baserunning_change": baserun_str,
+                          "defense_change": defense_str}).rename(team.nickname)
 
 def add_player(team, bat_star=None, pitch_star=None, run_star=None, def_star=None):
     """
@@ -499,15 +503,21 @@ def add_player(team, bat_star=None, pitch_star=None, run_star=None, def_star=Non
     defense_mean = 0.0
 
     if bat_star is not None:
-        bat_mean = mean([x.batting_stars for x in team.lineup] + [bat_star]) - mean([x.batting_stars for x in team.lineup])
+        bat_mean = mean([x.batting_rating for x in team.lineup] + [bat_star/5.0]) - mean([x.batting_rating for x in team.lineup])
     if pitch_star is not None:
-        pitch_mean = mean([x.pitching_stars for x in team.rotation] + [pitch_star]) - mean([x.pitching_stars for x in team.rotation])
+        pitch_mean = mean([x.pitching_rating for x in team.rotation] + [pitch_star/5.0]) - mean([x.pitching_rating for x in team.rotation])
     if run_star is not None:
-        baserun_mean = mean([x.baserunning_stars for x in team.lineup] + [run_star]) - mean([x.baserunning_stars for x in team.lineup])
+        baserun_mean = mean([x.baserunning_rating for x in team.lineup] + [run_star/5.0]) - mean([x.baserunning_rating for x in team.lineup])
     if def_star is not None:
-        defense_mean = mean([x.defense_stars for x in team.lineup + team.rotation] + [def_star]) - mean([x.defense_stars for x in team.lineup + team.rotation])
+        defense_mean = mean([x.defense_rating for x in team.lineup] + [def_star/5.0]) - mean([x.defense_rating for x in team.lineup])
 
-    return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
+    bat_str = "{:+.4f}%".format(bat_mean * 100)
+    pitch_str = "{:+.4f}%".format(pitch_mean * 100)
+    baserun_str = "{:+.4f}%".format(baserun_mean * 100)
+    defense_str = "{:+.4f}%".format(defense_mean * 100)
+
+    return pandas.Series({"batting_change": bat_str, "pitching_change": pitch_str, "baserunning_change": baserun_str,
+                          "defense_change": defense_str}).rename(team.nickname)
 
 def swap_players(team, player_lineup, player_rotation):
     """
@@ -519,12 +529,18 @@ def swap_players(team, player_lineup, player_rotation):
     new_lineup = [x for x in team.lineup if x.id not in [player_lineup.id, player_rotation.id]] + [player_lineup]
     new_rotation = [x for x in team.rotation if x.id not in [player_lineup.id, player_rotation.id]] + [player_rotation]
 
-    bat_mean = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in team.lineup])
-    pitch_mean = mean([x.pitching_stars for x in new_rotation]) - mean([x.pitching_stars for x in team.rotation])
-    baserun_mean = mean([x.baserunning_stars for x in new_lineup]) - mean([x.baserunning_stars for x in team.lineup])
-    defense_mean = mean([x.defense_stars for x in new_lineup + new_rotation]) - mean([x.defense_stars for x in team.lineup + team.rotation])
+    bat_mean = mean([x.batting_rating for x in new_lineup]) - mean([x.batting_rating for x in team.lineup])
+    pitch_mean = mean([x.pitching_rating for x in new_rotation]) - mean([x.pitching_rating for x in team.rotation])
+    baserun_mean = mean([x.baserunning_rating for x in new_lineup]) - mean([x.baserunning_rating for x in team.lineup])
+    defense_mean = mean([x.defense_rating for x in new_lineup]) - mean([x.defense_rating for x in team.lineup])
 
-    return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
+    bat_str = "{:+.4f}%".format(bat_mean * 100)
+    pitch_str = "{:+.4f}%".format(pitch_mean * 100)
+    baserun_str = "{:+.4f}%".format(baserun_mean * 100)
+    defense_str = "{:+.4f}%".format(defense_mean * 100)
+
+    return pandas.Series({"batting_change": bat_str, "pitching_change": pitch_str, "baserunning_change": baserun_str,
+                          "defense_change": defense_str}).rename(team.nickname)
 
 def remove_player(team, player):
     """
@@ -534,12 +550,18 @@ def remove_player(team, player):
     new_lineup = [x for x in team.lineup if x.id != player.id]
     new_rotation = [x for x in team.rotation if x.id != player.id]
 
-    bat_mean = mean([x.batting_stars for x in new_lineup]) - mean([x.batting_stars for x in team.lineup])
-    pitch_mean = mean([x.pitching_stars for x in new_rotation]) - mean([x.pitching_stars for x in team.rotation])
-    baserun_mean = mean([x.baserunning_stars for x in new_lineup]) - mean([x.baserunning_stars for x in team.lineup])
-    defense_mean = mean([x.defense_stars for x in new_lineup + new_rotation]) - mean([x.defense_stars for x in team.lineup + team.rotation])
+    bat_mean = mean([x.batting_rating for x in new_lineup]) - mean([x.batting_rating for x in team.lineup])
+    pitch_mean = mean([x.pitching_rating for x in new_rotation]) - mean([x.pitching_rating for x in team.rotation])
+    baserun_mean = mean([x.baserunning_rating for x in new_lineup]) - mean([x.baserunning_rating for x in team.lineup])
+    defense_mean = mean([x.defense_rating for x in new_lineup]) - mean([x.defense_rating for x in team.lineup])
 
-    return pandas.Series({"batting_change": bat_mean, "pitching_change": pitch_mean, "baserunning_change": baserun_mean, "defense_change": defense_mean}).rename(team.nickname)
+    bat_str = "{:+.4f}%".format(bat_mean * 100)
+    pitch_str = "{:+.4f}%".format(pitch_mean * 100)
+    baserun_str = "{:+.4f}%".format(baserun_mean * 100)
+    defense_str = "{:+.4f}%".format(defense_mean * 100)
+
+    return pandas.Series({"batting_change": bat_str, "pitching_change": pitch_str, "baserunning_change": baserun_str,
+                          "defense_change": defense_str}).rename(team.nickname)
 
 def night_thief(home_team):
     """
