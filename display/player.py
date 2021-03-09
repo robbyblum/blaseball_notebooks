@@ -86,7 +86,8 @@ def get_batting_stats(values, season=None):
 
     ret = datablase.player_stats(ids, "batting", season)
     return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
-        "player_name", "team_id", "team", "team_ids", "season", "player_id", "first_appearance"], axis=1, errors='ignore')
+        "player_name", "team_id", "team", "team_ids", "season", "player_id",
+        "first_appearance", "team_valid_from", "team_valid_until"], axis=1, errors='ignore')
 
 def get_pitching_stats(values, season=None):
     """
@@ -111,7 +112,8 @@ def get_pitching_stats(values, season=None):
 
     ret = datablase.player_stats(ids, "pitching", season)
     return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
-        "player_name", "team_id", "team", "team_ids", "season", "player_id"], axis=1, errors='ignore')
+        "player_name", "team_id", "team", "team_ids", "season", "player_id",
+        "team_valid_from", "team_valid_until"], axis=1, errors='ignore')
 
 def get_batting_stlats(values):
     """
