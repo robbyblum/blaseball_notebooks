@@ -8,7 +8,6 @@ import pandas
 
 # Teams that cannot be the targets or recipients of blessings
 INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
-                 "Baltimore Crabs": "8d87c468-699a-47a8-b40d-cfb73a5660ad",
                  "The Shelled One's Pods": "40b9ec2a-cb43-4dbb-b836-5accb62e7c20",
                  "Real Game Band": "7fcb63bc-11f2-40b9-b465-f1d458692a63",
                  "FWXBC": "e3f90fa1-0bbe-40df-88ce-578d0723a23b",

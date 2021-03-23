@@ -2,10 +2,13 @@
 Helper functions to display Player info in Jupyter Notebooks
 """
 from blaseball_mike.models import SimulationData, Player
+from blaseball_mike import reference
 from statistics import mean
 import blaseball_reference.api as datablase
 from display.general import *
 from matplotlib import pyplot
+import requests
+import numpy as np
 
 def display_vibes(player, day=None):
     """
@@ -199,6 +202,75 @@ def get_defense_stlats(values):
                               "Watchfulness": x.watchfulness, "Anticapitalism": x.anticapitalism,
                               "Chasiness": x.chasiness
                               } for x in values], index=[x.name for x in values])
+
+def get_similar_player(player, stat='batting', num_players=10, include_shadows=False, filter_by_postion=True, filter_dead=True):
+    """
+    Get a list of players that have statlines similar to the selected player.
+    TODO: Weight the attributes based on importance?
+
+    :param player: player to compare
+    :param stat: stats to compare: 'batting', 'pitching', 'baserunning', 'defense', 'offense'
+    :param num_players: number of players to return
+    :param include_shadows: whether to include shadows players in the comparison
+    :param filter_by_postion: if True, do not include players that are not currently active in this position
+    :param filter_dead: if True, do not include dead players
+    :return: dictionary with players as values and relative similarity as the key
+    """
+    bat = ["thwackability", "divinity", "musclitude", "moxie", "patheticism", "martyrdom", "tragicness", "buoyancy"]
+    pitch = ["unthwackability", "ruthlessness", "overpowerment", "shakespearianism", "coldness", "suppression"]
+    run = ["laserlikeness", "continuation", "baseThirst", "indulgence", "groundFriction"]
+    def_ = ["omniscience", "tenaciousness", "watchfulness", "anticapitalism", "chasiness"]
+
+    if stat == 'batting':
+        attrs = bat
+        position = 'BATTER'
+    elif stat == 'pitching':
+        attrs = pitch
+        position = 'PITCHER'
+    elif stat == 'baserunning':
+        attrs = run
+        position = 'BATTER'
+    elif stat == 'defense':
+        attrs = def_
+        position = 'BATTER'
+    elif stat == 'offense':
+        attrs = bat + run
+        position = 'BATTER'
+    else:
+        raise ValueError(f"Invalid stat {stat}")
+
+    # Generate table of all players
+    url = "https://api.sibr.dev/datablase/v1/allPlayers"
+    if include_shadows:
+        url += f"?includeShadows={include_shadows}"
+    all_players = [reference._apply_type_map(p) for p in requests.get(url).json()]
+    if filter_dead:
+        all_players = [x for x in all_players if x["deceased"] is False]
+    all_players_table = pandas.DataFrame(all_players, index=[x["player_id"] for x in all_players])
+    if filter_by_postion:
+        all_players_table = all_players_table[all_players_table["position_type"] == position]
+    all_table = all_players_table.filter(items=attrs)
+    min_stat = all_table.min(axis=0)
+    max_stat = all_table.max(axis=0)
+    all_scaled = (2.0 * ((all_table - min_stat)/(max_stat - min_stat))) - 1.0
+
+    # Generate table row of selected player
+    player_array = pandas.Series(player.json())
+    player_array = player_array.filter(items=attrs)
+    player_scaled = (2.0 * ((player_array - min_stat)/(max_stat - min_stat))) - 1.0
+
+    # PERFORM THE RITUAL
+    all_norm = all_scaled.apply(np.linalg.norm, axis=1)
+    player_norm = np.linalg.norm(player_scaled)
+    results = all_scaled.dot(player_scaled)/(all_norm*player_norm)
+
+    # Sort and organize output
+    results = results.drop(index=player.id, errors='ignore')
+    sorted_ = results.sort_values(ascending=False)
+    players = Player.load(*sorted_.index[0:num_players])
+    players = [players.get(id_) for id_ in sorted_.index[0:num_players]]
+    return {results[x.id]: x for x in players}
+
 
 def _html_attr(attr_list, border_color):
     ret = ""
