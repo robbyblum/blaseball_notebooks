@@ -4,7 +4,6 @@ Helper functions to display Player info in Jupyter Notebooks
 from blaseball_mike.models import SimulationData, Player
 from blaseball_mike import reference
 from statistics import mean
-import blaseball_reference.api as datablase
 from display.general import *
 from matplotlib import pyplot
 import requests
@@ -63,15 +62,18 @@ def get_stars(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Batting": x.batting_stars, "Pitching":x.pitching_stars,
-                              "Baserunning":x.baserunning_stars, "Defense":x.defense_stars} for x in values], index=[x.name for x in values])
+    return pandas.DataFrame([{"Batting": x.batting_stars, "Pitching": x.pitching_stars,
+                              "Baserunning": x.baserunning_stars, "Defense": x.defense_stars} for x in values],
+                            index=[x.name for x in values])
 
-def get_batting_stats(values, season=None):
+
+def get_batting_stats(values, season=None, filter=None):
     """
     Display player batting stats (from Blaseball-Reference)
 
     :param values: Player or list of Players
     :param season: Season to get stats for. Default is Career stats
+    :param filter: List of stat names to include, eg: ['home_runs', 'singles']
     :return: pandas DataFrame
     """
     if not isinstance(values, (Player, list, dict)):
@@ -85,19 +87,30 @@ def get_batting_stats(values, season=None):
         ids = values.id
 
     if season:
+        type_ = "season"
         season = season - 1
+    else:
+        type_ = "career"
+        season = None
 
-    ret = datablase.player_stats(ids, "batting", season)
-    return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
-        "player_name", "team_id", "team", "team_ids", "season", "player_id",
-        "first_appearance", "team_valid_from", "team_valid_until"], axis=1, errors='ignore')
+    table = pandas.DataFrame()
+    for player in ids:
+        ret = reference.get_stats(player_id=player, group='hitting', type_=type_, season=season, fields=filter)[0]
+        if ret["totalSplits"] != 1:
+            continue
+        data = ret["splits"][0]["stat"]
+        name = ret["splits"][0]["player"]["fullName"]
+        table = table.append(pandas.Series(data, name=name))
+    return table
 
-def get_pitching_stats(values, season=None):
+
+def get_pitching_stats(values, season=None, filter=None):
     """
     Display player pitching stats (from Blaseball-Reference)
 
     :param values: Player or list of Players
     :param season: Season to get stats for. Default is Career stats
+    :param filter: List of stat names to include, eg: ['strikeouts', 'walks']
     :return: pandas DataFrame
     """
     if not isinstance(values, (Player, list, dict)):
@@ -111,12 +124,21 @@ def get_pitching_stats(values, season=None):
         ids = values.id
 
     if season:
+        type_ = "season"
         season = season - 1
+    else:
+        type_ = "career"
+        season = None
 
-    ret = datablase.player_stats(ids, "pitching", season)
-    return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
-        "player_name", "team_id", "team", "team_ids", "season", "player_id",
-        "team_valid_from", "team_valid_until"], axis=1, errors='ignore')
+    table = pandas.DataFrame()
+    for player in ids:
+        ret = reference.get_stats(player_id=player, group='pitching', type_=type_, season=season, fields=filter)[0]
+        if ret["totalSplits"] != 1:
+            continue
+        data = ret["splits"][0]["stat"]
+        name = ret["splits"][0]["player"]["fullName"]
+        table = table.append(pandas.Series(data, name=name))
+    return table
 
 def get_batting_stlats(values):
     """
