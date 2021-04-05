@@ -614,10 +614,10 @@ def trade_players(team, player1, player2):
 
     new_lineup = team.lineup
     new_rotation = team.rotation
-    if on_team.id in [x.id for x in team.lineup]:
-        new_lineup = [x for x in team.lineup if x.id != on_team] + [off_team]
-    if on_team.id in [x.id for x in team.rotation]:
-        new_rotation = [x for x in team.rotation if x.id != on_team] + [off_team]
+    if on_team in team.lineup:
+        new_lineup = [x for x in team.lineup if x.id != on_team.id] + [off_team]
+    if on_team in team.rotation:
+        new_rotation = [x for x in team.rotation if x.id != on_team.id] + [off_team]
 
     bat_mean = mean([x.batting_rating for x in new_lineup]) - mean([x.batting_rating for x in team.lineup])
     pitch_mean = mean([x.pitching_rating for x in new_rotation]) - mean([x.pitching_rating for x in team.rotation])
