@@ -103,6 +103,16 @@ h3 {
     background-color: var(--jp-icon-contrast-color3);
 }
 
+.is-collapsible {
+    max-height: 1000px;
+    overflow: hidden;
+    transition: all 300ms ease-in-out;
+}
+
+.is-collapsed {
+    max-height: 0;
+}
+
 /* Link Toolbar */
 .ref-links {
     position: absolute;
@@ -221,6 +231,7 @@ th[role=columnheader]:not(.no-sort):hover:after {
     contentSelector: '.jp-Notebook',
     headingSelector: 'h2, h3, h4',
     hasInnerContainers: true,
+    collapseDepth: 3,
   });
   anchors.add();
   var tables = document.querySelectorAll("table");
