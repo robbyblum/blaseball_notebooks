@@ -67,6 +67,27 @@ def get_stars(values):
                             index=[x.name for x in values])
 
 
+def get_total_stars(values):
+    """
+    Get a list of Total Stars for players
+
+    :param values: Player or list of Players
+    :return: dictionary of total star values keyed by player ID
+    """
+    if not isinstance(values, (Player, list, dict)):
+        return
+
+    if isinstance(values, Player):
+        values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
+
+    data = {}
+    for player in values:
+        data[player.id] = (player.batting_rating * 5) + (player.pitching_rating * 5) + (player.baserunning_rating * 5) +\
+                          (player.defense_rating * 5)
+    return data
+
 def get_batting_stats(values, season=None, filter=None):
     """
     Display player batting stats (from Blaseball-Reference)

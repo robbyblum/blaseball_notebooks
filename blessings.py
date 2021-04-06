@@ -26,6 +26,39 @@ INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
                  "Americano Water Works": "4e5d0063-73b4-440a-b2d1-214a7345cf16",
                  "Heavy FC": "e8f7ffee-ec53-4fe0-8e87-ea8ff1d0b4a9"}
 
+UNREFORMED_MODS = ["RETURNED",
+                   "ALTERNATE",
+                   "SHELLED",
+                   "INVERTED",
+                   "BASE_INSTINCTS",
+                   "GROWTH",
+                   "O",
+                   "H2O",
+                   "O_NO",
+                   "ELECTRIC",
+                   "LOVE",
+                   "INHABITING",
+                   "UNDERPERFORMING",
+                   "OVERPERFORMING",
+                   "EGO1",
+                   "EGO2",
+                   "EGO3",
+                   "EGO4",
+                   "LEGENDARY",
+                   "FUGITIVE",
+                   "DEBT",
+                   "HARD_BOILED",
+                   "ELSEWHERE",
+                   "SCATTERED",
+                   "STATIC",
+                   "ECHO",
+                   "FIRST_BORN",
+                   "COFFEE_EXIT",
+                   "RETIRED",
+                   "REDACTED",
+                   "OVERUNDER",
+                   "UNDEROVER"]
+
 
 def sort_lineup(team, num=None, order="worst"):
     """
@@ -564,10 +597,10 @@ def swap_players(team, player1, player2):
         raise Exception("Both players must be on the same team, use trade_players instead")
 
     # Scooby Doo, where are you
-    p1_list = [x for x in (team.lineup, team.rotation, team.bench, team.bullpen) if player1 in x]
+    p1_list = [x for x in (team.lineup, team.rotation, team.bench, team.bullpen) if player1.id in [y.id for y in x]]
     if len(p1_list) != 1:
         raise Exception("Player1 is either not in any position or has 2 positions at once????")
-    p2_list = [x for x in (team.lineup, team.rotation, team.bench, team.bullpen) if player2 in x]
+    p2_list = [x for x in (team.lineup, team.rotation, team.bench, team.bullpen) if player2.id in [y.id for y in x]]
     if len(p2_list) != 1:
         raise Exception("Player2 is either not in any position or has 2 positions at once????")
     p1_list = p1_list[0]
@@ -614,9 +647,9 @@ def trade_players(team, player1, player2):
 
     new_lineup = team.lineup
     new_rotation = team.rotation
-    if on_team in team.lineup:
+    if on_team.id in [x.id for x in team.lineup]:
         new_lineup = [x for x in team.lineup if x.id != on_team.id] + [off_team]
-    if on_team in team.rotation:
+    if on_team.id in [x.id for x in team.rotation]:
         new_rotation = [x for x in team.rotation if x.id != on_team.id] + [off_team]
 
     bat_mean = mean([x.batting_rating for x in new_lineup]) - mean([x.batting_rating for x in team.lineup])
