@@ -74,7 +74,7 @@ def sort_lineup(team, num=None, order="worst"):
     else:
         reverse=False
 
-    batters = team.lineup
+    batters = team.lineup.copy()
     batters.sort(key=lambda x: x.batting_rating, reverse=reverse)
 
     if num is None or num > len(batters):
@@ -95,7 +95,7 @@ def sort_rotation(team, num=None, order="worst"):
     else:
         reverse=False
 
-    pitchers = team.rotation
+    pitchers = team.rotation.copy()
     pitchers.sort(key=lambda x: x.pitching_rating, reverse=reverse)
 
     if num is None or num > len(pitchers):
@@ -116,7 +116,7 @@ def sort_bench(team, num=None, order="worst"):
     else:
         reverse=False
 
-    batters = team.bench
+    batters = team.bench.copy()
     batters.sort(key=lambda x: x.batting_rating, reverse=reverse)
 
     if num is None or num > len(batters):
@@ -137,7 +137,7 @@ def sort_bullpen(team, num=None, order="worst"):
     else:
         reverse=False
 
-    pitchers = team.bullpen
+    pitchers = team.bullpen.copy()
     pitchers.sort(key=lambda x: x.pitching_rating, reverse=reverse)
 
     if num is None or num > len(pitchers):
@@ -171,55 +171,75 @@ def sort_overall(team, num=None, order="worst"):
         num = len(sorted_ids)
     return [k[0] for k in sorted_ids[0:num]]
 
-def improve_team_batting(team, amount):
+def improve_team_batting(team, amount, shadows=False):
     """
     Improve a Team's batting
 
     :param team: Team
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :param shadows: True if this applies to the Bench rather than the Lineup
     :return: list of improved players
     """
+    players = team.lineup
+    if shadows:
+        players = team.bench
+
     new_team = []
-    for player in team.lineup:
+    for player in players:
         new_team.append(player.simulated_copy(buffs={"batting_rating": amount}))
     return new_team
 
-def improve_team_pitching(team, amount):
+def improve_team_pitching(team, amount, shadows=False):
     """
     Improve a Team's pitching
 
     :param team: Team
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :param shadows: True if this applies to the Bench rather than the Lineup
     :return: list of improved players
     """
+    players = team.rotation
+    if shadows:
+        players = team.bullpen
+
     new_team = []
-    for player in team.rotation:
+    for player in players:
         new_team.append(player.simulated_copy(buffs={"pitching_rating": amount}))
     return new_team
 
-def improve_team_baserunning(team, amount):
+def improve_team_baserunning(team, amount, shadows=False):
     """
     Improve a Team's baserunning
 
     :param team: Team
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :param shadows: True if this applies to the Bench rather than the Lineup
     :return: list of improved players
     """
+    players = team.lineup
+    if shadows:
+        players = team.bench
+
     new_team = []
-    for player in team.lineup:
+    for player in players:
         new_team.append(player.simulated_copy(buffs={"baserunning_rating": amount}))
     return new_team
 
-def improve_team_defense(team, amount):
+def improve_team_defense(team, amount, shadows=False):
     """
     Improve a Team's defense
 
     :param team: Team
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
+    :param shadows: True if this applies to the Bench rather than the Lineup
     :return: list of improved players
     """
+    players = team.lineup + team.rotation
+    if shadows:
+        players = team.bench + team.bullpen
+
     new_team = []
-    for player in team.lineup:
+    for player in players:
         new_team.append(player.simulated_copy(buffs={"defense_rating": amount}))
     return new_team
 
@@ -272,7 +292,7 @@ def improve_team_overall(team, amount, position="all"):
         new_team.append(player.simulated_copy(buffs={"overall_rating": amount}))
     return new_team
 
-def improve_team_batting_table(team, amount):
+def improve_team_batting_table(team, amount, shadows=False):
     """
     Improve a Team's batting
 
@@ -280,9 +300,13 @@ def improve_team_batting_table(team, amount):
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
-    new = improve_team_batting(team, amount)
-    table = pandas.DataFrame([{"old_batting_stars": x.batting_rating * 5} for x in team.lineup],
-                             index=[x.name for x in team.lineup])
+    players = team.lineup
+    if shadows:
+        players = team.bench
+
+    new = improve_team_batting(team, amount, shadows=shadows)
+    table = pandas.DataFrame([{"old_batting_stars": x.batting_rating * 5} for x in players],
+                             index=[x.name for x in players])
     table = table.join(pandas.DataFrame([{"new_batting_stars": x.batting_rating * 5} for x in new],
                                         index=[x.name for x in new]))
     table['change_in_batting_stars'] = table.apply(lambda row: row.new_batting_stars - row.old_batting_stars, axis=1)
@@ -292,7 +316,7 @@ def improve_team_batting_table(team, amount):
 
     return table, total, avg
 
-def improve_team_pitching_table(team, amount):
+def improve_team_pitching_table(team, amount, shadows=False):
     """
     Improve a Team's pitching
 
@@ -300,9 +324,13 @@ def improve_team_pitching_table(team, amount):
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
-    new = improve_team_pitching(team, amount)
-    table = pandas.DataFrame([{"old_pitching_stars": x.pitching_rating * 5} for x in team.rotation],
-                             index=[x.name for x in team.rotation])
+    players = team.rotation
+    if shadows:
+        players = team.bullpen
+
+    new = improve_team_pitching(team, amount, shadows=shadows)
+    table = pandas.DataFrame([{"old_pitching_stars": x.pitching_rating * 5} for x in players],
+                             index=[x.name for x in players])
     table = table.join(pandas.DataFrame([{"new_pitching_stars": x.pitching_rating * 5} for x in new],
                                         index=[x.name for x in new]))
     table['change_in_pitching_stars'] = table.apply(lambda row: row.new_pitching_stars - row.old_pitching_stars, axis=1)
@@ -312,7 +340,7 @@ def improve_team_pitching_table(team, amount):
 
     return table, total, avg
 
-def improve_team_baserunning_table(team, amount):
+def improve_team_baserunning_table(team, amount, shadows=False):
     """
     Improve a Team's baserunning
 
@@ -320,9 +348,13 @@ def improve_team_baserunning_table(team, amount):
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
-    new = improve_team_baserunning(team, amount)
-    table = pandas.DataFrame([{"old_baserunning_stars": x.baserunning_rating * 5} for x in team.lineup],
-                             index=[x.name for x in team.lineup])
+    players = team.lineup
+    if shadows:
+        players = team.bench
+
+    new = improve_team_baserunning(team, amount, shadows=shadows)
+    table = pandas.DataFrame([{"old_baserunning_stars": x.baserunning_rating * 5} for x in players],
+                             index=[x.name for x in players])
     table = table.join(pandas.DataFrame([{"new_baserunning_stars": x.baserunning_rating * 5} for x in new],
                                         index=[x.name for x in new]))
     table['change_in_baserunning_stars'] = table.apply(lambda row: row.new_baserunning_stars - row.old_baserunning_stars, axis=1)
@@ -332,7 +364,7 @@ def improve_team_baserunning_table(team, amount):
 
     return table, total, avg
 
-def improve_team_defense_table(team, amount):
+def improve_team_defense_table(team, amount, shadows=False):
     """
     Improve a Team's defense
 
@@ -340,9 +372,13 @@ def improve_team_defense_table(team, amount):
     :param amount: amount to increase or decrease, as a decimal (0.10 is +10%, -0.05 is -5%)
     :return: pandas Dataframe of players star change, pandas Series of total star change, pandas Series of average team star change
     """
-    new = improve_team_defense(team, amount)
-    table = pandas.DataFrame([{"old_defense_stars": x.defense_rating * 5} for x in team.lineup],
-                             index=[x.name for x in team.lineup])
+    players = team.lineup + team.rotation
+    if shadows:
+        players = team.bench + team.bullpen
+
+    new = improve_team_defense(team, amount, shadows=shadows)
+    table = pandas.DataFrame([{"old_defense_stars": x.defense_rating * 5} for x in players],
+                             index=[x.name for x in players])
     table = table.join(pandas.DataFrame([{"new_defense_stars": x.defense_rating * 5} for x in new],
                                         index=[x.name for x in new]))
     table['change_in_defense_stars'] = table.apply(lambda row: row.new_defense_stars - row.old_defense_stars, axis=1)
