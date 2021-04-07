@@ -618,9 +618,34 @@ def add_player(team, bat_star=None, pitch_star=None, run_star=None, def_star=Non
 
     return _get_avg_stars_dict(team, bat_mean, pitch_mean, baserun_mean, defense_mean)
 
+def move_player(team, player, position='lineup'):
+    """
+    Move player to a position the same team
+    :param team: reference team
+    :param player: first player
+    :param position: where the player should move
+    :return: Pandas Series containing change in average stars
+    """
+
+    new_lineup = [x for x in team.lineup if x.id != player.id]
+    new_rotation = [x for x in team.rotation if x.id != player.id]
+    if position == "lineup":
+        new_lineup += [player]
+    if position == "rotation":
+        new_rotation += [player]
+
+    bat_mean = mean([x.batting_rating for x in new_lineup]) - mean([x.batting_rating for x in team.lineup])
+    pitch_mean = mean([x.pitching_rating for x in new_rotation]) - mean([x.pitching_rating for x in team.rotation])
+    baserun_mean = mean([x.baserunning_rating for x in new_lineup]) - mean([x.baserunning_rating for x in team.lineup])
+    defense_mean = mean([x.defense_rating for x in new_lineup]) - mean([x.defense_rating for x in team.lineup])
+
+    return _get_avg_stars_dict(team, bat_mean, pitch_mean, baserun_mean, defense_mean)
+
+
 def swap_players(team, player1, player2):
     """
     Swap 2 players within the same team
+    :param team: reference team, both players must be on this team
     :param player1: first player
     :param player2: second player
     :return: Pandas Series containing change in average stars
