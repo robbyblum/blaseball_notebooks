@@ -182,7 +182,7 @@ def improve_team_batting(team, amount, shadows=False):
     """
     players = team.lineup
     if shadows:
-        players = team.bench
+        players = team.bench + team.bullpen
 
     new_team = []
     for player in players:
@@ -200,7 +200,7 @@ def improve_team_pitching(team, amount, shadows=False):
     """
     players = team.rotation
     if shadows:
-        players = team.bullpen
+        players = team.bench + team.bullpen
 
     new_team = []
     for player in players:
@@ -218,7 +218,7 @@ def improve_team_baserunning(team, amount, shadows=False):
     """
     players = team.lineup
     if shadows:
-        players = team.bench
+        players = team.bench + team.bullpen
 
     new_team = []
     for player in players:
@@ -302,7 +302,7 @@ def improve_team_batting_table(team, amount, shadows=False):
     """
     players = team.lineup
     if shadows:
-        players = team.bench
+        players = team.bench + team.bullpen
 
     new = improve_team_batting(team, amount, shadows=shadows)
     table = pandas.DataFrame([{"old_batting_stars": x.batting_rating * 5} for x in players],
@@ -326,7 +326,7 @@ def improve_team_pitching_table(team, amount, shadows=False):
     """
     players = team.rotation
     if shadows:
-        players = team.bullpen
+        players = team.bench + team.bullpen
 
     new = improve_team_pitching(team, amount, shadows=shadows)
     table = pandas.DataFrame([{"old_pitching_stars": x.pitching_rating * 5} for x in players],
@@ -350,7 +350,7 @@ def improve_team_baserunning_table(team, amount, shadows=False):
     """
     players = team.lineup
     if shadows:
-        players = team.bench
+        players = team.bench + team.bullpen
 
     new = improve_team_baserunning(team, amount, shadows=shadows)
     table = pandas.DataFrame([{"old_baserunning_stars": x.baserunning_rating * 5} for x in players],
