@@ -1,6 +1,7 @@
 """
 Helper functions to display Player info in Jupyter Notebooks
 """
+import pandas
 from blaseball_mike.models import SimulationData, Player
 from blaseball_mike import reference
 from statistics import mean
@@ -47,11 +48,12 @@ def display_season_vibes(player):
     pyplot.xlabel("Day")
     pyplot.show()
 
-def get_stars(values):
+def get_stars(values, include_team=False):
     """
     Display player stars
 
     :param values: Player or list of Players
+    :param include_team: If true include team name in index
     :return: pandas DataFrame
     """
     if not isinstance(values, (Player, list, dict)):
@@ -62,9 +64,15 @@ def get_stars(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
+    if include_team:
+        indexes = pandas.MultiIndex.from_arrays([[x.name for x in values],
+                                                 [x.league_team.nickname if x.league_team is not None
+                                                  else '----' for x in values]], names=["", "Team"])
+    else:
+        indexes = [x.name for x in values]
     return pandas.DataFrame([{"Batting": x.batting_stars, "Pitching": x.pitching_stars,
                               "Baserunning": x.baserunning_stars, "Defense": x.defense_stars} for x in values],
-                            index=[x.name for x in values])
+                            index=indexes)
 
 
 def get_total_stars(values):
