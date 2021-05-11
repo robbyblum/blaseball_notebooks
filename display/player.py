@@ -113,7 +113,7 @@ def get_batting_stats(values, season=None, filter=None):
     elif isinstance(values, dict):
         ids = values.keys()
     else:
-        ids = values.id
+        ids = [values.id]
 
     if season:
         type_ = "season"
@@ -150,7 +150,7 @@ def get_pitching_stats(values, season=None, filter=None):
     elif isinstance(values, dict):
         ids = values.keys()
     else:
-        ids = values.id
+        ids = [values.id]
 
     if season:
         type_ = "season"

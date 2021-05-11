@@ -622,7 +622,7 @@ def move_player(team, player, position='lineup'):
     """
     Move player to a position the same team
     :param team: reference team
-    :param player: first player
+    :param player: player to move
     :param position: where the player should move
     :return: Pandas Series containing change in average stars
     """
