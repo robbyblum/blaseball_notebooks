@@ -48,7 +48,7 @@ def display_season_vibes(player):
     pyplot.xlabel("Day")
     pyplot.show()
 
-def get_stars(values, include_team=False):
+def get_stars(values, include_team=False, include_items=False):
     """
     Display player stars
 
@@ -70,12 +70,16 @@ def get_stars(values, include_team=False):
                                                   else '----' for x in values]], names=["", "Team"])
     else:
         indexes = [x.name for x in values]
-    return pandas.DataFrame([{"Batting": x.batting_stars, "Pitching": x.pitching_stars,
-                              "Baserunning": x.baserunning_stars, "Defense": x.defense_stars} for x in values],
+    return pandas.DataFrame([{"Combined": round(get_total_stars(x)[x.id], 1),
+                              "Batting": x.get_hitting_stars(include_items=include_items),
+                              "Pitching": x.get_pitching_stars(include_items=include_items),
+                              "Baserunning": x.get_baserunning_stars(include_items=include_items),
+                              "Defense": x.get_defense_stars(include_items=include_items)
+                              } for x in values],
                             index=indexes)
 
 
-def get_total_stars(values):
+def get_total_stars(values, include_items=False):
     """
     Get a list of Total Stars for players
 
@@ -92,8 +96,10 @@ def get_total_stars(values):
 
     data = {}
     for player in values:
-        data[player.id] = (player.batting_rating * 5) + (player.pitching_rating * 5) + (player.baserunning_rating * 5) +\
-                          (player.defense_rating * 5)
+        data[player.id] = (player.get_hitting_rating(include_items=include_items) * 5) +\
+                          (player.get_pitching_rating(include_items=include_items) * 5) +\
+                          (player.get_baserunning_rating(include_items=include_items) * 5) +\
+                          (player.get_defense_rating(include_items=include_items) * 5)
     return data
 
 def get_batting_stats(values, season=None, filter=None):
@@ -184,11 +190,11 @@ def get_batting_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Batting Rating": x.batting_rating,
+    return pandas.DataFrame([{"Batting Rating": x.get_hitting_rating(include_items=False),
                               "Thwackability": x.thwackability, "Divinity": x.divinity,
                               "Musclitude": x.musclitude, "Moxie": x.moxie,
                               "Patheticism": x.patheticism, "Martyrdom": x.martyrdom,
-                              "Tragicness": x.tragicness, "Buoyancy":x.buoyancy
+                              "Tragicness": x.tragicness, "Buoyancy": x.buoyancy
                               } for x in values], index=[x.name for x in values])
 
 def get_pitching_stlats(values):
@@ -206,7 +212,7 @@ def get_pitching_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Pitching Rating": x.pitching_rating,
+    return pandas.DataFrame([{"Pitching Rating": x.get_pitching_rating(include_items=False),
                               "Unthwackability": x.unthwackability, "Ruthlessness": x.ruthlessness,
                               "Overpowerment": x.overpowerment, "Shakespearianism": x.shakespearianism,
                               "Coldness": x.coldness, "Suppression": x.suppression
@@ -227,7 +233,7 @@ def get_baserunning_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Baserunning Rating": x.baserunning_rating,
+    return pandas.DataFrame([{"Baserunning Rating": x.get_baserunning_rating(include_items=False),
                               "Laserlikeness": x.laserlikeness, "Continuation": x.continuation,
                               "Base Thirst": x.base_thirst, "Indulgence": x.indulgence,
                               "Ground Friction": x.ground_friction,
@@ -248,7 +254,7 @@ def get_defense_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Defense Rating": x.defense_rating,
+    return pandas.DataFrame([{"Defense Rating": x.get_defense_rating(include_items=False),
                               "Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
                               "Watchfulness": x.watchfulness, "Anticapitalism": x.anticapitalism,
                               "Chasiness": x.chasiness
