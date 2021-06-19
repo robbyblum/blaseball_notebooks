@@ -24,7 +24,8 @@ INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
                  "Macchiato City": "9e42c12a-7561-42a2-b2d0-7cf81a817a5e",
                  "Light & Sweet Electric Co.": "70eab4ab-6cb1-41e7-ac8b-1050ee12eecc",
                  "Americano Water Works": "4e5d0063-73b4-440a-b2d1-214a7345cf16",
-                 "Heavy FC": "e8f7ffee-ec53-4fe0-8e87-ea8ff1d0b4a9"}
+                 "Heavy FC": "e8f7ffee-ec53-4fe0-8e87-ea8ff1d0b4a9",
+                 "Alaskan Immortals": "88151292-6c12-4fb8-b2d6-3e64821293b3"}
 
 UNREFORMED_MODS = ["RETURNED",
                    "ALTERNATE",
