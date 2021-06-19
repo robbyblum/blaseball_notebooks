@@ -10,6 +10,7 @@ from matplotlib import pyplot
 import requests
 import numpy as np
 
+
 def display_vibes(player, day=None):
     """
     Display a player's current vibes
@@ -26,6 +27,7 @@ def display_vibes(player, day=None):
 
     vibe = player.get_vibe(day)
     print(vibe_to_string(vibe))
+
 
 def display_season_vibes(player):
     # TODO: Finish this
@@ -47,6 +49,25 @@ def display_season_vibes(player):
     pyplot.yticks(ticks=[0.9, 0.6, 0.25, 0, -0.25, -0.6, -0.9], labels=["Most Excellent", "Excellent", "Quality", "Neutral", "Less Than Ideal", "Far Less Than Ideal", "Honestly Terrible"])
     pyplot.xlabel("Day")
     pyplot.show()
+
+
+def has_item_slots(values):
+    """
+    Filter if player has open items slots
+
+    :param values: Player or list of Players
+    :return: list of filtered players
+    """
+    if not isinstance(values, (Player, list, dict)):
+        return
+
+    if isinstance(values, Player):
+        values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
+
+    return [x for x in values if ((x.evolution + 1) - len([x for x in x.items if not x.is_broken])) > 0]
+
 
 def get_stars(values, include_team=False, include_items=False):
     """
@@ -101,6 +122,7 @@ def get_total_stars(values, include_items=False):
                           (player.get_baserunning_rating(include_items=include_items) * 5) +\
                           (player.get_defense_rating(include_items=include_items) * 5)
     return data
+
 
 def get_batting_stats(values, season=None, filter=None):
     """
@@ -175,6 +197,7 @@ def get_pitching_stats(values, season=None, filter=None):
         table = table.append(pandas.Series(data, name=name))
     return table
 
+
 def get_batting_stlats(values):
     """
     Display player batting stlats (FK attributes)
@@ -197,6 +220,7 @@ def get_batting_stlats(values):
                               "Tragicness": x.tragicness, "Buoyancy": x.buoyancy
                               } for x in values], index=[x.name for x in values])
 
+
 def get_pitching_stlats(values):
     """
     Display player pitching stlats (FK attributes)
@@ -217,6 +241,7 @@ def get_pitching_stlats(values):
                               "Overpowerment": x.overpowerment, "Shakespearianism": x.shakespearianism,
                               "Coldness": x.coldness, "Suppression": x.suppression
                               } for x in values], index=[x.name for x in values])
+
 
 def get_baserunning_stlats(values):
     """
@@ -239,6 +264,7 @@ def get_baserunning_stlats(values):
                               "Ground Friction": x.ground_friction,
                               } for x in values], index=[x.name for x in values])
 
+
 def get_defense_stlats(values):
     """
     Display player defense stlats (FK attributes)
@@ -259,6 +285,7 @@ def get_defense_stlats(values):
                               "Watchfulness": x.watchfulness, "Anticapitalism": x.anticapitalism,
                               "Chasiness": x.chasiness
                               } for x in values], index=[x.name for x in values])
+
 
 def get_similar_player(player, stat='batting', num_players=10, include_shadows=False, filter_by_postion=True, filter_dead=True):
     """
@@ -339,6 +366,7 @@ def _html_attr(attr_list, border_color):
             </div>
         """
     return ret
+
 
 def display_player(player, day=None):
     """

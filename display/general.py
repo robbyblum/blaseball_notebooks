@@ -2,7 +2,7 @@
 Generic functions for displaying things in Jupyter Notebooks
 """
 
-from blaseball_mike.models import Base, Player, Team
+from blaseball_mike.models import Base, Player, Team, Stadium, Modification
 import pandas
 import matplotlib
 
@@ -25,6 +25,7 @@ def _display_name(value):
     elif isinstance(value, Team):
         print(value.full_name)
 
+
 def display_name(values, pre="", post=""):
     if isinstance(values, list):
         print(pre)
@@ -34,13 +35,58 @@ def display_name(values, pre="", post=""):
     else:
         _display_name(pre, values, post)
 
+
+def has_mods(values, mods, mod_type="permanent"):
+    """
+    Filter a list of Players/Teams/Stadiums that have certain Modifications
+
+    :param values: Player, Team, Stadium, or list/dictionary of Players/Teams/Stadiums
+    :param mods: Modification, String ID of Modification, or list or Modifications/Strings
+    :param mod_type: type of mod to check against (permanent, seasonal, weekly, game, item)
+    :return: list of filtered objects
+    """
+
+    if not isinstance(values, (Player, Team, list, dict)):
+        return
+
+    if isinstance(values, (Player, Team, Stadium)):
+        values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
+
+    fields = None
+    if isinstance(values[0], Stadium):
+        fields = "_mods_ids"
+    elif mod_type.lower() == "permanent":
+        fields = "_perm_attr_ids"
+    elif mod_type.lower() == "seasonal":
+        fields = "_seas_attr_ids"
+    elif mod_type.lower() == "weekly":
+        fields = "_week_attr_ids"
+    elif mod_type.lower() == "game":
+        fields = "_game_attr_ids"
+    elif mod_type.lower() == "item" and isinstance(values[0], Player):
+        fields = "_item_attr_ids"
+
+    if fields is None:
+        raise ValueError(f"Invalid mod_type \"{mod_type}\" for object \"{type(values[0])}\"")
+
+    if isinstance(mods, (str, Modification)):
+        mods = [mods]
+
+    if isinstance(mods[0], Modification):
+        mods = [x.id for x in mods]
+
+    return [x for x in values if any(mod in mods for mod in getattr(x, fields, list()))]
+
+
 def set_heatmap(table, maxVal=None, colormap="RdYlGn"):
     """
     Add a heatmap to a pandas DataFrame
     :param table: input TableDisplay
     :param maxVal: highest expected value
     :param: colormap: string matching a [matplotlib colormap](https://matplotlib.org/tutorials/colors/colormaps.html)
-    :return:
+    :return: output TableDisplay
     """
 
     table_style = table.style.background_gradient(colormap, vmin=0, vmax=maxVal, axis=None)
@@ -53,6 +99,7 @@ def set_heatmap(table, maxVal=None, colormap="RdYlGn"):
         table_style = table_style.background_gradient(reverse, vmin=0, vmax=maxVal, subset='Tragicness', axis=None)
 
     return table_style
+
 
 # Various Helper Functions
 def vibe_to_string(vibe):
@@ -72,6 +119,7 @@ def vibe_to_string(vibe):
         vibe_str = "▼▼▼ Honestly Terrible"
     return vibe_str
 
+
 def vibe_to_color(vibe):
     if vibe > 0.8:
         vibe_str = "#15d400"
@@ -89,11 +137,13 @@ def vibe_to_color(vibe):
         vibe_str = "#e00000"
     return vibe_str
 
+
 def stars_to_string(stars):
     star_str = "★" * int(stars)
     if stars % 1 != 0:
         star_str += "☆"
     return star_str
+
 
 def parse_emoji(val):
     try:

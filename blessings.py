@@ -90,6 +90,7 @@ def sort_lineup(team, num=None, order="worst", include_items=False):
         num = len(batters)
     return batters[0:num]
 
+
 def sort_rotation(team, num=None, order="worst", include_items=False):
     """
     Sort a teams rotation by pitching stars
@@ -111,6 +112,36 @@ def sort_rotation(team, num=None, order="worst", include_items=False):
     if num is None or num > len(pitchers):
         num = len(pitchers)
     return pitchers[0:num]
+
+
+def sort_shadows(team, stat="hitting", num=None, order="worst", include_items=False):
+    """
+    Sort a teams rotation by pitching stars
+
+    :param team: Team
+    :param stat: stat to sort by (hitting, pitching)
+    :param num: number of desired results, returns all by default
+    :param order: sort by 'best' or 'worst', default 'worst'
+    :param include_items: whether to include items in sorting
+    :return: list of Players
+    """
+    if order.lower() == "best":
+        reverse = True
+    else:
+        reverse = False
+
+    if stat.lower() == "hitting":
+        function = "get_hitting_rating"
+    elif stat.lower() == "pitching":
+        function = "get_pitching_rating"
+
+    shadows = team.shadows.copy()
+    shadows.sort(key=lambda x: getattr(x, function)(include_items=include_items), reverse=reverse)
+
+    if num is None or num > len(shadows):
+        num = len(shadows)
+    return shadows[0:num]
+
 
 def sort_overall(team, num=None, order="worst", include_items=False):
     """
@@ -140,6 +171,7 @@ def sort_overall(team, num=None, order="worst", include_items=False):
         num = len(sorted_ids)
     return [k[0] for k in sorted_ids[0:num]]
 
+
 def improve_team_batting(team, amount, shadows=False):
     """
     Improve a Team's batting
@@ -157,6 +189,7 @@ def improve_team_batting(team, amount, shadows=False):
     for player in players:
         new_team.append(player.simulated_copy(buffs={"batting_rating": amount}))
     return new_team
+
 
 def improve_team_pitching(team, amount, shadows=False):
     """
@@ -176,6 +209,7 @@ def improve_team_pitching(team, amount, shadows=False):
         new_team.append(player.simulated_copy(buffs={"pitching_rating": amount}))
     return new_team
 
+
 def improve_team_baserunning(team, amount, shadows=False):
     """
     Improve a Team's baserunning
@@ -193,6 +227,7 @@ def improve_team_baserunning(team, amount, shadows=False):
     for player in players:
         new_team.append(player.simulated_copy(buffs={"baserunning_rating": amount}))
     return new_team
+
 
 def improve_team_defense(team, amount, shadows=False):
     """
@@ -212,6 +247,7 @@ def improve_team_defense(team, amount, shadows=False):
         new_team.append(player.simulated_copy(buffs={"defense_rating": amount}))
     return new_team
 
+
 def improve_team_power(team, amount):
     """
     Improve a Team's power
@@ -226,6 +262,7 @@ def improve_team_power(team, amount):
                                                      "groundFriction": amount*0.5}))
     return new_team
 
+
 def improve_team_speed(team, amount):
     """
     Improve a Team's speed
@@ -239,6 +276,7 @@ def improve_team_speed(team, amount):
         new_team.append(player.simulated_copy(buffs={"laserlikeness": amount*0.8, "continuation": amount*0.5,
                                                      "groundFriction": amount*0.5, "musclitude": amount*0.15}))
     return new_team
+
 
 def improve_team_overall(team, amount, position="all"):
     """
@@ -260,6 +298,7 @@ def improve_team_overall(team, amount, position="all"):
     for player in vals:
         new_team.append(player.simulated_copy(buffs={"overall_rating": amount}))
     return new_team
+
 
 def improve_team_batting_table(team, amount, shadows=False):
     """
@@ -285,6 +324,7 @@ def improve_team_batting_table(team, amount, shadows=False):
 
     return table, total, avg
 
+
 def improve_team_pitching_table(team, amount, shadows=False):
     """
     Improve a Team's pitching
@@ -308,6 +348,7 @@ def improve_team_pitching_table(team, amount, shadows=False):
     avg = table.mean(axis=0)
 
     return table, total, avg
+
 
 def improve_team_baserunning_table(team, amount, shadows=False):
     """
@@ -333,6 +374,7 @@ def improve_team_baserunning_table(team, amount, shadows=False):
 
     return table, total, avg
 
+
 def improve_team_defense_table(team, amount, shadows=False):
     """
     Improve a Team's defense
@@ -357,6 +399,7 @@ def improve_team_defense_table(team, amount, shadows=False):
 
     return table, total, avg
 
+
 def make_team_big_table(team):
     """
     Simulate making a team "big". This is +0.6 to power, -0.4 to baserunning (and some change to cinnamon)
@@ -379,6 +422,7 @@ def make_team_big_table(team):
     avg = table.mean(axis=0)
 
     return table, total, avg
+
 
 def improve_team_overall_table(team, amount):
     """
@@ -441,6 +485,7 @@ def improve_team_overall_table(team, amount):
 
     return table, total, avg
 
+
 def maximize(player, position="lineup", overall=False):
     """
     Maximize a player
@@ -474,6 +519,7 @@ def maximize(player, position="lineup", overall=False):
 
     return player
 
+
 def minimize(player, position, overall=False):
     """
     Minimize a player
@@ -501,6 +547,7 @@ def minimize(player, position, overall=False):
 
     return player
 
+
 def clone(player):
     """
     Clone a player
@@ -513,17 +560,20 @@ def clone(player):
     player.name = player.name + " II"
     return player
 
+
 def best_pitching_hitter(team):
     """
     Get the best Pitching Hitter on a team (highest pitching stars in lineup)
     """
     return max(team.lineup, key=lambda x: x.get_pitching_rating(include_items=False))
 
+
 def best_hitting_pitcher(team):
     """
     Get the best Hitting Pitcher on a team (highest batting stars in rotation)
     """
     return max(team.rotation, key=lambda x: x.get_hitting_rating(include_items=False))
+
 
 def _get_avg_stars_dict(team, bat, pitch, run, def_):
     bat_str = "{:+.4f}%".format(bat * 100)
@@ -533,6 +583,7 @@ def _get_avg_stars_dict(team, bat, pitch, run, def_):
 
     return pandas.Series({"batting_change": bat_str, "pitching_change": pitch_str, "baserunning_change": baserun_str,
                           "defense_change": defense_str}).rename(team.nickname)
+
 
 def _get_player_position(team, player):
     if player in team.lineup:
@@ -547,6 +598,7 @@ def _get_player_position(team, player):
         return 'shadows'
     else:
         raise Exception("Player not on team")
+
 
 def replace_player(team, player, bat_star=None, pitch_star=None, run_star=None, def_star=None):
     """
@@ -572,6 +624,7 @@ def replace_player(team, player, bat_star=None, pitch_star=None, run_star=None, 
 
     return _get_avg_stars_dict(team, bat_mean, pitch_mean, baserun_mean, defense_mean)
 
+
 def add_player(team, bat_star=None, pitch_star=None, run_star=None, def_star=None, position=None):
     """
     Add a new player, with star values defined
@@ -592,6 +645,7 @@ def add_player(team, bat_star=None, pitch_star=None, run_star=None, def_star=Non
         defense_mean = mean([x.get_defense_rating(include_items=False) for x in team.lineup] + [def_star/5.0]) - mean([x.get_defense_rating(include_items=False) for x in team.lineup])
 
     return _get_avg_stars_dict(team, bat_mean, pitch_mean, baserun_mean, defense_mean)
+
 
 def move_player(team, player, position='lineup'):
     """
@@ -694,6 +748,7 @@ def trade_players(team, player1, player2):
     defense_mean = mean([x.get_defense_rating(include_items=False) for x in new_lineup]) - mean([x.get_defense_rating(include_items=False) for x in team.lineup])
 
     return _get_avg_stars_dict(team, bat_mean, pitch_mean, baserun_mean, defense_mean)
+
 
 def remove_player(team, player):
     """
