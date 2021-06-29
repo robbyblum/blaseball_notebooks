@@ -1,7 +1,13 @@
 ## TEAM DISPLAY
 
-from blaseball_mike.models import Team, SimulationData
+from blaseball_mike.models import Team, SimulationData, League
 from display.general import *
+
+def league_teams():
+    """
+    Get list of all league teams
+    """
+    return League.load().teams
 
 def _vibe_to_arrow(vibe):
     if vibe > 0.8:

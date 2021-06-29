@@ -6,27 +6,6 @@ from blaseball_mike.models import Team
 from statistics import mean
 import pandas
 
-# Teams that cannot be the targets or recipients of blessings
-INVALID_TEAMS = {"Hall Stars": "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
-                 "The Shelled One's Pods": "40b9ec2a-cb43-4dbb-b836-5accb62e7c20",
-                 "Real Game Band": "7fcb63bc-11f2-40b9-b465-f1d458692a63",
-                 "FWXBC": "e3f90fa1-0bbe-40df-88ce-578d0723a23b",
-                 "Club de Calf": "a3ea6358-ce03-4f23-85f9-deb38cb81b20",
-                 "BC Noir": "f29d6e60-8fce-4ac6-8bc2-b5e3cabc5696",
-                 "Atlético Latte": "49181b72-7f1c-4f1c-929f-928d763ad7fb",
-                 "Cold Brew Crew": "4d921519-410b-41e2-882e-9726a4e54a6a",
-                 "Royal PoS": "9a5ab308-41f2-4889-a3c3-733b9aab806e",
-                 "Cream & Sugar United": "b3b9636a-f88a-47dc-a91d-86ecc79f9934",
-                 "Pandemonium Artists": "3b0a289b-aebd-493c-bc11-96793e7216d5",
-                 "Society Data Witches": "d2634113-b650-47b9-ad95-673f8e28e687",
-                 "Inter Xpresso": "d8f82163-2e74-496b-8e4b-2ab35b2d3ff1",
-                 "Milk Proxy Society": "a7592bd7-1d3c-4ffb-8b3a-0b1e4bc321fd",
-                 "Macchiato City": "9e42c12a-7561-42a2-b2d0-7cf81a817a5e",
-                 "Light & Sweet Electric Co.": "70eab4ab-6cb1-41e7-ac8b-1050ee12eecc",
-                 "Americano Water Works": "4e5d0063-73b4-440a-b2d1-214a7345cf16",
-                 "Heavy FC": "e8f7ffee-ec53-4fe0-8e87-ea8ff1d0b4a9",
-                 "Alaskan Immortals": "88151292-6c12-4fb8-b2d6-3e64821293b3"}
-
 UNREFORMED_MODS = ["RETURNED",
                    "ALTERNATE",
                    "SHELLED",
