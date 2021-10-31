@@ -6,7 +6,7 @@ APPENDIX = """
 ---
 ## Appendix
 * [Description of Attributes](https://www.blaseball.wiki/w/Player_Attributes)
-* [Stlat Viewer](https://blaseballplayers.netlify.app/team/PHIL)
+* [Stlat Viewer](http://yoori.space/astrology/#baltimore-crabs-gamma)
 * [Historical Player Graphs](http://yoori.space/hloroscopes/)"""
 
 CODE_HEADER = """import pandas
@@ -29,7 +29,7 @@ sys.path.remove(pdir)
 
 _pio.renderers.default = "notebook_connected"
 
-pies = Team.load_by_name("Philly Pies")
+crabs = Team.load_by_name("Baltimore Crabs")
 
 # Fix Attractors
 real_pies = deepcopy(pies)
