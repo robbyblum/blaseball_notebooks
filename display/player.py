@@ -1,14 +1,15 @@
 """
 Helper functions to display Player info in Jupyter Notebooks
 """
+import pandas
 from blaseball_mike.models import SimulationData, Player
 from blaseball_mike import reference
 from statistics import mean
-import blaseball_reference.api as datablase
 from display.general import *
 from matplotlib import pyplot
 import requests
 import numpy as np
+
 
 def display_vibes(player, day=None):
     """
@@ -26,6 +27,7 @@ def display_vibes(player, day=None):
 
     vibe = player.get_vibe(day)
     print(vibe_to_string(vibe))
+
 
 def display_season_vibes(player):
     # TODO: Finish this
@@ -48,11 +50,31 @@ def display_season_vibes(player):
     pyplot.xlabel("Day")
     pyplot.show()
 
-def get_stars(values):
+
+def has_item_slots(values):
+    """
+    Filter if player has open items slots
+
+    :param values: Player or list of Players
+    :return: list of filtered players
+    """
+    if not isinstance(values, (Player, list, dict)):
+        return
+
+    if isinstance(values, Player):
+        values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
+
+    return [x for x in values if ((x.evolution + 1) - len([x for x in x.items if not x.is_broken])) > 0]
+
+
+def get_stars(values, include_team=False, include_items=False):
     """
     Display player stars
 
     :param values: Player or list of Players
+    :param include_team: If true include team name in index
     :return: pandas DataFrame
     """
     if not isinstance(values, (Player, list, dict)):
@@ -63,15 +85,52 @@ def get_stars(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Batting": x.batting_stars, "Pitching":x.pitching_stars,
-                              "Baserunning":x.baserunning_stars, "Defense":x.defense_stars} for x in values], index=[x.name for x in values])
+    if include_team:
+        indexes = pandas.MultiIndex.from_arrays([[x.name for x in values],
+                                                 [x.league_team.nickname if x.league_team is not None
+                                                  else '----' for x in values]], names=["", "Team"])
+    else:
+        indexes = [x.name for x in values]
+    return pandas.DataFrame([{"Combined": round(get_total_stars(x)[x.id], 1),
+                              "Batting": x.get_hitting_stars(include_items=include_items),
+                              "Pitching": x.get_pitching_stars(include_items=include_items),
+                              "Baserunning": x.get_baserunning_stars(include_items=include_items),
+                              "Defense": x.get_defense_stars(include_items=include_items)
+                              } for x in values],
+                            index=indexes)
 
-def get_batting_stats(values, season=None):
+
+def get_total_stars(values, include_items=False):
+    """
+    Get a list of Total Stars for players
+
+    :param values: Player or list of Players
+    :return: dictionary of total star values keyed by player ID
+    """
+    if not isinstance(values, (Player, list, dict)):
+        return
+
+    if isinstance(values, Player):
+        values = [values]
+    elif isinstance(values, dict):
+        values = list(values.values())
+
+    data = {}
+    for player in values:
+        data[player.id] = (player.get_hitting_rating(include_items=include_items) * 5) +\
+                          (player.get_pitching_rating(include_items=include_items) * 5) +\
+                          (player.get_baserunning_rating(include_items=include_items) * 5) +\
+                          (player.get_defense_rating(include_items=include_items) * 5)
+    return data
+
+
+def get_batting_stats(values, season=None, filter=None):
     """
     Display player batting stats (from Blaseball-Reference)
 
     :param values: Player or list of Players
     :param season: Season to get stats for. Default is Career stats
+    :param filter: List of stat names to include, eg: ['home_runs', 'singles']
     :return: pandas DataFrame
     """
     if not isinstance(values, (Player, list, dict)):
@@ -82,22 +141,33 @@ def get_batting_stats(values, season=None):
     elif isinstance(values, dict):
         ids = values.keys()
     else:
-        ids = values.id
+        ids = [values.id]
 
     if season:
+        type_ = "season"
         season = season - 1
+    else:
+        type_ = "career"
+        season = None
 
-    ret = datablase.player_stats(ids, "batting", season)
-    return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
-        "player_name", "team_id", "team", "team_ids", "season", "player_id",
-        "first_appearance", "team_valid_from", "team_valid_until"], axis=1, errors='ignore')
+    table = pandas.DataFrame()
+    for player in ids:
+        ret = reference.get_stats(player_id=player, group='hitting', type_=type_, season=season, fields=filter)[0]
+        if ret["totalSplits"] != 1:
+            continue
+        data = ret["splits"][0]["stat"]
+        name = ret["splits"][0]["player"]["fullName"]
+        table = table.append(pandas.Series(data, name=name))
+    return table
 
-def get_pitching_stats(values, season=None):
+
+def get_pitching_stats(values, season=None, filter=None):
     """
     Display player pitching stats (from Blaseball-Reference)
 
     :param values: Player or list of Players
     :param season: Season to get stats for. Default is Career stats
+    :param filter: List of stat names to include, eg: ['strikeouts', 'walks']
     :return: pandas DataFrame
     """
     if not isinstance(values, (Player, list, dict)):
@@ -108,15 +178,25 @@ def get_pitching_stats(values, season=None):
     elif isinstance(values, dict):
         ids = values.keys()
     else:
-        ids = values.id
+        ids = [values.id]
 
     if season:
+        type_ = "season"
         season = season - 1
+    else:
+        type_ = "career"
+        season = None
 
-    ret = datablase.player_stats(ids, "pitching", season)
-    return pandas.DataFrame(ret, index=[x["player_name"] for x in ret]).drop(labels=[
-        "player_name", "team_id", "team", "team_ids", "season", "player_id",
-        "team_valid_from", "team_valid_until"], axis=1, errors='ignore')
+    table = pandas.DataFrame()
+    for player in ids:
+        ret = reference.get_stats(player_id=player, group='pitching', type_=type_, season=season, fields=filter)[0]
+        if ret["totalSplits"] != 1:
+            continue
+        data = ret["splits"][0]["stat"]
+        name = ret["splits"][0]["player"]["fullName"]
+        table = table.append(pandas.Series(data, name=name))
+    return table
+
 
 def get_batting_stlats(values):
     """
@@ -133,12 +213,13 @@ def get_batting_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Batting Rating": x.batting_rating,
+    return pandas.DataFrame([{"Batting Rating": x.get_hitting_rating(include_items=False),
                               "Thwackability": x.thwackability, "Divinity": x.divinity,
                               "Musclitude": x.musclitude, "Moxie": x.moxie,
                               "Patheticism": x.patheticism, "Martyrdom": x.martyrdom,
-                              "Tragicness": x.tragicness, "Buoyancy":x.buoyancy
+                              "Tragicness": x.tragicness, "Buoyancy": x.buoyancy
                               } for x in values], index=[x.name for x in values])
+
 
 def get_pitching_stlats(values):
     """
@@ -155,11 +236,12 @@ def get_pitching_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Pitching Rating": x.pitching_rating,
+    return pandas.DataFrame([{"Pitching Rating": x.get_pitching_rating(include_items=False),
                               "Unthwackability": x.unthwackability, "Ruthlessness": x.ruthlessness,
                               "Overpowerment": x.overpowerment, "Shakespearianism": x.shakespearianism,
                               "Coldness": x.coldness, "Suppression": x.suppression
                               } for x in values], index=[x.name for x in values])
+
 
 def get_baserunning_stlats(values):
     """
@@ -176,11 +258,12 @@ def get_baserunning_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Baserunning Rating": x.baserunning_rating,
+    return pandas.DataFrame([{"Baserunning Rating": x.get_baserunning_rating(include_items=False),
                               "Laserlikeness": x.laserlikeness, "Continuation": x.continuation,
                               "Base Thirst": x.base_thirst, "Indulgence": x.indulgence,
                               "Ground Friction": x.ground_friction,
                               } for x in values], index=[x.name for x in values])
+
 
 def get_defense_stlats(values):
     """
@@ -197,11 +280,12 @@ def get_defense_stlats(values):
     elif isinstance(values, dict):
         values = list(values.values())
 
-    return pandas.DataFrame([{"Defense Rating": x.defense_rating,
+    return pandas.DataFrame([{"Defense Rating": x.get_defense_rating(include_items=False),
                               "Omniscience": x.omniscience, "Tenaciousness": x.tenaciousness,
                               "Watchfulness": x.watchfulness, "Anticapitalism": x.anticapitalism,
                               "Chasiness": x.chasiness
                               } for x in values], index=[x.name for x in values])
+
 
 def get_similar_player(player, stat='batting', num_players=10, include_shadows=False, filter_by_postion=True, filter_dead=True):
     """
@@ -282,6 +366,7 @@ def _html_attr(attr_list, border_color):
             </div>
         """
     return ret
+
 
 def display_player(player, day=None):
     """

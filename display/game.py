@@ -81,7 +81,7 @@ def display_game_results(game):
                     {game_status}
                 </div>
                 <div style="{weather_style}display:flex;padding-left:10px;padding-right:10px;height:32px;border-radius:5px;align-items:center;font-size:14px;justify-content:center">
-                    {game.weather.text}
+                    {game.weather.name}
                 </div>
             </div>
         </div>
