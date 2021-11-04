@@ -1,5 +1,6 @@
 import pandas
 from blaseball_mike.models import Item, Player, Modification
+from blaseball_mike.tables import StatType
 from blaseball_mike import database
 from display.general import *
 
@@ -36,6 +37,7 @@ def get_item_stats(items, include_wielder=False):
     table = []
     for i in items:
         mods = [Modification.load_one(a["mod"]).title for a in i.adjustments if a["type"] == 0]
+        stlats = sum_adj([a for a in i.adjustments if a["type"] == 1])
         entry = {}
         if include_wielder:
             ret = database.get_players_by_item(i.id)
@@ -43,6 +45,14 @@ def get_item_stats(items, include_wielder=False):
                 wielder = Player(ret[0])
                 entry["Wielder"] = wielder.name
                 entry["Team"] = wielder.league_team.nickname
-        entry = {"Max Durability": i.durability, "Modifications": mods}
+        entry = {"Max Durability": i.durability, "Modifications": mods, "Stlats": stlats}
         table.append(pandas.Series(entry, name=i.name))
     return pandas.DataFrame(table)
+
+
+def sum_adj(adjustments):
+    totals = {}
+    for entry in adjustments:
+        stat = StatType(entry['stat']).stat_name
+        totals[stat] = totals.get(stat, 0) + entry['value']
+    return totals

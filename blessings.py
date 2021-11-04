@@ -257,6 +257,44 @@ def improve_team_speed(team, amount):
     return new_team
 
 
+def improve_team_arbitrary_lineup(team, buffs):
+    """
+    Improve a Team's lineup by an arbitrary list of buffs
+
+    :param team: Team
+    :param buffs: buffs to apply
+    :return: list of improved players
+    """
+    new_team = []
+    # whyyyyy
+    if 'base_thirst' in buffs.keys():
+        buffs['baseThirst'] = buffs['base_thirst']
+    if 'ground_friction' in buffs.keys():
+        buffs['groundFriction'] = buffs['ground_friction']
+    for player in team.lineup:
+        new_team.append(player.simulated_copy(buffs=buffs))
+    return new_team
+
+
+def improve_team_arbitrary_rotation(team, buffs):
+    """
+    Improve a Team's rotation by an arbitrary list of buffs
+
+    :param team: Team
+    :param buffs: buffs to apply
+    :return: list of improved players
+    """
+    new_team = []
+    # whyyyyy
+    if 'base_thirst' in buffs.keys():
+        buffs['baseThirst'] = buffs['base_thirst']
+    if 'ground_friction' in buffs.keys():
+        buffs['groundFriction'] = buffs['ground_friction']
+    for player in team.rotation:
+        new_team.append(player.simulated_copy(buffs=buffs))
+    return new_team
+
+
 def improve_team_overall(team, amount, position="all"):
     """
     Improve a Team's overall stats
