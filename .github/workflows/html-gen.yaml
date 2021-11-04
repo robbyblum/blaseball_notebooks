@@ -30,6 +30,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        email: ryan.littleton0@gmail.com
+        email: robbyblum@gmail.com
         build_dir: 'docs'
         branch: 'docs-branch'
