@@ -42,9 +42,10 @@ def make_notebook(file_info, build_dir='', binder_base=None, github_base=None):
 
 
 template_dir = ".jupyter/templates"
-binder_url_base = "https://mybinder.org/v2/gh/Edgarware/blaseball_notebooks/main?filepath="
-github_url_base = "https://github.com/Edgarware/blaseball_notebooks/blob/main/"
-github_pages_url_base = "https://edgarware.github.io/blaseball_notebooks/"
+# binder_url_base = "https://mybinder.org/v2/gh/Edgarware/blaseball_notebooks/main?filepath="
+binder_url_base = None
+github_url_base = "https://github.com/robbyblum/blaseball_notebooks/blob/main/"
+github_pages_url_base = "https://robbyblum.github.io/blaseball_notebooks/"
 build_dir = "docs"
 
 configs = [
