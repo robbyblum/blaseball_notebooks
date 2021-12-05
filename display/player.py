@@ -31,7 +31,7 @@ def display_vibes(player, day=None):
 
 def display_season_vibes(player):
     # TODO: Finish this
-    days = range(1, 100)
+    days = range(1, 111)
     if isinstance(player, list):
         vibes = [mean([y.get_vibe(x) for y in player]) for x in days]
     elif isinstance(player, dict):
@@ -49,6 +49,7 @@ def display_season_vibes(player):
     pyplot.yticks(ticks=[0.9, 0.6, 0.25, 0, -0.25, -0.6, -0.9], labels=["Most Excellent", "Excellent", "Quality", "Neutral", "Less Than Ideal", "Far Less Than Ideal", "Honestly Terrible"])
     pyplot.xlabel("Day")
     pyplot.show()
+    return vibes
 
 
 def has_item_slots(values):
