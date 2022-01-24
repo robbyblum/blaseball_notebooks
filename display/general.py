@@ -173,4 +173,4 @@ def god_text(html_str, index):
     elif index == 6:  # Namerifeht
         style_extra = "color:#ea5b23;-webkit-transform:scaleX(-1);transform:scaleX(-1)"
 
-    return HTMLWrapper(f'<div style="text-align:center;{style_font};{style_extra}">{html_str}</div>')
+    return HTMLWrapper(f'<div style="{style_font};{style_extra}">{html_str}</div>')
