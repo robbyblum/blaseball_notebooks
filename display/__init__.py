@@ -1,6 +1,5 @@
 from .general import *
 from .player import *
-from .game import *
 from .team import *
 from .item import *
 

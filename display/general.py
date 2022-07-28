@@ -19,23 +19,6 @@ class HTMLWrapper():
         return self.html
 
 
-def _display_name(value):
-    if isinstance(value, Player):
-        print(value.name)
-    elif isinstance(value, Team):
-        print(value.full_name)
-
-
-def display_name(values, pre="", post=""):
-    if isinstance(values, list):
-        print(pre)
-        for x in values:
-            _display_name(x)
-        print(post)
-    else:
-        _display_name(pre, values, post)
-
-
 def has_mods(values, mods, mod_type="permanent"):
     """
     Filter a list of Players/Teams/Stadiums that have certain Modifications
