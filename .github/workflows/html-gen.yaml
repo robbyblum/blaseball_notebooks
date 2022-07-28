@@ -9,7 +9,7 @@ on:
     - 'nb_build.py'
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,11 +25,24 @@ jobs:
     - name: Build
       run: python nb_build.py
 
-    - name: Deploy to GitHub Pages
-      uses: Cecilapp/GitHub-Pages-deploy@v3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload pages artifact
+      uses: actions/upload-pages-artifact@v1
       with:
-        email: ryan.littleton0@gmail.com
-        build_dir: 'docs'
-        branch: 'docs-branch'
+        path: 'docs/'
+
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
