@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-python@v2
 
     - name: Setup Dependancies
-      run: pip install jupyter nbconvert==6.3.0
+      run: pip install jupyter nbconvert
 
     - name: Build
       run: python nb_build.py

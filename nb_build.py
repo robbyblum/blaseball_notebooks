@@ -54,7 +54,8 @@ configs = [
         'config': {
             'TemplateExporter': {
                 'extra_template_basedirs': [template_dir],
-                'template_name': 'notes'
+                'template_name': 'notes',
+                'exclude_output_prompt': True
             },
             'HTMLExporter': {
                 'anchor_link_text': ' '
@@ -68,7 +69,8 @@ configs = [
             'TemplateExporter': {
                 'extra_template_basedirs': [template_dir],
                 'template_name': 'notes',
-                'exclude_input': True
+                'exclude_input': True,
+                'exclude_output_prompt': True
             },
             'HTMLExporter': {
                 'anchor_link_text': ' '
@@ -82,7 +84,8 @@ configs = [
             'TemplateExporter': {
                 'extra_template_basedirs': [template_dir],
                 'template_name': 'lab-narrow',
-                'exclude_input': True
+                'exclude_input': True,
+                'exclude_output_prompt': True
             }
         }
     }
@@ -107,6 +110,8 @@ with open(os.path.join(build_dir, 'election_results.html'), 'w', encoding='utf8'
 output_files.append((Path("election_results.html"), "Election Vote Totals"))
 print("Wrote election_results.html")
 
+# Create the Index.html file
+output_files.sort(key=lambda x: x[1])
 HTML_start = """<!DOCTYPE html>
 <html>
 <body style="line-height:2;font-size:18px;font-weight:400;font-family:sans-serif;">
