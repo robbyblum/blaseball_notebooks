@@ -114,6 +114,7 @@ print("Wrote election_results.html")
 output_files.sort(key=lambda x: x[1])
 HTML_start = """<!DOCTYPE html>
 <html>
+<head><title>Blaseball Notebooks</title></head>
 <body style="line-height:2;font-size:18px;font-weight:400;font-family:sans-serif;">
 <div style="width:1000px; margin:auto;">
 <h1>Blaseball Notebooks</h1>
