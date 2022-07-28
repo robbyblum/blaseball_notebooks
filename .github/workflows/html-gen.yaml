@@ -7,6 +7,7 @@ on:
     - '**.ipynb'
     - '.jupyter/**'
     - 'nb_build.py'
+    workflow_dispatch:
 
 jobs:
   build:
