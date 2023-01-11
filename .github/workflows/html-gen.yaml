@@ -7,9 +7,11 @@ on:
     - '**.ipynb'
     - '.jupyter/**'
     - 'nb_build.py'
+    - '.github/workflows/html-gen.yaml'
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,17 +21,33 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
 
-    - name: Setup Dependancies
-      run: pip install jupyter
+    - name: Setup Dependencies
+      run: pip install jupyter nbconvert
 
     - name: Build
       run: python nb_build.py
 
-    - name: Deploy to GitHub Pages
-      uses: Cecilapp/GitHub-Pages-deploy@v3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Add Static Files
+      run: cp -r static/* docs/
+
+    - name: Upload pages artifact
+      uses: actions/upload-pages-artifact@v1
       with:
-        email: robbyblum@gmail.com
-        build_dir: 'docs'
-        branch: 'docs-branch'
+        path: 'docs/'
+
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
