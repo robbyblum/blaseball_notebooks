@@ -8,7 +8,7 @@ on:
     - '.jupyter/**'
     - 'nb_build.py'
     - '.github/workflows/html-gen.yaml'
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,11 +21,14 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
 
-    - name: Setup Dependancies
+    - name: Setup Dependencies
       run: pip install jupyter nbconvert
 
     - name: Build
       run: python nb_build.py
+
+    - name: Add Static Files
+      run: cp -r static/* docs/
 
     - name: Upload pages artifact
       uses: actions/upload-pages-artifact@v1

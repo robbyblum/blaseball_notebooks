@@ -104,12 +104,6 @@ for config_info in configs:
         print(f"Converted {file} -> {out_file[0].as_posix()}")
 
 
-# Generate redirect to Election Results Google Sheet
-with open(os.path.join(build_dir, 'election_results.html'), 'w', encoding='utf8') as fp:
-    fp.write("<head><meta http-equiv=\"refresh\" content=\"0;url=http://docs.google.com/spreadsheets/d/1v_1e2cxKoHvVejxXk4xHHC-YpPfKJXww15WIZ6nU7RU\"></head><body>Redirecting</body>")
-output_files.append((Path("election_results.html"), "Election Vote Totals"))
-print("Wrote election_results.html")
-
 # Create the Index.html file
 output_files.sort(key=lambda x: x[1])
 HTML_start = """<!DOCTYPE html>
