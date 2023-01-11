@@ -27,24 +27,19 @@ def parse_player(x):
     return data
 
 
-def nlumpy_get_players():
-    s = api2.get_sim()
-    divs = [b["id"] for a in s["simData"]["currentLeagueData"]["subLeagues"] for b in a["divisions"]]
+def nlumpy_get_all_players():
+    all = api2.get_all_players()
 
     lines = []
-    l = api2.get_all_teams()
-    for div in divs:
-        teams = l[div]
-        for t in teams:
-            for p in t["roster"]:
-                x = api2.get_player(p["id"])
-                data = parse_player(x)
-                lines.append(pandas.Series(data, name=x["id"]))
+    for p in all:
+        x = api2.get_player(p["id"])
+        data = parse_player(x)
+        lines.append(pandas.Series(data, name=x["id"]))
 
     return pandas.DataFrame(lines)
 
 
-def nlumpy_get_team(team_id):
+def nlumpy_get_team_players(team_id):
     lines = []
     team = api2.get_team(team_id)
     for p in team["roster"]:
