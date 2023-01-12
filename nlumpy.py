@@ -1,5 +1,7 @@
 import pandas
-import api2
+# import api2
+import json
+import urllib.request
 from statistics import mean
 
 BATTING_ATTRIBUTES = ("sight", "thwack", "ferocity")
@@ -28,25 +30,39 @@ def parse_player(x):
 
 
 def nlumpy_get_players():
-    s = api2.get_sim()
-    divs = [b["id"] for a in s["simData"]["currentLeagueData"]["subLeagues"] for b in a["divisions"]]
-
+    with urllib.request.urlopen("https://api2.sibr.dev/mirror/players") as url:
+        all_players = json.load(url)
     lines = []
-    l = api2.get_all_teams()
-    for div in divs:
-        teams = l[div]
-        for t in teams:
-            for p in t["roster"]:
-                x = api2.get_player(p["id"])
-                data = parse_player(x)
-                lines.append(pandas.Series(data, name=x["id"]))
+    for p in all_players:
+        data = parse_player(p)
+        lines.append(pandas.Series(data, name=p["id"]))
+    
+#     # s = api2.get_sim()
+#     s = json.load("https://api2.blaseball.com/sim")
+#     divs = [b["id"] for a in s["simData"]["currentLeagueData"]["subLeagues"] for b in a["divisions"]]
+
+#     lines = []
+#     # l = api2.get_all_teams()
+#     l = json.load("https://api2.sibr.dev/mirror/teams")
+#     for div in divs:
+#         teams = l[div]
+#         for t in teams:
+#             for p in t["roster"]:
+#                 x = api2.get_player(p["id"])
+#                 data = parse_player(x)
+#                 lines.append(pandas.Series(data, name=x["id"]))
 
     return pandas.DataFrame(lines)
 
 
 def nlumpy_get_team(team_id):
     lines = []
-    team = api2.get_team(team_id)
+    allteams = json.load("https://api2.sibr.dev/mirror/teams")
+    # team = api2.get_team(team_id)
+    for t in allteams:
+        if t["id"] == team_id:
+            team = t
+            break
     for p in team["roster"]:
         x = api2.get_player(p["id"])
         data = parse_player(x)
