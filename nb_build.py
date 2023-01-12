@@ -120,7 +120,7 @@ HTML_end = """</div>
 </body>
 </html>"""
 
-links = ""
+links = f"<a href={github_pages_url_base}/archives>Archives</a></br>\n"
 for file, title in output_files:
     file = github_pages_url_base + file.as_posix()
     links += f"<a href={file}>{title}</a></br>\n"
