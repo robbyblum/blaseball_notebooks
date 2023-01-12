@@ -14803,10 +14803,10 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class='ref-links'>
-    <a class="github ref-link-item" href="https://github.com/Edgarware/blaseball_notebooks/blob/main/tutorial.ipynb" alt="Github logo" title="View on Github">
+    <a class="github ref-link-item" href="https://github.com/robbyblum/blaseball_notebooks/blob/main/tutorial.ipynb" alt="Github logo" title="View on Github">
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
     </a>
-    <a class="binder ref-link-item" href="https://mybinder.org/v2/gh/Edgarware/blaseball_notebooks/main?filepath=tutorial.ipynb" alt="Binder logo" title="Open in Binder"></a>
+    <a class="binder ref-link-item" href="" alt="Binder logo" title="Open in Binder"></a>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -14847,15 +14847,12 @@ and running, like below.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span>
-<span class="o">%</span><span class="k">matplotlib</span> inline
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">from</span> <span class="nn">display</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">blessings</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span>
 </pre></div>
 
      </div>
@@ -14870,12 +14867,30 @@ and running, like below.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Jupyter-Notebooks-101">Jupyter Notebooks 101<a class="anchor-link" href="#Jupyter-Notebooks-101"> </a></h3><p>So firstly, this is a Jupyter Notebook. It's a file that includes text,
-code, and code output into one file so you can easily share data analysis.
-Pretty helpful for what we want!</p>
-<p>There are a few existing functions that will help make your life easier. The
-first is that tables are normally done using the <code>pandas</code> library, but you can
-use <code>numpy</code> as well. This lets you easily make a nice looking table of data.</p>
+<h2 id="Blaseball-APIs">Blaseball APIs<a class="anchor-link" href="#Blaseball-APIs"> </a></h2><p>The foundation of most of the code is using data retrieved from the blaseball
+website itself. The APIs to access these have been well documented by SIBR, and are
+wrapped in a library named <code>blaseball-mike</code> for ease of access. We'll be going over
+examples for each type of data as we go.</p>
+<p>Note: Because we load directly from the website it does not work when the site
+is down. It also tends to take longer when games are running as there is more strain
+on the servers.</p>
+<p>For more information, documentation can be found below:</p>
+<p><a href="https://jmaliksi.github.io/blaseball-mike/docs/blaseball_mike/index.html">https://jmaliksi.github.io/blaseball-mike/docs/blaseball_mike/index.html</a></p>
+<p><a href="https://docs.sibr.dev/docs/apis/reference/Blaseball-API.v1.yaml">https://docs.sibr.dev/docs/apis/reference/Blaseball-API.v1.yaml</a></p>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="Player-Data">Player Data<a class="anchor-link" href="#Player-Data"> </a></h3><p>Players can be retrieved with lookups based on their name or by using their Player ID,
+found in the URL of a player page on the blaseball website. Historical data for players can
+also be collected based on timestamp</p>
 
 </div>
 </div>
@@ -14885,11 +14900,13 @@ use <code>numpy</code> as well. This lets you easily make a nice looking table o
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cool_teams</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Team&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Pies&quot;</span><span class="p">,</span> <span class="s2">&quot;Magic&quot;</span><span class="p">,</span> <span class="s2">&quot;Flowers&quot;</span><span class="p">],</span> <span class="s2">&quot;Coolness&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;very cool&quot;</span><span class="p">,</span> <span class="s2">&quot;super cool&quot;</span><span class="p">,</span> <span class="s2">&quot;awesome&quot;</span><span class="p">]}</span>
-<span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cool_teams</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Let's check out good boy Beasley</span>
+<span class="n">beasley</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="s2">"Beasley Day"</span><span class="p">)</span>
+
+<span class="n">display_player</span><span class="p">(</span><span class="n">beasley</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14901,9 +14918,187 @@ use <code>numpy</code> as well. This lets you easily make a nice looking table o
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 
+
 <div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+    <div style="width:500px;background:#000;border:1px solid #fff;color:#fff;display:flex;flex-direction:column;box-sizing:border-box;font-size:14px;">
+        <div style="border-bottom:1px solid #fff;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:40px 40px 20px;">
+            <div style="font-size:24px;">
+                Beasley Day
+            </div>
+            
+            <div style="display:flex;flex-direction:row;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="font-size:18px;display:flex;align-items:center;border-radius:50%;height:30px;width:30px;justify-content:center;flex-shrink:0;background-color:#399d8f;">
+                    🥧
+                </div>
+                <div style="padding:0 10px;">
+                    Philly Pies
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding:5px 40px;display:flex;flex-direction:row;background:#111;border-bottom:1px solid #fff;">
+        <div style="display:flex;flex-direction:row;padding:5px;border-radius:5px;background:#222;">
+            <div style="font-weight:700;display:flex;margin-right:10px;padding-left:5px;padding-right:5px;height:32px;border-radius:5px;align-items:center;justify-content:center;color:#2e1406;background:#44c97c none repeat scroll 0% 0%;border:2px solid #dbbc0b">
+                Free Refill
+            </div>
+        </div></div>
+        <div style="padding:20px 0;">
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
+                <div style="width:180px;font-weight:700;">
+                    Current Vibe
+                </div>
+                <span style="color:#d1d1d1;">
+                    ⬌ Neutral
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;">
+                <div style="width:180px;font-weight:700;">
+                    Batting
+                </div>
+                <span>
+                    ★★☆
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
+                <div style="width:180px;font-weight:700;">
+                    Pitching
+                </div>
+                <span>
+                    ★☆
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;">
+                <div style="width:180px;font-weight:700;">
+                    Baserunning
+                </div>
+                <span>
+                    ★★☆
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
+                <div style="width:180px;font-weight:700;">
+                    Defense
+                </div>
+                <span>
+                    ★☆
+                </span>
+            </div>
+            <div style="padding:10px;40px;display:flex;flex-direction:row;justify-content:space-around;">
+                <div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;width:auto;min-width:150px;height:80px;margin:5px;padding:10px 0;background:#111;border-radius:5px;">
+                    <div style="font-weight:700;">
+                        ITEM
+                    </div>
+                    <div>
+                        None
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;width:auto;min-width:150px;height:80px;margin:5px;padding:10px 0;background:#111;border-radius:5px;">
+                    <div style="font-weight:700;">
+                        ARMOR
+                    </div>
+                    <div>
+                        None
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
+                <div style="width:180px;font-weight:700;">
+                    Evolution
+                </div>
+                <span>
+                    Base
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;">
+                <div style="width:180px;font-weight:700;">
+                    Pregame Ritual
+                </div>
+                <span>
+                    Air guitar
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
+                <div style="width:180px;font-weight:700;">
+                    Coffee Style
+                </div>
+                <span>
+                    Decaf
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;">
+                <div style="width:180px;font-weight:700;">
+                    Blood Type
+                </div>
+                <span>
+                    O No
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;background:rgba(30,30,30,1)">
+                <div style="width:180px;font-weight:700;">
+                    Fate
+                </div>
+                <span>
+                    59
+                </span>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;padding:2px 40px;">
+                <div style="width:180px;font-weight:700;">
+                    Soulscream
+                </div>
+                <span style="max-width:240px;height:auto;border-radius:5px;font-size:16px;font-weight:700;font-style:italic;word-wrap:break-word;color:#F00">
+                    IHEEIIHEEIIEEAAEEEAAEEXEAHEXEAHEXUEAXAUEAXAUXAAUAXAAUAXOAIAEOAIAEOIEAAIIEAAII
+                </span>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># But what about Beasley's stlats?</span>
+<span class="n">get_batting_stlats</span><span class="p">(</span><span class="n">beasley</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
+
 
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
@@ -14925,384 +15120,6 @@ use <code>numpy</code> as well. This lets you easily make a nice looking table o
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Team</th>
-      <th>Coolness</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Pies</td>
-      <td>very cool</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Magic</td>
-      <td>super cool</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Flowers</td>
-      <td>awesome</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>If the block of code ends in a table (or a graph, which we'll handle later) it will automatically
-display it, but if you want to display more than one you have to use the <code>display()</code> function.
-I generally always use it, just to make sure it actually gets shown. You can also use some other
-built-ins to display other formats, like <code>Markdown</code> or <code>HTML</code>! Markdown elements can even show up
-as headers in the sidebar!</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[51]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;This *is* Markdown!&quot;</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">HTMLWrapper</span><span class="p">(</span><span class="s2">&quot;&lt;span style=</span><span class="se">\&quot;</span><span class="s2">color: #009999</span><span class="se">\&quot;</span><span class="s2">&gt;and this is HTML!&lt;/span&gt;&quot;</span><span class="p">))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output " data-mime-type="text/markdown">
-<p>This <em>is</em> Markdown!</p>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<span style="color: #009999">and this is HTML!</span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[48]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># We even have a helper function for generating God Text!</span>
-<span class="n">display</span><span class="p">(</span><span class="n">god_text</span><span class="p">(</span><span class="s2">&quot;hey bud, hows it hanging&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">god_text</span><span class="p">(</span><span class="s2">&quot;I AM DOING ADEQUATE THANK YOU&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div style="font-family: 'Lora', 'Courier New', monospace, serif;font-weight: 700;color:#5988ff;text-shadow:0 0 20px #5988ff">hey bud, hows it hanging</div>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div style="font-family: 'Lora', 'Courier New', monospace, serif;font-weight: 700;color:red">I AM DOING ADEQUATE THANK YOU</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Blaseball-APIs">Blaseball APIs<a class="anchor-link" href="#Blaseball-APIs"> </a></h2><p>The foundation of most of the code is using data retrieved from the blaseball
-website itself. The APIs to access these have been well documented by SIBR, and are
-wrapped in a library named <code>blaseball-mike</code> for ease of access. We'll be going over
-examples for some common types of data as we go.</p>
-<p>Note: Because we load directly from the website it does not work when the site
-is down. It also tends to take longer when games are running as there is more strain
-on the servers.</p>
-<p>For more information, documentation can be found below:</p>
-<p><a href="https://jmaliksi.github.io/blaseball-mike/docs/blaseball_mike/index.html">https://jmaliksi.github.io/blaseball-mike/docs/blaseball_mike/index.html</a></p>
-<p><a href="https://docs.sibr.dev/docs/apis/reference/Blaseball-API.v1.yaml">https://docs.sibr.dev/docs/apis/reference/Blaseball-API.v1.yaml</a></p>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Players">Players<a class="anchor-link" href="#Players"> </a></h3><p>Players can be retrieved with lookups based on their name or by using their Player ID,
-found in the URL of a player page on the blaseball website. Historical data for players can
-also be collected based on timestamp.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[29]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ruslan</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="s2">&quot;Ruslan Greatness&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">ruslan</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">ruslan</span><span class="o">.</span><span class="n">ritual</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output " data-mime-type="text/plain">
-<pre>&#39;Ruslan Greatness&#39;</pre>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output " data-mime-type="text/plain">
-<pre>&#39;Channeling chi&#39;</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[30]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">jaxon</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">load_one</span><span class="p">(</span><span class="s2">&quot;405dfadf-d435-4307-82f6-8eba2287e87a&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">jaxon</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">jaxon</span><span class="o">.</span><span class="n">soulscream</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output " data-mime-type="text/plain">
-<pre>&#39;Jaxon Buckley&#39;</pre>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output " data-mime-type="text/plain">
-<pre>&#39;XIAAAXIAAAXIEAUHIEAUHIOAEOIOAEOIOAEAAXAEAAXAIAIOXIAIOXIUOIAAUOIAAUEXAIIEXAIIEOIAIUOIAIUOEAIUUEAIUUEEHIEAEHIEAE&#39;</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>So the above <code>Player.find_by_name()</code> function will try and find a player with that name. Note that
-there are some instances of multiple players with the same name! This returns an object that contains
-all of the player's info. Because you usually want to make it look pretty, there are a set of existing
-functions for displaying player info.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[31]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">get_stars</span><span class="p">(</span><span class="n">ruslan</span><span class="p">))</span>          <span class="c1"># Display stars</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_batting_stlats</span><span class="p">(</span><span class="n">ruslan</span><span class="p">))</span> <span class="c1"># Display batting substats</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_batting_stats</span><span class="p">(</span><span class="n">ruslan</span><span class="p">))</span>  <span class="c1"># Display batting performance stats</span>
-<span class="c1"># ^ if you do not pass a season, it returns career stats</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Combined</th>
-      <th>Batting</th>
-      <th>Pitching</th>
-      <th>Baserunning</th>
-      <th>Defense</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Ruslan Greatness</th>
-      <td>19.6</td>
-      <td>4.9</td>
-      <td>4.3</td>
-      <td>5.2</td>
-      <td>5.2</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Batting Rating</th>
       <th>Thwackability</th>
       <th>Divinity</th>
       <th>Musclitude</th>
@@ -15315,16 +15132,15 @@ functions for displaying player info.</p>
   </thead>
   <tbody>
     <tr>
-      <th>Ruslan Greatness</th>
-      <td>0.977582</td>
-      <td>0.659065</td>
-      <td>1.161697</td>
-      <td>1.591594</td>
-      <td>1.494362</td>
-      <td>0.001</td>
-      <td>1.341271</td>
-      <td>0.001</td>
-      <td>0.70605</td>
+      <th>Beasley Day</th>
+      <td>0.685</td>
+      <td>0.688801</td>
+      <td>0.077669</td>
+      <td>0.208479</td>
+      <td>0.468964</td>
+      <td>0.523706</td>
+      <td>0.1</td>
+      <td>0.753672</td>
     </tr>
   </tbody>
 </table>
@@ -15333,10 +15149,42 @@ functions for displaying player info.</p>
 
 </div>
 
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># And his baserunning?</span>
+<span class="n">get_baserunning_stlats</span><span class="p">(</span><span class="n">beasley</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
 <div class="jp-OutputArea-child">
 
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
 
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -15355,10 +15203,167 @@ functions for displaying player info.</p>
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>Laserlikeness</th>
+      <th>Continuation</th>
+      <th>Base Thirst</th>
+      <th>Indulgence</th>
+      <th>Ground Friction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Beasley Day</th>
+      <td>0.396098</td>
+      <td>0.416221</td>
+      <td>0.961669</td>
+      <td>0.330239</td>
+      <td>0.673205</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Why not defense?</span>
+<span class="n">get_defense_stlats</span><span class="p">(</span><span class="n">beasley</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Omniscience</th>
+      <th>Tenaciousness</th>
+      <th>Watchfulness</th>
+      <th>Anticapitalism</th>
+      <th>Chasiness</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Beasley Day</th>
+      <td>0.11034</td>
+      <td>0.14211</td>
+      <td>0.934442</td>
+      <td>0.198512</td>
+      <td>0.275182</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># We can also get performance stats from Blaseball Reference!</span>
+<span class="c1"># Note: you have to use separate code blocks for each stlat/stat lookup</span>
+<span class="n">get_batting_stats</span><span class="p">(</span><span class="n">beasley</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>team_valid_from</th>
+      <th>team_valid_until</th>
+      <th>appearances</th>
       <th>batting_average</th>
       <th>on_base_percentage</th>
       <th>slugging</th>
-      <th>appearances</th>
       <th>plate_appearances</th>
       <th>at_bats</th>
       <th>hits</th>
@@ -15381,1083 +15386,39 @@ functions for displaying player info.</p>
       <th>ground_outs</th>
       <th>flyouts</th>
       <th>gidp</th>
-      <th>stolen_bases</th>
-      <th>caught_stealing</th>
-      <th>runs</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th>Ruslan Greatness</th>
-      <td>0.249</td>
-      <td>0.285</td>
-      <td>0.565</td>
-      <td>732.0</td>
-      <td>3528.0</td>
-      <td>3279.0</td>
-      <td>815.0</td>
-      <td>189.0</td>
-      <td>302.0</td>
-      <td>230.0</td>
-      <td>59.0</td>
-      <td>2.0</td>
-      <td>222.0</td>
-      <td>543.9</td>
-      <td>394.0</td>
-      <td>48.0</td>
-      <td>11.0</td>
-      <td>661.0</td>
-      <td>184.0</td>
-      <td>0.278</td>
-      <td>0.85</td>
-      <td>1852.0</td>
-      <td>0.0</td>
-      <td>1600.0</td>
-      <td>306.0</td>
-      <td>42.0</td>
-      <td>341.0</td>
-      <td>26.0</td>
-      <td>527.0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>In addition to these functions taking on player, they can also be passed a list of players,
-which will come into play more when we get to teams. And a few of the functions also let you
-include additional information like their team.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[32]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">get_stars</span><span class="p">([</span><span class="n">ruslan</span><span class="p">,</span> <span class="n">jaxon</span><span class="p">],</span> <span class="n">include_team</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>Combined</th>
-      <th>Batting</th>
-      <th>Pitching</th>
-      <th>Baserunning</th>
-      <th>Defense</th>
-    </tr>
-    <tr>
-      <th></th>
-      <th>Team</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Ruslan Greatness</th>
-      <th>Pies</th>
-      <td>19.6</td>
-      <td>4.9</td>
-      <td>4.3</td>
-      <td>5.2</td>
-      <td>5.2</td>
-    </tr>
-    <tr>
-      <th>Jaxon Buckley</th>
-      <th>Pies</th>
-      <td>20.6</td>
-      <td>7.4</td>
-      <td>4.7</td>
-      <td>4.3</td>
-      <td>4.1</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>While that's nice, it can also get a little hard to parse if you have a lot of numbers.
-To help out, we support including heatmaps in this with the <code>set_heatmap</code> function. This
-supports all tables, so feel free to use it wherever. Note that the heatmap may not show
-up on all platforms, Github in particular is bad about this.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[33]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stlat_table</span> <span class="o">=</span> <span class="n">get_batting_stlats</span><span class="p">([</span><span class="n">ruslan</span><span class="p">,</span> <span class="n">jaxon</span><span class="p">])</span>
-<span class="n">display</span><span class="p">(</span><span class="n">set_heatmap</span><span class="p">(</span><span class="n">stlat_table</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">set_heatmap</span><span class="p">(</span><span class="n">stlat_table</span><span class="p">,</span> <span class="n">maxVal</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span> <span class="c1"># there&#39;s also a version with maxVal, where all numbers above that will be treated as maximum</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<style type="text/css">
-#T_0f8d3_row0_col0 {
-  background-color: #fff1a8;
-  color: #000000;
-}
-#T_0f8d3_row0_col1 {
-  background-color: #fdb163;
-  color: #000000;
-}
-#T_0f8d3_row0_col2 {
-  background-color: #eff8aa;
-  color: #000000;
-}
-#T_0f8d3_row0_col3, #T_0f8d3_row1_col8 {
-  background-color: #89cc67;
-  color: #000000;
-}
-#T_0f8d3_row0_col4 {
-  background-color: #a7d96b;
-  color: #000000;
-}
-#T_0f8d3_row0_col5, #T_0f8d3_row0_col7, #T_0f8d3_row1_col5, #T_0f8d3_row1_col7 {
-  background-color: #a50026;
-  color: #f1f1f1;
-  background-color: #a50026;
-  color: #f1f1f1;
-}
-#T_0f8d3_row0_col6 {
-  background-color: #cbe982;
-  color: #000000;
-}
-#T_0f8d3_row0_col8 {
-  background-color: #fdbd6d;
-  color: #000000;
-}
-#T_0f8d3_row1_col0 {
-  background-color: #abdb6d;
-  color: #000000;
-}
-#T_0f8d3_row1_col1 {
-  background-color: #4bb05c;
-  color: #f1f1f1;
-}
-#T_0f8d3_row1_col2 {
-  background-color: #e5f49b;
-  color: #000000;
-}
-#T_0f8d3_row1_col3 {
-  background-color: #219c52;
-  color: #f1f1f1;
-}
-#T_0f8d3_row1_col4, #T_0f8d3_row1_col6 {
-  background-color: #006837;
-  color: #f1f1f1;
-}
-</style>
-<table id="T_0f8d3">
-  <thead>
-    <tr>
-      <th class="blank level0" >&nbsp;</th>
-      <th id="T_0f8d3_level0_col0" class="col_heading level0 col0" >Batting Rating</th>
-      <th id="T_0f8d3_level0_col1" class="col_heading level0 col1" >Thwackability</th>
-      <th id="T_0f8d3_level0_col2" class="col_heading level0 col2" >Divinity</th>
-      <th id="T_0f8d3_level0_col3" class="col_heading level0 col3" >Musclitude</th>
-      <th id="T_0f8d3_level0_col4" class="col_heading level0 col4" >Moxie</th>
-      <th id="T_0f8d3_level0_col5" class="col_heading level0 col5" >Patheticism</th>
-      <th id="T_0f8d3_level0_col6" class="col_heading level0 col6" >Martyrdom</th>
-      <th id="T_0f8d3_level0_col7" class="col_heading level0 col7" >Tragicness</th>
-      <th id="T_0f8d3_level0_col8" class="col_heading level0 col8" >Buoyancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_0f8d3_level0_row0" class="row_heading level0 row0" >Ruslan Greatness</th>
-      <td id="T_0f8d3_row0_col0" class="data row0 col0" >0.977582</td>
-      <td id="T_0f8d3_row0_col1" class="data row0 col1" >0.659065</td>
-      <td id="T_0f8d3_row0_col2" class="data row0 col2" >1.161697</td>
-      <td id="T_0f8d3_row0_col3" class="data row0 col3" >1.591594</td>
-      <td id="T_0f8d3_row0_col4" class="data row0 col4" >1.494362</td>
-      <td id="T_0f8d3_row0_col5" class="data row0 col5" >0.001000</td>
-      <td id="T_0f8d3_row0_col6" class="data row0 col6" >1.341271</td>
-      <td id="T_0f8d3_row0_col7" class="data row0 col7" >0.001000</td>
-      <td id="T_0f8d3_row0_col8" class="data row0 col8" >0.706050</td>
-    </tr>
-    <tr>
-      <th id="T_0f8d3_level0_row1" class="row_heading level0 row1" >Jaxon Buckley</th>
-      <td id="T_0f8d3_row1_col0" class="data row1 col0" >1.479213</td>
-      <td id="T_0f8d3_row1_col1" class="data row1 col1" >1.782206</td>
-      <td id="T_0f8d3_row1_col2" class="data row1 col2" >1.217104</td>
-      <td id="T_0f8d3_row1_col3" class="data row1 col3" >1.907337</td>
-      <td id="T_0f8d3_row1_col4" class="data row1 col4" >2.135263</td>
-      <td id="T_0f8d3_row1_col5" class="data row1 col5" >0.001000</td>
-      <td id="T_0f8d3_row1_col6" class="data row1 col6" >2.141931</td>
-      <td id="T_0f8d3_row1_col7" class="data row1 col7" >0.001000</td>
-      <td id="T_0f8d3_row1_col8" class="data row1 col8" >1.589857</td>
-    </tr>
-  </tbody>
-</table>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<style type="text/css">
-#T_1bb06_row0_col0 {
-  background-color: #05713c;
-  color: #f1f1f1;
-}
-#T_1bb06_row0_col1 {
-  background-color: #bbe278;
-  color: #000000;
-}
-#T_1bb06_row0_col2, #T_1bb06_row0_col3, #T_1bb06_row0_col4, #T_1bb06_row0_col6, #T_1bb06_row1_col0, #T_1bb06_row1_col1, #T_1bb06_row1_col2, #T_1bb06_row1_col3, #T_1bb06_row1_col4, #T_1bb06_row1_col6, #T_1bb06_row1_col8 {
-  background-color: #006837;
-  color: #f1f1f1;
-}
-#T_1bb06_row0_col5, #T_1bb06_row0_col7, #T_1bb06_row1_col5, #T_1bb06_row1_col7 {
-  background-color: #a50026;
-  color: #f1f1f1;
-  background-color: #006837;
-  color: #f1f1f1;
-}
-#T_1bb06_row0_col8 {
-  background-color: #a2d76a;
-  color: #000000;
-}
-</style>
-<table id="T_1bb06">
-  <thead>
-    <tr>
-      <th class="blank level0" >&nbsp;</th>
-      <th id="T_1bb06_level0_col0" class="col_heading level0 col0" >Batting Rating</th>
-      <th id="T_1bb06_level0_col1" class="col_heading level0 col1" >Thwackability</th>
-      <th id="T_1bb06_level0_col2" class="col_heading level0 col2" >Divinity</th>
-      <th id="T_1bb06_level0_col3" class="col_heading level0 col3" >Musclitude</th>
-      <th id="T_1bb06_level0_col4" class="col_heading level0 col4" >Moxie</th>
-      <th id="T_1bb06_level0_col5" class="col_heading level0 col5" >Patheticism</th>
-      <th id="T_1bb06_level0_col6" class="col_heading level0 col6" >Martyrdom</th>
-      <th id="T_1bb06_level0_col7" class="col_heading level0 col7" >Tragicness</th>
-      <th id="T_1bb06_level0_col8" class="col_heading level0 col8" >Buoyancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_1bb06_level0_row0" class="row_heading level0 row0" >Ruslan Greatness</th>
-      <td id="T_1bb06_row0_col0" class="data row0 col0" >0.977582</td>
-      <td id="T_1bb06_row0_col1" class="data row0 col1" >0.659065</td>
-      <td id="T_1bb06_row0_col2" class="data row0 col2" >1.161697</td>
-      <td id="T_1bb06_row0_col3" class="data row0 col3" >1.591594</td>
-      <td id="T_1bb06_row0_col4" class="data row0 col4" >1.494362</td>
-      <td id="T_1bb06_row0_col5" class="data row0 col5" >0.001000</td>
-      <td id="T_1bb06_row0_col6" class="data row0 col6" >1.341271</td>
-      <td id="T_1bb06_row0_col7" class="data row0 col7" >0.001000</td>
-      <td id="T_1bb06_row0_col8" class="data row0 col8" >0.706050</td>
-    </tr>
-    <tr>
-      <th id="T_1bb06_level0_row1" class="row_heading level0 row1" >Jaxon Buckley</th>
-      <td id="T_1bb06_row1_col0" class="data row1 col0" >1.479213</td>
-      <td id="T_1bb06_row1_col1" class="data row1 col1" >1.782206</td>
-      <td id="T_1bb06_row1_col2" class="data row1 col2" >1.217104</td>
-      <td id="T_1bb06_row1_col3" class="data row1 col3" >1.907337</td>
-      <td id="T_1bb06_row1_col4" class="data row1 col4" >2.135263</td>
-      <td id="T_1bb06_row1_col5" class="data row1 col5" >0.001000</td>
-      <td id="T_1bb06_row1_col6" class="data row1 col6" >2.141931</td>
-      <td id="T_1bb06_row1_col7" class="data row1 col7" >0.001000</td>
-      <td id="T_1bb06_row1_col8" class="data row1 col8" >1.589857</td>
-    </tr>
-  </tbody>
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>And finally, you can look up players at any point in the past as well. These use real life timestamps, rather than game days, but you can use them for quick comparisons.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[34]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Format is &lt;YEAR&gt;-&lt;MONTH&gt;-&lt;DAY&gt;T&lt;HOUR&gt;:&lt;MINUTE&gt;:&lt;SECOND&gt;Z</span>
-<span class="c1"># Note: Historical records only go back as far as mid-Season 2</span>
-<span class="n">mid_season_2</span> <span class="o">=</span> <span class="s2">&quot;2020-07-29T18:00:00Z&quot;</span>
-<span class="n">betsy_current</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="s2">&quot;Betsy Trombone&quot;</span><span class="p">)</span>
-<span class="n">betsy_old</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">load_one_at_time</span><span class="p">(</span><span class="n">betsy_current</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">mid_season_2</span><span class="p">)</span>
-
-<span class="n">display</span><span class="p">(</span><span class="n">get_pitching_stlats</span><span class="p">([</span><span class="n">betsy_old</span><span class="p">,</span> <span class="n">betsy_current</span><span class="p">]))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Pitching Rating</th>
-      <th>Unthwackability</th>
-      <th>Ruthlessness</th>
-      <th>Overpowerment</th>
-      <th>Shakespearianism</th>
-      <th>Coldness</th>
-      <th>Suppression</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Betsy Trombone</th>
-      <td>0.470545</td>
-      <td>0.418548</td>
-      <td>0.725370</td>
-      <td>0.473664</td>
-      <td>0.474900</td>
-      <td>0.872849</td>
-      <td>0.021753</td>
-    </tr>
-    <tr>
-      <th>Betsy Trombone</th>
-      <td>0.691343</td>
-      <td>0.456078</td>
-      <td>1.238348</td>
-      <td>0.903830</td>
-      <td>0.623116</td>
-      <td>1.015514</td>
-      <td>1.107961</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Let's do a more in-depth example... lets get a list of all players that have a career ERA over 10. Because it's funny.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[65]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_players</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">load_all</span><span class="p">()</span>
-<span class="n">all_eras</span> <span class="o">=</span> <span class="n">get_pitching_stats</span><span class="p">(</span><span class="n">all_players</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;earned_run_average&quot;</span><span class="p">])</span>
-<span class="n">filtered_eras</span> <span class="o">=</span> <span class="n">all_eras</span><span class="p">[</span><span class="n">all_eras</span><span class="p">[</span><span class="s2">&quot;earned_run_average&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">10.0</span><span class="p">]</span>
-<span class="n">display</span><span class="p">(</span><span class="n">filtered_eras</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>earned_run_average</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Mcdowell Karim</th>
-      <td>14.86</td>
-    </tr>
-    <tr>
-      <th>Chorby Soul V</th>
-      <td>15.30</td>
-    </tr>
-    <tr>
-      <th>Caleb Novak</th>
-      <td>11.84</td>
-    </tr>
-    <tr>
-      <th>Lady Matsuyama</th>
-      <td>12.91</td>
-    </tr>
-    <tr>
-      <th>Ilane Snart</th>
-      <td>13.39</td>
-    </tr>
-    <tr>
-      <th>Dimi Sutherland</th>
-      <td>10.24</td>
-    </tr>
-    <tr>
-      <th>Axel Cardenas</th>
-      <td>10.76</td>
-    </tr>
-    <tr>
-      <th>Backpatch Rolsenthal</th>
-      <td>12.54</td>
-    </tr>
-    <tr>
-      <th>Simba Davis</th>
-      <td>13.34</td>
-    </tr>
-    <tr>
-      <th>Paula Turnip</th>
-      <td>12.99</td>
-    </tr>
-    <tr>
-      <th>Pitching Machine</th>
-      <td>19.06</td>
-    </tr>
-    <tr>
-      <th>Wyatt Mason XII</th>
-      <td>15.00</td>
-    </tr>
-    <tr>
-      <th>Baby Doyle</th>
-      <td>19.06</td>
-    </tr>
-    <tr>
-      <th>Milli Kalette</th>
-      <td>270.00</td>
-    </tr>
-    <tr>
-      <th>Holden Stanton</th>
-      <td>13.24</td>
-    </tr>
-    <tr>
-      <th>Albert Stink</th>
-      <td>10.80</td>
-    </tr>
-    <tr>
-      <th>Abbott Wright</th>
-      <td>13.27</td>
-    </tr>
-    <tr>
-      <th>Tiana Wheeler</th>
-      <td>10.85</td>
-    </tr>
-    <tr>
-      <th>Chorby Soul</th>
-      <td>14.47</td>
-    </tr>
-    <tr>
-      <th>Jenkins Ingram</th>
-      <td>15.17</td>
-    </tr>
-    <tr>
-      <th>Aubrey Teakwook</th>
-      <td>17.72</td>
-    </tr>
-    <tr>
-      <th>Richardson Games</th>
-      <td>11.51</td>
-    </tr>
-    <tr>
-      <th>Jada Frederick</th>
-      <td>14.09</td>
-    </tr>
-    <tr>
-      <th>Oliver Loofah</th>
-      <td>12.45</td>
-    </tr>
-    <tr>
-      <th>Fish Summer</th>
-      <td>11.36</td>
-    </tr>
-    <tr>
-      <th>Pangolin Ruiz</th>
-      <td>11.84</td>
-    </tr>
-    <tr>
-      <th>Ronan Vargas</th>
-      <td>12.90</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Those sure are pitchers. Note that this call takes a <em>really</em> <strong><em>REALLY</em></strong> long time to run, but because of how Jupyter Notebooks are structured, you only have to run it once and people can view it immediately!</p>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Teams">Teams<a class="anchor-link" href="#Teams"> </a></h3><p>Teams can be retrieved by with lookups based on the team name or by using
-the Team ID, found in the URL of a team page on the blaseball website.</p>
-<p>Teams contain lists of players in particular positions, most notably <code>lineup</code> for batters,
-<code>rotation</code> for pitchers, and <code>shadows</code> for the shadows.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pies</span> <span class="o">=</span> <span class="n">Team</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;23e4cbc1-e9cd-47fa-a35b-bfa06f726cb7&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">slogan</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output " data-mime-type="text/plain">
-<pre>&#39;Pie or Die.&#39;</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[36]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">get_pitching_stlats</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">rotation</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_pitching_stats</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;wins&quot;</span><span class="p">,</span> <span class="s2">&quot;losses&quot;</span><span class="p">,</span> <span class="s2">&quot;earned_run_average&quot;</span><span class="p">,</span> <span class="s2">&quot;whip&quot;</span><span class="p">]))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Pitching Rating</th>
-      <th>Unthwackability</th>
-      <th>Ruthlessness</th>
-      <th>Overpowerment</th>
-      <th>Shakespearianism</th>
-      <th>Coldness</th>
-      <th>Suppression</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Tiana Takahashi</th>
-      <td>1.064998</td>
-      <td>1.142441</td>
-      <td>1.215111</td>
-      <td>1.182198</td>
-      <td>0.356126</td>
-      <td>0.872711</td>
-      <td>1.199716</td>
-    </tr>
-    <tr>
-      <th>Jaxon Buckley</th>
-      <td>0.945195</td>
-      <td>0.933260</td>
-      <td>1.069557</td>
-      <td>0.859596</td>
-      <td>0.743037</td>
-      <td>1.158093</td>
-      <td>1.409315</td>
-    </tr>
-    <tr>
-      <th>Twofurious Puddles</th>
-      <td>0.765088</td>
-      <td>0.871357</td>
-      <td>0.706770</td>
-      <td>0.894336</td>
-      <td>0.778056</td>
-      <td>0.481997</td>
-      <td>0.793621</td>
-    </tr>
-    <tr>
-      <th>Lucy Tokkan</th>
-      <td>0.881699</td>
-      <td>1.001342</td>
-      <td>1.064761</td>
-      <td>0.418112</td>
-      <td>1.085947</td>
-      <td>0.311982</td>
-      <td>0.455269</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>wins</th>
-      <th>losses</th>
-      <th>earned_run_average</th>
-      <th>whip</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Tiana Takahashi</th>
-      <td>14.0</td>
-      <td>6.0</td>
-      <td>2.62</td>
-      <td>0.887</td>
-    </tr>
-    <tr>
-      <th>Jaxon Buckley</th>
-      <td>9.0</td>
-      <td>10.0</td>
-      <td>3.85</td>
-      <td>1.157</td>
-    </tr>
-    <tr>
-      <th>Twofurious Puddles</th>
-      <td>11.0</td>
-      <td>5.0</td>
-      <td>3.48</td>
-      <td>1.222</td>
-    </tr>
-    <tr>
-      <th>Lucy Tokkan</th>
-      <td>7.0</td>
-      <td>4.0</td>
-      <td>3.28</td>
-      <td>1.024</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>You can also load up teams at specific times if you want to compare previous versions.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Format is &lt;YEAR&gt;-&lt;MONTH&gt;-&lt;DAY&gt;T&lt;HOUR&gt;:&lt;MINUTE&gt;:&lt;SECOND&gt;Z</span>
-<span class="c1"># Note: Historical records only go back as far as mid-Season 2</span>
-<span class="n">mid_season_2</span> <span class="o">=</span> <span class="s2">&quot;2020-07-29T18:00:00Z&quot;</span>
-<span class="n">old_pies</span> <span class="o">=</span> <span class="n">Team</span><span class="o">.</span><span class="n">load_at_time</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">mid_season_2</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_stars</span><span class="p">(</span><span class="n">old_pies</span><span class="o">.</span><span class="n">lineup</span> <span class="o">+</span> <span class="n">old_pies</span><span class="o">.</span><span class="n">rotation</span><span class="p">))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Combined</th>
-      <th>Batting</th>
-      <th>Pitching</th>
-      <th>Baserunning</th>
-      <th>Defense</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Juan Rangel</th>
-      <td>6.7</td>
-      <td>2.2</td>
-      <td>0.4</td>
-      <td>2.1</td>
-      <td>2.0</td>
-    </tr>
     <tr>
       <th>Beasley Day</th>
-      <td>9.4</td>
-      <td>2.8</td>
-      <td>2.2</td>
-      <td>2.5</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>Spears Taylor</th>
-      <td>10.1</td>
-      <td>2.3</td>
-      <td>2.0</td>
-      <td>1.9</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>Elvis Figueroa</th>
-      <td>10.7</td>
-      <td>2.6</td>
-      <td>4.3</td>
-      <td>1.1</td>
-      <td>2.7</td>
-    </tr>
-    <tr>
-      <th>Cedric Gonzalez</th>
-      <td>8.9</td>
-      <td>1.6</td>
-      <td>1.4</td>
-      <td>3.6</td>
-      <td>2.4</td>
-    </tr>
-    <tr>
-      <th>Mickey Woods</th>
-      <td>9.6</td>
-      <td>2.2</td>
-      <td>1.2</td>
-      <td>2.3</td>
-      <td>3.9</td>
-    </tr>
-    <tr>
-      <th>Jessica Telephone</th>
-      <td>11.6</td>
-      <td>4.8</td>
-      <td>1.3</td>
-      <td>2.8</td>
-      <td>2.7</td>
-    </tr>
-    <tr>
-      <th>Morrow Wilson</th>
-      <td>7.7</td>
-      <td>2.2</td>
-      <td>0.3</td>
-      <td>1.8</td>
-      <td>3.5</td>
-    </tr>
-    <tr>
-      <th>Kennedy Cena</th>
-      <td>11.4</td>
-      <td>2.7</td>
-      <td>3.6</td>
-      <td>2.0</td>
-      <td>3.1</td>
-    </tr>
-    <tr>
-      <th>Betsy Trombone</th>
-      <td>9.0</td>
-      <td>3.1</td>
-      <td>2.4</td>
-      <td>2.1</td>
-      <td>1.5</td>
-    </tr>
-    <tr>
-      <th>Kevin Dudley</th>
-      <td>12.2</td>
-      <td>2.9</td>
-      <td>1.9</td>
-      <td>4.2</td>
-      <td>3.3</td>
-    </tr>
-    <tr>
-      <th>Nicholas Mora</th>
-      <td>13.0</td>
-      <td>3.9</td>
-      <td>1.8</td>
-      <td>3.7</td>
-      <td>3.6</td>
-    </tr>
-    <tr>
-      <th>Bright Zimmerman</th>
-      <td>7.3</td>
-      <td>3.3</td>
-      <td>1.3</td>
-      <td>0.5</td>
-      <td>2.2</td>
-    </tr>
-    <tr>
-      <th>Ruslan Greatness</th>
-      <td>6.8</td>
-      <td>1.6</td>
-      <td>1.0</td>
-      <td>2.3</td>
-      <td>2.0</td>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
+      <td>99</td>
+      <td>0.268</td>
+      <td>0.300</td>
+      <td>0.485</td>
+      <td>566</td>
+      <td>534</td>
+      <td>143</td>
+      <td>27</td>
+      <td>103</td>
+      <td>9</td>
+      <td>13</td>
+      <td>0</td>
+      <td>18</td>
+      <td>61</td>
+      <td>80</td>
+      <td>3</td>
+      <td>2</td>
+      <td>89</td>
+      <td>23</td>
+      <td>0.258</td>
+      <td>0.785</td>
+      <td>259</td>
+      <td>0</td>
+      <td>152</td>
+      <td>129</td>
+      <td>6</td>
     </tr>
   </tbody>
 </table>
@@ -16477,7 +15438,10 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Let's end this section with another interesting example: How about we rank all the teams in the league based on their number of pitchers?</p>
+<h3 id="Team-Data">Team Data<a class="anchor-link" href="#Team-Data"> </a></h3><p>Teams can be retrieved by with lookups based on the team name or by using
+the Team ID, found in the URL of a team page on the blaseball website.</p>
+<p>Teams contain lists of players in particular positions, most notably <code>lineup</code> for batters
+and <code>rotation</code> for pitchers.</p>
 
 </div>
 </div>
@@ -16487,12 +15451,13 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[60]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_teams</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">league_teams</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="n">all_teams</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">rotation</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Pitchers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_teams</span><span class="p">]},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">full_name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_teams</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Let's see that Team page!</span>
+<span class="n">pies</span> <span class="o">=</span> <span class="n">Team</span><span class="o">.</span><span class="n">load_by_name</span><span class="p">(</span><span class="s2">"Philly Pies"</span><span class="p">)</span>
+
+<span class="n">display_team</span><span class="p">(</span><span class="n">pies</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -16504,133 +15469,207 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 
+
 <div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
 
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
 
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Pitchers</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>New York Millennials</th>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>Breckenridge Jazz Hands</th>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>Miami Dale</th>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>Core Mechanics</th>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>Tokyo Lift</th>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>Canada Moist Talkers</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Kansas City Breath Mints</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Hawai'i Fridays</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Hades Tigers</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Ohio Worms</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Boston Flowers</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Yellowstone Magic</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>LA Unlimited Tacos</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Houston Spies</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Seattle Garages</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Charleston Shoe Thieves</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Atlantis Georgias</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Chicago Firefighters</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Hellmouth Sunbeams</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Mexico City Wild Wings</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>San Francisco Lovers</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Dallas Steaks</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Philly Pies</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Baltimore Crabs</th>
-      <td>5</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+    <div style="width:500px;background:#000;border:1px solid #fff;color:#fff;display:flex;flex-direction:column;box-sizing:border-box;font-size:14px;">
+        <div style="padding: 40px 40px 20px;border-bottom:1px solid #fff;">
+            <div style="width:100%;display:flex;flex-direction:row;justify-content:flex-start;align-items:center;">
+                <div style="background-color:#399d8f;border-radius:50%;height:60px;width:60px;font-size:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    🥧
+                </div>
+                <div style="display:flex;flex-direction:column;margin-left:10px;">
+                    <div style="font-size:24px;">
+                        Philly Pies
+                    </div>
+                    <div>
+                        <i>"Pie or Die."</i>
+                    </div>
+                    <div style="margin-top:5px;margin-left:auto;border:1px solid #fff;padding:4px 10px;border-radius:5px;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;color:#fff">
+                        VIIII The Hermit
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding:5px 40px;display:flex;flex-direction:row;background:#111;border-bottom:1px solid #fff;">
+            <div style="display:flex;flex-direction:row;padding:5px;border-radius:5px;background:#222;">
+            <div style="font-weight:700;display:flex;margin-right:10px;padding-left:5px;padding-right:5px;height:32px;border-radius:5px;align-items:center;justify-content:center;color:#cb80d9;background:#240c36 none repeat scroll 0% 0%;border:2px solid #dbbc0b">
+                Affinity for Crows
+            </div>
+        </div></div>
+        <div style="padding:20px 40px 20px;">
+            <div style="margin-bottom:10px;">
+                <div style="font-size:18px;margin-bottom:10px;color:#aaa;text-align:center;">
+                    Lineup
+                </div>
+                <ul style="margin:0;padding:0;width:100%;">
+                    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Eduardo Woodman
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#8fdb88;">▲</span>
+            </div>
+            <div>
+                ★★★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Beasley Day
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#d1d1d1;">⬌</span>
+            </div>
+            <div>
+                ★★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Farrell Seagull
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#d97373;">▼</span>
+            </div>
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Jaxon Buckley
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#8fdb88;">▲</span>
+            </div>
+            <div>
+                ★★★★★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Lang Richardson
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#de3c3c;">▼▼</span>
+            </div>
+            <div>
+                ★★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Yusef Puddles
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#8fdb88;">▲</span>
+            </div>
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Jode Preston
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#5de04f;">▲▲</span>
+            </div>
+            <div>
+                ★★★★
+            </div>
+        </div>
+    
+                </ul>
+            </div>
+            <div style="margin-bottom:10px;">
+                <div style="font-size:18px;margin-bottom:10px;color:#aaa;text-align:center;">
+                    Rotation
+                </div>
+                <ul style="margin:0;padding:0;width:100%;">
+                    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Henry Marshallow
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#15d400;">▲▲▲</span>
+            </div>
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Nicholas Mora
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#de3c3c;">▼▼</span>
+            </div>
+            <div>
+                ★★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Bright Zimmerman
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#d97373;">▼</span>
+            </div>
+            <div>
+                ★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Ruslan Greatness
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#e00000;">▼▼▼</span>
+            </div>
+            <div>
+                ★★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Elvis Figueroa
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:center;">
+                <span style="color:#5de04f;">▲▲</span>
+            </div>
+            <div>
+                ★★★★☆
+            </div>
+        </div>
+    
+                </ul>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 </div>
@@ -16639,43 +15678,16 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 
 </div>
 
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Neat. Note that this data is from the <em>current</em> active league, which as of writing is one of the Short Circuits.</p>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Items">Items<a class="anchor-link" href="#Items"> </a></h3><p>You can also look up items, either on a player or generally in the league. These items have modifications and stat boosts viewable when you look them up.</p>
-
-</div>
-</div>
-</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[39]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_items</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pies</span><span class="o">.</span><span class="n">lineup</span> <span class="o">+</span> <span class="n">pies</span><span class="o">.</span><span class="n">rotation</span><span class="p">:</span>
-    <span class="n">all_items</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
-
-<span class="n">display</span><span class="p">(</span><span class="n">get_item_stats</span><span class="p">(</span><span class="n">all_items</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Just like with players, we can look up the stlats for the whole team</span>
+<span class="n">get_pitching_stlats</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -16687,9 +15699,14 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 
+
 <div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+
 
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
@@ -16711,197 +15728,288 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Max Durability</th>
-      <th>Modifications</th>
+      <th>Unthwackability</th>
+      <th>Ruthlessness</th>
+      <th>Overpowerment</th>
+      <th>Shakespearianism</th>
+      <th>Coldness</th>
+      <th>Suppression</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>Bat of Vanity</th>
-      <td>2</td>
-      <td>[]</td>
+      <th>Henry Marshallow</th>
+      <td>0.233266</td>
+      <td>0.882016</td>
+      <td>1.123135</td>
+      <td>0.484581</td>
+      <td>0.571587</td>
+      <td>0.656728</td>
     </tr>
     <tr>
-      <th>Charitable Socks</th>
-      <td>2</td>
-      <td>[]</td>
+      <th>Nicholas Mora</th>
+      <td>1.140948</td>
+      <td>0.343723</td>
+      <td>0.553609</td>
+      <td>0.367345</td>
+      <td>0.482330</td>
+      <td>0.431032</td>
     </tr>
     <tr>
-      <th>Actual Helmet of Vanity</th>
-      <td>3</td>
-      <td>[]</td>
+      <th>Bright Zimmerman</th>
+      <td>0.207882</td>
+      <td>0.511157</td>
+      <td>0.852666</td>
+      <td>0.679224</td>
+      <td>0.303950</td>
+      <td>0.870961</td>
     </tr>
     <tr>
-      <th>Skate Helmet</th>
-      <td>2</td>
-      <td>[Pro Skater]</td>
+      <th>Ruslan Greatness</th>
+      <td>0.484582</td>
+      <td>0.481892</td>
+      <td>0.944604</td>
+      <td>0.726276</td>
+      <td>0.320791</td>
+      <td>1.085039</td>
     </tr>
     <tr>
-      <th>Rubber Ring of Fourtitude</th>
-      <td>3</td>
-      <td>[The Fourth Strike]</td>
+      <th>Elvis Figueroa</th>
+      <td>1.036387</td>
+      <td>1.015972</td>
+      <td>0.930460</td>
+      <td>0.689138</td>
+      <td>0.328725</td>
+      <td>0.592661</td>
     </tr>
-    <tr>
-      <th>Rock Bat +1</th>
-      <td>3</td>
-      <td>[]</td>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># And the same with stats</span>
+<span class="n">get_pitching_stats</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>team_valid_from</th>
+      <th>team_valid_until</th>
+      <th>games</th>
+      <th>wins</th>
+      <th>losses</th>
+      <th>win_pct</th>
+      <th>pitches_thrown</th>
+      <th>batters_faced</th>
+      <th>outs_recorded</th>
+      <th>innings</th>
+      <th>runs_allowed</th>
+      <th>shutouts</th>
+      <th>quality_starts</th>
+      <th>strikeouts</th>
+      <th>walks</th>
+      <th>home_runs_allowed</th>
+      <th>hits_allowed</th>
+      <th>hit_by_pitches</th>
+      <th>earned_run_average</th>
+      <th>walks_per_9</th>
+      <th>hits_per_9</th>
+      <th>strikeouts_per_9</th>
+      <th>home_runs_per_9</th>
+      <th>whip</th>
+      <th>strikeouts_per_walk</th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
-      <th>Actual Blood Bat</th>
-      <td>3</td>
-      <td>[]</td>
-    </tr>
-    <tr>
-      <th>Chunky Helmet</th>
-      <td>2</td>
-      <td>[Chunky]</td>
-    </tr>
-    <tr>
-      <th>Hard Blood Jersey</th>
-      <td>3</td>
-      <td>[]</td>
-    </tr>
-    <tr>
-      <th>Wooden Helmet</th>
-      <td>2</td>
-      <td>[]</td>
-    </tr>
-    <tr>
-      <th>Brambly Rock Shoes</th>
+      <th>Bright Zimmerman</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
+      <td>20</td>
+      <td>8</td>
+      <td>12</td>
+      <td>0.40</td>
+      <td>2320</td>
+      <td>802</td>
+      <td>543</td>
+      <td>181.0</td>
+      <td>122</td>
+      <td>0</td>
       <td>4</td>
-      <td>[]</td>
+      <td>90</td>
+      <td>48</td>
+      <td>21</td>
+      <td>234</td>
+      <td>0</td>
+      <td>6.07</td>
+      <td>2.39</td>
+      <td>11.64</td>
+      <td>4.48</td>
+      <td>1.04</td>
+      <td>1.731</td>
+      <td>1.88</td>
     </tr>
     <tr>
-      <th>Head Necklace</th>
-      <td>2</td>
-      <td>[]</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>More examples! How about we get a list of the top 10 items not held by any current players sorted by durability, that seems like it'd be tricky...</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[45]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_held_items</span> <span class="o">=</span> <span class="n">get_held_items</span><span class="p">()</span>
-<span class="n">all_items</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">load_all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-
-<span class="n">non_held_items</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_items</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_held_items</span><span class="p">]</span>
-<span class="n">non_held_items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">durability</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_item_stats</span><span class="p">(</span><span class="n">non_held_items</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Max Durability</th>
-      <th>Modifications</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Chorby's Soul III</th>
-      <td>157</td>
-      <td>[]</td>
+      <th>Elvis Figueroa</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
+      <td>19</td>
+      <td>9</td>
+      <td>10</td>
+      <td>0.47</td>
+      <td>1716</td>
+      <td>666</td>
+      <td>501</td>
+      <td>167.0</td>
+      <td>68</td>
+      <td>1</td>
+      <td>11</td>
+      <td>127</td>
+      <td>8</td>
+      <td>18</td>
+      <td>172</td>
+      <td>0</td>
+      <td>3.66</td>
+      <td>0.43</td>
+      <td>9.27</td>
+      <td>6.84</td>
+      <td>0.97</td>
+      <td>1.198</td>
+      <td>15.88</td>
     </tr>
     <tr>
-      <th>Limestone Holey Steel Chair of Fourtitude</th>
+      <th>Henry Marshallow</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
+      <td>20</td>
+      <td>8</td>
+      <td>12</td>
+      <td>0.40</td>
+      <td>2137</td>
+      <td>778</td>
+      <td>549</td>
+      <td>183.0</td>
+      <td>99</td>
+      <td>1</td>
       <td>7</td>
-      <td>[Steeled, The Fourth Strike]</td>
+      <td>121</td>
+      <td>22</td>
+      <td>23</td>
+      <td>216</td>
+      <td>0</td>
+      <td>4.87</td>
+      <td>1.08</td>
+      <td>10.62</td>
+      <td>5.95</td>
+      <td>1.13</td>
+      <td>1.445</td>
+      <td>5.50</td>
     </tr>
     <tr>
-      <th>Travelling Fireproof Parasitic Steel Chair</th>
-      <td>7</td>
-      <td>[Steeled, Traveling, Fireproof, Parasite]</td>
-    </tr>
-    <tr>
-      <th>Fire Eating Hearty Aluminum Steel Chair</th>
-      <td>7</td>
-      <td>[Steeled, Fire Eater]</td>
-    </tr>
-    <tr>
-      <th>Repeating Chunky Steel Chair</th>
+      <th>Nicholas Mora</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
+      <td>20</td>
       <td>6</td>
-      <td>[Steeled, Repeating, Chunky]</td>
+      <td>14</td>
+      <td>0.30</td>
+      <td>2277</td>
+      <td>779</td>
+      <td>532</td>
+      <td>177.1</td>
+      <td>115</td>
+      <td>1</td>
+      <td>4</td>
+      <td>69</td>
+      <td>83</td>
+      <td>27</td>
+      <td>176</td>
+      <td>0</td>
+      <td>5.84</td>
+      <td>4.21</td>
+      <td>8.93</td>
+      <td>3.50</td>
+      <td>1.37</td>
+      <td>1.623</td>
+      <td>0.83</td>
     </tr>
     <tr>
-      <th>Fire Eating Steel Chair of Charisma</th>
-      <td>6</td>
-      <td>[Steeled, Fire Eater]</td>
-    </tr>
-    <tr>
-      <th>Charitable Steel Chair of Intelligence</th>
-      <td>6</td>
-      <td>[Steeled]</td>
-    </tr>
-    <tr>
-      <th>Charitable Steel Chair of Vanity</th>
-      <td>6</td>
-      <td>[Steeled]</td>
-    </tr>
-    <tr>
-      <th>Metaphorical Brambly Concrete Cap</th>
-      <td>6</td>
-      <td>[]</td>
-    </tr>
-    <tr>
-      <th>Plant-Based Steel Chair of Wisdom</th>
-      <td>6</td>
-      <td>[Steeled]</td>
+      <th>Ruslan Greatness</th>
+      <td>2020-10-25T19:42:22.164Z</td>
+      <td>None</td>
+      <td>20</td>
+      <td>9</td>
+      <td>11</td>
+      <td>0.45</td>
+      <td>2286</td>
+      <td>787</td>
+      <td>541</td>
+      <td>180.1</td>
+      <td>113</td>
+      <td>1</td>
+      <td>5</td>
+      <td>95</td>
+      <td>64</td>
+      <td>20</td>
+      <td>195</td>
+      <td>0</td>
+      <td>5.64</td>
+      <td>3.19</td>
+      <td>9.73</td>
+      <td>4.74</td>
+      <td>1.00</td>
+      <td>1.596</td>
+      <td>1.48</td>
     </tr>
   </tbody>
 </table>
@@ -16921,19 +16029,8 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Wow, more straight-forward than I thought! Note that this call does take a while to run though, there are a <em>lot</em> of items! Also note that the old Discipline Era style items are weirder to work with, but thankfully they don't exist anymore so that makes it easy.</p>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Stadiums">Stadiums<a class="anchor-link" href="#Stadiums"> </a></h3><p>Expansion Era also brought about stadiums for each team, and we can check their stats just like we do for players by either loading all stadiums or loading them by team.</p>
+<h3 id="Games">Games<a class="anchor-link" href="#Games"> </a></h3><p>The results of individual games can be found based on the gameday and season, including
+future games in a currently running season.</p>
 
 </div>
 </div>
@@ -16943,19 +16040,12 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[75]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_stadiums</span> <span class="o">=</span> <span class="n">Stadium</span><span class="o">.</span><span class="n">load_all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">stadium</span> <span class="ow">in</span> <span class="n">all_stadiums</span><span class="p">:</span>
-    <span class="c1"># Filter out invalid stadiums</span>
-    <span class="k">if</span> <span class="n">stadium</span><span class="o">.</span><span class="n">filthiness</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
-        <span class="k">continue</span>
-
-    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Filthiness&quot;</span><span class="p">:</span> <span class="n">stadium</span><span class="o">.</span><span class="n">filthiness</span><span class="p">,</span>
-                       <span class="s2">&quot;Grandiosity&quot;</span><span class="p">:</span> <span class="n">stadium</span><span class="o">.</span><span class="n">grandiosity</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="n">stadium</span><span class="o">.</span><span class="n">nickname</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Let's relive some fun history</span>
+<span class="n">test_game</span> <span class="o">=</span> <span class="n">Game</span><span class="o">.</span><span class="n">load_by_season</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">43</span><span class="p">,</span> <span class="n">team_id</span><span class="o">=</span><span class="n">pies</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="n">display_game_results</span><span class="p">(</span><span class="n">test_game</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -16967,163 +16057,66 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 
+
 <div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
 
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Filthiness</th>
-      <th>Grandiosity</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>The Pillars</th>
-      <td>0.604276</td>
-      <td>0.525056</td>
-    </tr>
-    <tr>
-      <th>The Fire House</th>
-      <td>1.253098</td>
-      <td>0.511205</td>
-    </tr>
-    <tr>
-      <th>The Polyhedron</th>
-      <td>0.213924</td>
-      <td>0.469349</td>
-    </tr>
-    <tr>
-      <th>The Meadow</th>
-      <td>1.164006</td>
-      <td>0.451429</td>
-    </tr>
-    <tr>
-      <th>The Bucket</th>
-      <td>0.202474</td>
-      <td>0.504088</td>
-    </tr>
-    <tr>
-      <th>Yellowstone</th>
-      <td>0.309268</td>
-      <td>0.948843</td>
-    </tr>
-    <tr>
-      <th>The Choux</th>
-      <td>0.610302</td>
-      <td>0.585127</td>
-    </tr>
-    <tr>
-      <th>LA Taquería</th>
-      <td>0.753472</td>
-      <td>0.510360</td>
-    </tr>
-    <tr>
-      <th>The Bubble</th>
-      <td>0.975808</td>
-      <td>0.568523</td>
-    </tr>
-    <tr>
-      <th>REDACTED</th>
-      <td>0.468948</td>
-      <td>0.714184</td>
-    </tr>
-    <tr>
-      <th>The Pocket</th>
-      <td>0.243580</td>
-      <td>0.715561</td>
-    </tr>
-    <tr>
-      <th>The Steakhouse</th>
-      <td>0.537832</td>
-      <td>0.246684</td>
-    </tr>
-    <tr>
-      <th>The Vault</th>
-      <td>0.006108</td>
-      <td>0.297030</td>
-    </tr>
-    <tr>
-      <th>The Gym</th>
-      <td>0.655176</td>
-      <td>0.794621</td>
-    </tr>
-    <tr>
-      <th>The Wormhole</th>
-      <td>1.264596</td>
-      <td>0.632402</td>
-    </tr>
-    <tr>
-      <th>The Solarium</th>
-      <td>0.645038</td>
-      <td>0.619529</td>
-    </tr>
-    <tr>
-      <th>The Ampitheater</th>
-      <td>0.864537</td>
-      <td>0.681281</td>
-    </tr>
-    <tr>
-      <th>Worldwide Field</th>
-      <td>0.117373</td>
-      <td>0.513923</td>
-    </tr>
-    <tr>
-      <th>The Oven</th>
-      <td>0.732336</td>
-      <td>0.351436</td>
-    </tr>
-    <tr>
-      <th>Battin' Island</th>
-      <td>1.249934</td>
-      <td>0.564192</td>
-    </tr>
-    <tr>
-      <th>The Big Garage</th>
-      <td>0.139385</td>
-      <td>0.594599</td>
-    </tr>
-    <tr>
-      <th>The Crabitat</th>
-      <td>0.192727</td>
-      <td>0.586489</td>
-    </tr>
-    <tr>
-      <th>The Garden</th>
-      <td>0.730521</td>
-      <td>0.358945</td>
-    </tr>
-    <tr>
-      <th>The Cookout</th>
-      <td>0.160164</td>
-      <td>0.410747</td>
-    </tr>
-    <tr>
-      <th>The Gleek</th>
-      <td>1.827119</td>
-      <td>0.730682</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+    <div style="display:flex;flex-direction:column;border-radius:5px;background-color:#111;width:390px;font-size:1rem;font-weight:400;line-height:1.5;color:#fff;box-sizing:border-box;">
+        <div style="height:32px;display:flex;justify-content:space-between;flex-direction:row;align-items:center;font-size:14px;background:rgba(30,30,30,.64);border-radius:5px 5px 0 0;">
+            <div style=" display:flex;flex-direction:row;height:32px">
+                <div style="background:#800878;display:flex;padding:0 8px;height:100%;border-radius:5px;align-items:center">
+                    SHAME
+                </div>
+                <div style="display:flex;padding-left:10px;padding-right:10px;height:32px;border-radius:5px;align-items:center;font-size:14px;justify-content:center">
+                    Feedback
+                </div>
+            </div>
+        </div>
+        <div style="display:flex;flex:1 0 auto;flex-direction:column;justify-content:space-around;padding:10px 0 10px 10px;">
+            <div style="display:grid;grid-template-columns:60px auto 15%;grid-gap:10px;gap:10px;width:100%;align-items:center;padding-bottom:10px;">
+                <div style="background:#5c1c1c;display:flex;width:50px;height:50px;margin-left:8px;border-radius:50%;font-size:29px;justify-content:center;align-items:center;">
+                    🐅
+                </div>
+                <div style="color:#5c1c1c;font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
+                    Tigers
+                </div>
+                <div style="display:flex;font-size:24px;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;margin:0 8px 0 0;">
+                    1
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:60px auto 15%;grid-gap:10px;gap:10px;width:100%;align-items:center">
+                <div style="background:#399d8f;display:flex;width:50px;height:50px;margin-left:8px;border-radius:50%;font-size:29px;justify-content:center;align-items:center;">
+                    🥧
+                </div>
+                <div style="color:#399d8f;font-size:24px; font-family:"Lora","Courier New",monospace,serif;">
+                    Pies
+                </div>
+                <div style="border: 2px solid;display:flex;font-size:24px;align-items:center;justify-content:center;width:46px;height:46px;margin:0 auto;border-radius:50%;margin:0 8px 0 0;">
+                    3
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:row;align-items:center;justify-content:space-evenly;padding-top:20px;">
+                <div style="background:#5c1c1c80;font-size:14px;align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
+                    Hiroto Wilcox
+                </div>
+                <div style="background:#399d8f80;font-size:14px;align-items:center;line-height:20px;padding:0 8px;margin:5px 0;border-radius:5px;">
+                    Nicholas Mora
+                </div>
+            </div>
+            <div style="font-size:12px;line-height:24px;height:100%;text-align:center;padding:5px 0;">
+                Jessica Telephone and Spears Taylor switched teams in the feedback!
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 </div>
@@ -17139,20 +16132,8 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>There's not much else to it, really!</p>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Helper-Functions">Helper Functions<a class="anchor-link" href="#Helper-Functions"> </a></h2><p>Now we get into the weird stuff. These are a collection of functions that I threw together because I used them often enough to write them. They're usually used to modify players or teams and see what happens. So lets dig into it!</p>
-<p>First up is a group of functions to sort a team's lineup or rotation by stats. It's common for blessings to hit the "best batter" and the like, so this lets you see who that is really easily.</p>
+<h3 id="Player-&amp;-Team-History">Player &amp; Team History<a class="anchor-link" href="#Player-&amp;-Team-History"> </a></h3><p>In addition to loading what the players &amp; team are like right now, we can also load
+their historical records by date.</p>
 
 </div>
 </div>
@@ -17162,17 +16143,16 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[77]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">best_batters</span> <span class="o">=</span> <span class="n">sort_lineup</span><span class="p">(</span><span class="n">pies</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">set_heatmap</span><span class="p">(</span><span class="n">get_batting_stlats</span><span class="p">(</span><span class="n">best_batters</span><span class="p">)))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Let's grab the Season 2 Pies, for nostalgia</span>
+<span class="c1"># Format is &lt;YEAR&gt;-&lt;MONTH&gt;-&lt;DAY&gt;T&lt;HOUR&gt;:&lt;MINUTE&gt;:&lt;SECOND&gt;Z</span>
+<span class="c1"># Note: Historical records only go back as far as mid-Season 2</span>
+<span class="n">mid_season_2</span> <span class="o">=</span> <span class="s2">"2020-07-29T18:00:00Z"</span>
+<span class="n">old_pies</span> <span class="o">=</span> <span class="n">Team</span><span class="o">.</span><span class="n">load_at_time</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">mid_season_2</span><span class="p">)</span>
 
-<span class="c1">#Also can get the best/worst Overall players, based on their current position</span>
-<span class="n">worst_players</span> <span class="o">=</span> <span class="n">sort_overall</span><span class="p">(</span><span class="n">pies</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;worst&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_stars</span><span class="p">(</span><span class="n">worst_players</span><span class="p">))</span>
-
-<span class="c1">#See also: sort_rotation(), sort_shadows()</span>
+<span class="n">display_team</span><span class="p">(</span><span class="n">old_pies</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -17184,230 +16164,196 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 
+
 <div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
 
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<style type="text/css">
-#T_7ca67_row0_col0, #T_7ca67_row2_col6 {
-  background-color: #45ad5b;
-  color: #f1f1f1;
-}
-#T_7ca67_row0_col1 {
-  background-color: #006837;
-  color: #f1f1f1;
-}
-#T_7ca67_row0_col2 {
-  background-color: #33a456;
-  color: #f1f1f1;
-}
-#T_7ca67_row0_col3 {
-  background-color: #8ecf67;
-  color: #000000;
-}
-#T_7ca67_row0_col4 {
-  background-color: #bbe278;
-  color: #000000;
-}
-#T_7ca67_row0_col5 {
-  background-color: #ef633f;
-  color: #f1f1f1;
-  background-color: #fece7c;
-  color: #000000;
-}
-#T_7ca67_row0_col6, #T_7ca67_row1_col3 {
-  background-color: #e6f59d;
-  color: #000000;
-}
-#T_7ca67_row0_col7, #T_7ca67_row1_col5, #T_7ca67_row1_col7 {
-  background-color: #a50026;
-  color: #f1f1f1;
-  background-color: #006837;
-  color: #f1f1f1;
-}
-#T_7ca67_row0_col8 {
-  background-color: #75c465;
-  color: #000000;
-}
-#T_7ca67_row1_col0 {
-  background-color: #57b65f;
-  color: #f1f1f1;
-}
-#T_7ca67_row1_col1 {
-  background-color: #3faa59;
-  color: #f1f1f1;
-}
-#T_7ca67_row1_col2 {
-  background-color: #0c7f43;
-  color: #f1f1f1;
-}
-#T_7ca67_row1_col4 {
-  background-color: #7fc866;
-  color: #000000;
-}
-#T_7ca67_row1_col6 {
-  background-color: #fdbb6c;
-  color: #000000;
-}
-#T_7ca67_row1_col8 {
-  background-color: #cdea83;
-  color: #000000;
-}
-#T_7ca67_row2_col0 {
-  background-color: #9dd569;
-  color: #000000;
-}
-#T_7ca67_row2_col1 {
-  background-color: #afdd70;
-  color: #000000;
-}
-#T_7ca67_row2_col2 {
-  background-color: #4eb15d;
-  color: #f1f1f1;
-}
-#T_7ca67_row2_col3 {
-  background-color: #6bbf64;
-  color: #000000;
-}
-#T_7ca67_row2_col4 {
-  background-color: #e8f59f;
-  color: #000000;
-}
-#T_7ca67_row2_col5 {
-  background-color: #fca85e;
-  color: #000000;
-  background-color: #a50026;
-  color: #f1f1f1;
-}
-#T_7ca67_row2_col7 {
-  background-color: #fed481;
-  color: #000000;
-  background-color: #a50026;
-  color: #f1f1f1;
-}
-#T_7ca67_row2_col8 {
-  background-color: #fffdbc;
-  color: #000000;
-}
-</style>
-<table id="T_7ca67">
-  <thead>
-    <tr>
-      <th class="blank level0" >&nbsp;</th>
-      <th id="T_7ca67_level0_col0" class="col_heading level0 col0" >Batting Rating</th>
-      <th id="T_7ca67_level0_col1" class="col_heading level0 col1" >Thwackability</th>
-      <th id="T_7ca67_level0_col2" class="col_heading level0 col2" >Divinity</th>
-      <th id="T_7ca67_level0_col3" class="col_heading level0 col3" >Musclitude</th>
-      <th id="T_7ca67_level0_col4" class="col_heading level0 col4" >Moxie</th>
-      <th id="T_7ca67_level0_col5" class="col_heading level0 col5" >Patheticism</th>
-      <th id="T_7ca67_level0_col6" class="col_heading level0 col6" >Martyrdom</th>
-      <th id="T_7ca67_level0_col7" class="col_heading level0 col7" >Tragicness</th>
-      <th id="T_7ca67_level0_col8" class="col_heading level0 col8" >Buoyancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_7ca67_level0_row0" class="row_heading level0 row0" >Ed---d- ---d---</th>
-      <td id="T_7ca67_row0_col0" class="data row0 col0" >1.155215</td>
-      <td id="T_7ca67_row0_col1" class="data row0 col1" >1.371260</td>
-      <td id="T_7ca67_row0_col2" class="data row0 col2" >1.189019</td>
-      <td id="T_7ca67_row0_col3" class="data row0 col3" >1.009623</td>
-      <td id="T_7ca67_row0_col4" class="data row0 col4" >0.901743</td>
-      <td id="T_7ca67_row0_col5" class="data row0 col5" >0.253729</td>
-      <td id="T_7ca67_row0_col6" class="data row0 col6" >0.773682</td>
-      <td id="T_7ca67_row0_col7" class="data row0 col7" >0.001000</td>
-      <td id="T_7ca67_row0_col8" class="data row0 col8" >1.062578</td>
-    </tr>
-    <tr>
-      <th id="T_7ca67_level0_row1" class="row_heading level0 row1" >Lotus Mango</th>
-      <td id="T_7ca67_row1_col0" class="data row1 col0" >1.121476</td>
-      <td id="T_7ca67_row1_col1" class="data row1 col1" >1.164756</td>
-      <td id="T_7ca67_row1_col2" class="data row1 col2" >1.306107</td>
-      <td id="T_7ca67_row1_col3" class="data row1 col3" >0.773692</td>
-      <td id="T_7ca67_row1_col4" class="data row1 col4" >1.044061</td>
-      <td id="T_7ca67_row1_col5" class="data row1 col5" >0.001000</td>
-      <td id="T_7ca67_row1_col6" class="data row1 col6" >0.446380</td>
-      <td id="T_7ca67_row1_col7" class="data row1 col7" >0.001000</td>
-      <td id="T_7ca67_row1_col8" class="data row1 col8" >0.852025</td>
-    </tr>
-    <tr>
-      <th id="T_7ca67_level0_row2" class="row_heading level0 row2" >Clove Mahle</th>
-      <td id="T_7ca67_row2_col0" class="data row2 col0" >0.979022</td>
-      <td id="T_7ca67_row2_col1" class="data row2 col1" >0.937028</td>
-      <td id="T_7ca67_row2_col2" class="data row2 col2" >1.137184</td>
-      <td id="T_7ca67_row2_col3" class="data row2 col3" >1.085896</td>
-      <td id="T_7ca67_row2_col4" class="data row2 col4" >0.770516</td>
-      <td id="T_7ca67_row2_col5" class="data row2 col5" >0.400561</td>
-      <td id="T_7ca67_row2_col6" class="data row2 col6" >1.151823</td>
-      <td id="T_7ca67_row2_col7" class="data row2 col7" >0.518003</td>
-      <td id="T_7ca67_row2_col8" class="data row2 col8" >0.678284</td>
-    </tr>
-  </tbody>
-</table>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 
 
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Combined</th>
-      <th>Batting</th>
-      <th>Pitching</th>
-      <th>Baserunning</th>
-      <th>Defense</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Will Statter Jr.</th>
-      <td>6.3</td>
-      <td>1.3</td>
-      <td>2.3</td>
-      <td>1.1</td>
-      <td>1.6</td>
-    </tr>
-    <tr>
-      <th>August Obrien</th>
-      <td>9.8</td>
-      <td>3.4</td>
-      <td>1.0</td>
-      <td>3.3</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>Jefferson Delacruz</th>
-      <td>13.0</td>
-      <td>3.8</td>
-      <td>1.1</td>
-      <td>3.8</td>
-      <td>4.4</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+    <div style="width:500px;background:#000;border:1px solid #fff;color:#fff;display:flex;flex-direction:column;box-sizing:border-box;font-size:14px;">
+        <div style="padding: 40px 40px 20px;border-bottom:1px solid #fff;">
+            <div style="width:100%;display:flex;flex-direction:row;justify-content:flex-start;align-items:center;">
+                <div style="background-color:#399d8f;border-radius:50%;height:60px;width:60px;font-size:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    🥧
+                </div>
+                <div style="display:flex;flex-direction:column;margin-left:10px;">
+                    <div style="font-size:24px;">
+                        Philly Pies
+                    </div>
+                    <div>
+                        <i>"Pie or Die."</i>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding:20px 40px 20px;">
+            <div style="margin-bottom:10px;">
+                <div style="font-size:18px;margin-bottom:10px;color:#aaa;text-align:center;">
+                    Lineup
+                </div>
+                <ul style="margin:0;padding:0;width:100%;">
+                    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Juan Rangel
+            </div>
+            
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Beasley Day
+            </div>
+            
+            <div>
+                ★★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Spears Taylor
+            </div>
+            
+            <div>
+                ★★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Elvis Figueroa
+            </div>
+            
+            <div>
+                ★★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Cedric Gonzalez
+            </div>
+            
+            <div>
+                ★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Mickey Woods
+            </div>
+            
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Jessica Telephone
+            </div>
+            
+            <div>
+                ★★★★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Morrow Wilson
+            </div>
+            
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Kennedy Cena
+            </div>
+            
+            <div>
+                ★★☆
+            </div>
+        </div>
+    
+                </ul>
+            </div>
+            <div style="margin-bottom:10px;">
+                <div style="font-size:18px;margin-bottom:10px;color:#aaa;text-align:center;">
+                    Rotation
+                </div>
+                <ul style="margin:0;padding:0;width:100%;">
+                    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Betsy Trombone
+            </div>
+            
+            <div>
+                ★★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Kevin Dudley
+            </div>
+            
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Nicholas Mora
+            </div>
+            
+            <div>
+                ★★
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;">
+            <div>
+                Bright Zimmerman
+            </div>
+            
+            <div>
+                ★☆
+            </div>
+        </div>
+    
+        <div style="display:grid;grid-template-columns:auto 100px 140px; grid-template-rows:30px;align-items:center;margin:0 -40px;padding:0 20px 0 40px;line-height:1.2em;background:rgba(30,30,30,1);">
+            <div>
+                Ruslan Greatness
+            </div>
+            
+            <div>
+                ★
+            </div>
+        </div>
+    
+                </ul>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 </div>
@@ -17416,41 +16362,19 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 
 </div>
 
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Next up is the player movement functions. With the Expansion Era so focused on trades and swaps this came in really handy! Rather than displaying what the team looks like afterwards, these functions focus on showing how the overall stars will change in each position</p>
-
-</div>
-</div>
-</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[84]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**Move Jaxon to Lineup**&quot;</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">move_player</span><span class="p">(</span><span class="n">pies</span><span class="p">,</span> <span class="n">jaxon</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;lineup&#39;</span><span class="p">)))</span>
-<span class="c1"># See also: remove_player()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Oh hey, that was pre-AR Betsy. I wonder what her stlats looked like back then?</span>
+<span class="n">betsy_current</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="s2">"Betsy Trombone"</span><span class="p">)</span>
+<span class="n">betsy_old</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">load_one_at_time</span><span class="p">(</span><span class="n">betsy_current</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">mid_season_2</span><span class="p">)</span>
 
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**Trade Winnie Hess for Jaxon**&quot;</span><span class="p">))</span>
-<span class="n">winnie</span> <span class="o">=</span> <span class="n">Player</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="s2">&quot;Winnie Hess&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">trade_players</span><span class="p">(</span><span class="n">pies</span><span class="p">,</span> <span class="n">jaxon</span><span class="p">,</span> <span class="n">winnie</span><span class="p">)))</span>
-<span class="c1"># See also: swap_players()</span>
-
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**Incinerate Ruslan**&quot;</span><span class="p">))</span>
-<span class="c1"># Note: This assumes the player is replaced by the &quot;statistically average&quot; new egg generation</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">replace_player</span><span class="p">(</span><span class="n">pies</span><span class="p">,</span> <span class="n">ruslan</span><span class="p">,</span>
-                                        <span class="n">bat_star</span><span class="o">=</span><span class="n">NEW_PLAYER</span><span class="p">[</span><span class="s2">&quot;batting&quot;</span><span class="p">],</span> <span class="n">pitch_star</span><span class="o">=</span><span class="n">NEW_PLAYER</span><span class="p">[</span><span class="s2">&quot;pitching&quot;</span><span class="p">],</span>
-                                        <span class="n">run_star</span><span class="o">=</span><span class="n">NEW_PLAYER</span><span class="p">[</span><span class="s2">&quot;baserunning&quot;</span><span class="p">],</span> <span class="n">def_star</span><span class="o">=</span><span class="n">NEW_PLAYER</span><span class="p">[</span><span class="s2">&quot;defense&quot;</span><span class="p">])))</span>
-<span class="c1"># See also: add_player()</span>
+<span class="n">get_pitching_stlats</span><span class="p">([</span><span class="n">betsy_old</span><span class="p">,</span> <span class="n">betsy_current</span><span class="p">])</span>
 </pre></div>
 
      </div>
@@ -17462,835 +16386,17 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output " data-mime-type="text/markdown">
-<p><strong>Move Jaxon to Lineup</strong></p>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Pies</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>batting_change</th>
-      <td>+6.2825%</td>
-    </tr>
-    <tr>
-      <th>pitching_change</th>
-      <td>-1.0317%</td>
-    </tr>
-    <tr>
-      <th>baserunning_change</th>
-      <td>+1.6200%</td>
-    </tr>
-    <tr>
-      <th>defense_change</th>
-      <td>+1.0186%</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output " data-mime-type="text/markdown">
-<p><strong>Trade Winnie Hess for Jaxon</strong></p>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Pies</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>batting_change</th>
-      <td>+0.0000%</td>
-    </tr>
-    <tr>
-      <th>pitching_change</th>
-      <td>+23.3614%</td>
-    </tr>
-    <tr>
-      <th>baserunning_change</th>
-      <td>+0.0000%</td>
-    </tr>
-    <tr>
-      <th>defense_change</th>
-      <td>+0.0000%</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output " data-mime-type="text/markdown">
-<p><strong>Incinerate Ruslan</strong></p>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Pies</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>batting_change</th>
-      <td>-6.4176%</td>
-    </tr>
-    <tr>
-      <th>pitching_change</th>
-      <td>+0.0000%</td>
-    </tr>
-    <tr>
-      <th>baserunning_change</th>
-      <td>-6.0792%</td>
-    </tr>
-    <tr>
-      <th>defense_change</th>
-      <td>-5.9569%</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Then we have some functions for player improvement. You know, the whole "Improve team pitching by 8%" deal. There's functions for all the star ratings, including for power, speed, and "big". For individual stats you will have to do it manually, sadly... there's just too many of them to make a function for each.</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[94]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_lineup</span> <span class="o">=</span> <span class="n">improve_team_baserunning</span><span class="p">(</span><span class="n">pies</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">set_heatmap</span><span class="p">(</span><span class="n">get_baserunning_stlats</span><span class="p">(</span><span class="n">new_lineup</span><span class="p">),</span> <span class="n">maxVal</span><span class="o">=</span><span class="mf">1.5</span><span class="p">))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">set_heatmap</span><span class="p">(</span><span class="n">get_baserunning_stlats</span><span class="p">(</span><span class="n">pies</span><span class="o">.</span><span class="n">lineup</span><span class="p">),</span> <span class="n">maxVal</span><span class="o">=</span><span class="mf">1.5</span><span class="p">))</span>
-
-<span class="c1"># Perhaps more usefully there&#39;s a version that calculates average star increase as well</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">avg</span> <span class="o">=</span> <span class="n">improve_team_baserunning_table</span><span class="p">(</span><span class="n">pies</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">avg</span><span class="p">))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
 
 <div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
 
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<style type="text/css">
-#T_9f445_row0_col0, #T_9f445_row4_col4 {
-  background-color: #e2f397;
-  color: #000000;
-}
-#T_9f445_row0_col1 {
-  background-color: #afdd70;
-  color: #000000;
-}
-#T_9f445_row0_col2 {
-  background-color: #f99153;
-  color: #000000;
-}
-#T_9f445_row0_col3 {
-  background-color: #89cc67;
-  color: #000000;
-}
-#T_9f445_row0_col4 {
-  background-color: #bde379;
-  color: #000000;
-}
-#T_9f445_row0_col5 {
-  background-color: #fdbf6f;
-  color: #000000;
-}
-#T_9f445_row1_col0 {
-  background-color: #f67a49;
-  color: #f1f1f1;
-}
-#T_9f445_row1_col1, #T_9f445_row7_col3 {
-  background-color: #f7814c;
-  color: #f1f1f1;
-}
-#T_9f445_row1_col2 {
-  background-color: #abdb6d;
-  color: #000000;
-}
-#T_9f445_row1_col3 {
-  background-color: #c62027;
-  color: #f1f1f1;
-}
-#T_9f445_row1_col4 {
-  background-color: #cc2627;
-  color: #f1f1f1;
-}
-#T_9f445_row1_col5 {
-  background-color: #e75337;
-  color: #f1f1f1;
-}
-#T_9f445_row2_col0, #T_9f445_row2_col3 {
-  background-color: #e3f399;
-  color: #000000;
-}
-#T_9f445_row2_col1 {
-  background-color: #57b65f;
-  color: #f1f1f1;
-}
-#T_9f445_row2_col2 {
-  background-color: #f67c4a;
-  color: #f1f1f1;
-}
-#T_9f445_row2_col4, #T_9f445_row7_col5 {
-  background-color: #d1ec86;
-  color: #000000;
-}
-#T_9f445_row2_col5 {
-  background-color: #f26841;
-  color: #f1f1f1;
-}
-#T_9f445_row3_col0 {
-  background-color: #87cb67;
-  color: #000000;
-}
-#T_9f445_row3_col1 {
-  background-color: #05713c;
-  color: #f1f1f1;
-}
-#T_9f445_row3_col2, #T_9f445_row3_col5 {
-  background-color: #fff8b4;
-  color: #000000;
-}
-#T_9f445_row3_col3 {
-  background-color: #eff8aa;
-  color: #000000;
-}
-#T_9f445_row3_col4 {
-  background-color: #8ccd67;
-  color: #000000;
-}
-#T_9f445_row4_col0 {
-  background-color: #e9f6a1;
-  color: #000000;
-}
-#T_9f445_row4_col1 {
-  background-color: #fbfdba;
-  color: #000000;
-}
-#T_9f445_row4_col2 {
-  background-color: #6ec064;
-  color: #000000;
-}
-#T_9f445_row4_col3 {
-  background-color: #feeda1;
-  color: #000000;
-}
-#T_9f445_row4_col5 {
-  background-color: #c7e77f;
-  color: #000000;
-}
-#T_9f445_row5_col0 {
-  background-color: #feffbe;
-  color: #000000;
-}
-#T_9f445_row5_col1 {
-  background-color: #a7d96b;
-  color: #000000;
-}
-#T_9f445_row5_col2 {
-  background-color: #e44c34;
-  color: #f1f1f1;
-}
-#T_9f445_row5_col3 {
-  background-color: #f7fcb4;
-  color: #000000;
-}
-#T_9f445_row5_col4 {
-  background-color: #fed27f;
-  color: #000000;
-}
-#T_9f445_row5_col5 {
-  background-color: #fdbd6d;
-  color: #000000;
-}
-#T_9f445_row6_col0 {
-  background-color: #ebf7a3;
-  color: #000000;
-}
-#T_9f445_row6_col1, #T_9f445_row7_col1 {
-  background-color: #f8fcb6;
-  color: #000000;
-}
-#T_9f445_row6_col2 {
-  background-color: #fffcba;
-  color: #000000;
-}
-#T_9f445_row6_col3 {
-  background-color: #ddf191;
-  color: #000000;
-}
-#T_9f445_row6_col4 {
-  background-color: #a2d76a;
-  color: #000000;
-}
-#T_9f445_row6_col5 {
-  background-color: #f5fbb2;
-  color: #000000;
-}
-#T_9f445_row7_col0 {
-  background-color: #fee28f;
-  color: #000000;
-}
-#T_9f445_row7_col2 {
-  background-color: #ec5c3b;
-  color: #f1f1f1;
-}
-#T_9f445_row7_col4 {
-  background-color: #f57547;
-  color: #f1f1f1;
-}
-#T_9f445_row8_col0 {
-  background-color: #d5ed88;
-  color: #000000;
-}
-#T_9f445_row8_col1 {
-  background-color: #fff1a8;
-  color: #000000;
-}
-#T_9f445_row8_col2 {
-  background-color: #279f53;
-  color: #f1f1f1;
-}
-#T_9f445_row8_col3 {
-  background-color: #006837;
-  color: #f1f1f1;
-}
-#T_9f445_row8_col4 {
-  background-color: #54b45f;
-  color: #f1f1f1;
-}
-#T_9f445_row8_col5 {
-  background-color: #98d368;
-  color: #000000;
-}
-</style>
-<table id="T_9f445">
-  <thead>
-    <tr>
-      <th class="blank level0" >&nbsp;</th>
-      <th id="T_9f445_level0_col0" class="col_heading level0 col0" >Baserunning Rating</th>
-      <th id="T_9f445_level0_col1" class="col_heading level0 col1" >Laserlikeness</th>
-      <th id="T_9f445_level0_col2" class="col_heading level0 col2" >Continuation</th>
-      <th id="T_9f445_level0_col3" class="col_heading level0 col3" >Base Thirst</th>
-      <th id="T_9f445_level0_col4" class="col_heading level0 col4" >Indulgence</th>
-      <th id="T_9f445_level0_col5" class="col_heading level0 col5" >Ground Friction</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_9f445_level0_row0" class="row_heading level0 row0" >Clove Mahle</th>
-      <td id="T_9f445_row0_col0" class="data row0 col0" >0.866831</td>
-      <td id="T_9f445_row0_col1" class="data row0 col1" >1.023632</td>
-      <td id="T_9f445_row0_col2" class="data row0 col2" >0.386468</td>
-      <td id="T_9f445_row0_col3" class="data row0 col3" >1.118699</td>
-      <td id="T_9f445_row0_col4" class="data row0 col4" >0.979865</td>
-      <td id="T_9f445_row0_col5" class="data row0 col5" >0.503076</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row1" class="row_heading level0 row1" >Will Statter Jr.</th>
-      <td id="T_9f445_row1_col0" class="data row1 col0" >0.329473</td>
-      <td id="T_9f445_row1_col1" class="data row1 col1" >0.347074</td>
-      <td id="T_9f445_row1_col2" class="data row1 col2" >1.031897</td>
-      <td id="T_9f445_row1_col3" class="data row1 col3" >0.101921</td>
-      <td id="T_9f445_row1_col4" class="data row1 col4" >0.119305</td>
-      <td id="T_9f445_row1_col5" class="data row1 col5" >0.238526</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row2" class="row_heading level0 row2" >Doc Anice</th>
-      <td id="T_9f445_row2_col0" class="data row2 col0" >0.858656</td>
-      <td id="T_9f445_row2_col1" class="data row2 col1" >1.225746</td>
-      <td id="T_9f445_row2_col2" class="data row2 col2" >0.339479</td>
-      <td id="T_9f445_row2_col3" class="data row2 col3" >0.861079</td>
-      <td id="T_9f445_row2_col4" class="data row2 col4" >0.921527</td>
-      <td id="T_9f445_row2_col5" class="data row2 col5" >0.292299</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row3" class="row_heading level0 row3" >Ruslan Greatness</th>
-      <td id="T_9f445_row3_col0" class="data row3 col0" >1.122463</td>
-      <td id="T_9f445_row3_col1" class="data row3 col1" >1.468207</td>
-      <td id="T_9f445_row3_col2" class="data row3 col2" >0.719122</td>
-      <td id="T_9f445_row3_col3" class="data row3 col3" >0.814308</td>
-      <td id="T_9f445_row3_col4" class="data row3 col4" >1.109890</td>
-      <td id="T_9f445_row3_col5" class="data row3 col5" >0.716001</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row4" class="row_heading level0 row4" >Ed---d- ---d---</th>
-      <td id="T_9f445_row4_col0" class="data row4 col0" >0.837240</td>
-      <td id="T_9f445_row4_col1" class="data row4 col1" >0.765043</td>
-      <td id="T_9f445_row4_col2" class="data row4 col2" >1.182715</td>
-      <td id="T_9f445_row4_col3" class="data row4 col3" >0.664057</td>
-      <td id="T_9f445_row4_col4" class="data row4 col4" >0.862992</td>
-      <td id="T_9f445_row4_col5" class="data row4 col5" >0.952748</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row5" class="row_heading level0 row5" >August Obrien</th>
-      <td id="T_9f445_row5_col0" class="data row5 col0" >0.754903</td>
-      <td id="T_9f445_row5_col1" class="data row5 col1" >1.046470</td>
-      <td id="T_9f445_row5_col2" class="data row5 col2" >0.220389</td>
-      <td id="T_9f445_row5_col3" class="data row5 col3" >0.781812</td>
-      <td id="T_9f445_row5_col4" class="data row5 col4" >0.561149</td>
-      <td id="T_9f445_row5_col5" class="data row5 col5" >0.495344</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row6" class="row_heading level0 row6" >Jefferson Delacruz</th>
-      <td id="T_9f445_row6_col0" class="data row6 col0" >0.827819</td>
-      <td id="T_9f445_row6_col1" class="data row6 col1" >0.775563</td>
-      <td id="T_9f445_row6_col2" class="data row6 col2" >0.733158</td>
-      <td id="T_9f445_row6_col3" class="data row6 col3" >0.880811</td>
-      <td id="T_9f445_row6_col4" class="data row6 col4" >1.058897</td>
-      <td id="T_9f445_row6_col5" class="data row6 col5" >0.787650</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row7" class="row_heading level0 row7" >Ren Hunter</th>
-      <td id="T_9f445_row7_col0" class="data row7 col0" >0.615094</td>
-      <td id="T_9f445_row7_col1" class="data row7 col1" >0.779182</td>
-      <td id="T_9f445_row7_col2" class="data row7 col2" >0.262550</td>
-      <td id="T_9f445_row7_col3" class="data row7 col3" >0.347675</td>
-      <td id="T_9f445_row7_col4" class="data row7 col4" >0.321345</td>
-      <td id="T_9f445_row7_col5" class="data row7 col5" >0.920156</td>
-    </tr>
-    <tr>
-      <th id="T_9f445_level0_row8" class="row_heading level0 row8" >Lotus Mango</th>
-      <td id="T_9f445_row8_col0" class="data row8 col0" >0.910801</td>
-      <td id="T_9f445_row8_col1" class="data row8 col1" >0.683281</td>
-      <td id="T_9f445_row8_col2" class="data row8 col2" >1.321216</td>
-      <td id="T_9f445_row8_col3" class="data row8 col3" >1.498844</td>
-      <td id="T_9f445_row8_col4" class="data row8 col4" >1.231521</td>
-      <td id="T_9f445_row8_col5" class="data row8 col5" >1.081602</td>
-    </tr>
-  </tbody>
-</table>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
 
 
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<style type="text/css">
-#T_42119_row0_col0 {
-  background-color: #f5fbb2;
-  color: #000000;
-}
-#T_42119_row0_col1 {
-  background-color: #c9e881;
-  color: #000000;
-}
-#T_42119_row0_col2 {
-  background-color: #f47044;
-  color: #f1f1f1;
-}
-#T_42119_row0_col3 {
-  background-color: #a9da6c;
-  color: #000000;
-}
-#T_42119_row0_col4 {
-  background-color: #d9ef8b;
-  color: #000000;
-}
-#T_42119_row0_col5 {
-  background-color: #fba35c;
-  color: #000000;
-}
-#T_42119_row1_col0, #T_42119_row2_col5 {
-  background-color: #e34933;
-  color: #f1f1f1;
-}
-#T_42119_row1_col1, #T_42119_row7_col3 {
-  background-color: #ed5f3c;
-  color: #f1f1f1;
-}
-#T_42119_row1_col2 {
-  background-color: #c7e77f;
-  color: #000000;
-}
-#T_42119_row1_col3 {
-  background-color: #ab0626;
-  color: #f1f1f1;
-}
-#T_42119_row1_col4 {
-  background-color: #b10b26;
-  color: #f1f1f1;
-}
-#T_42119_row1_col5 {
-  background-color: #d93429;
-  color: #f1f1f1;
-}
-#T_42119_row2_col0 {
-  background-color: #fafdb8;
-  color: #000000;
-}
-#T_42119_row2_col1 {
-  background-color: #7dc765;
-  color: #000000;
-}
-#T_42119_row2_col2 {
-  background-color: #ec5c3b;
-  color: #f1f1f1;
-}
-#T_42119_row2_col3, #T_42119_row4_col4 {
-  background-color: #f7fcb4;
-  color: #000000;
-}
-#T_42119_row2_col4, #T_42119_row7_col5 {
-  background-color: #e8f59f;
-  color: #000000;
-}
-#T_42119_row3_col0 {
-  background-color: #a7d96b;
-  color: #000000;
-}
-#T_42119_row3_col1 {
-  background-color: #138c4a;
-  color: #f1f1f1;
-}
-#T_42119_row3_col2 {
-  background-color: #fee999;
-  color: #000000;
-}
-#T_42119_row3_col3 {
-  background-color: #fffcba;
-  color: #000000;
-}
-#T_42119_row3_col4 {
-  background-color: #addc6f;
-  color: #000000;
-}
-#T_42119_row3_col5 {
-  background-color: #fee797;
-  color: #000000;
-}
-#T_42119_row4_col0 {
-  background-color: #fbfdba;
-  color: #000000;
-}
-#T_42119_row4_col1 {
-  background-color: #fff1a8;
-  color: #000000;
-}
-#T_42119_row4_col2 {
-  background-color: #8ecf67;
-  color: #000000;
-}
-#T_42119_row4_col3 {
-  background-color: #feda86;
-  color: #000000;
-}
-#T_42119_row4_col5 {
-  background-color: #e0f295;
-  color: #000000;
-}
-#T_42119_row5_col0 {
-  background-color: #feeda1;
-  color: #000000;
-}
-#T_42119_row5_col1 {
-  background-color: #c3e67d;
-  color: #000000;
-}
-#T_42119_row5_col2 {
-  background-color: #d22b27;
-  color: #f1f1f1;
-}
-#T_42119_row5_col3, #T_42119_row7_col1 {
-  background-color: #fff5ae;
-  color: #000000;
-}
-#T_42119_row5_col4 {
-  background-color: #fdb96a;
-  color: #000000;
-}
-#T_42119_row5_col5 {
-  background-color: #fb9d59;
-  color: #000000;
-}
-#T_42119_row6_col0 {
-  background-color: #feffbe;
-  color: #000000;
-}
-#T_42119_row6_col1 {
-  background-color: #fff3ac;
-  color: #000000;
-}
-#T_42119_row6_col2 {
-  background-color: #feeb9d;
-  color: #000000;
-}
-#T_42119_row6_col3 {
-  background-color: #f2faae;
-  color: #000000;
-}
-#T_42119_row6_col4 {
-  background-color: #bde379;
-  color: #000000;
-}
-#T_42119_row6_col5 {
-  background-color: #fff6b0;
-  color: #000000;
-}
-#T_42119_row7_col0 {
-  background-color: #fdc776;
-  color: #000000;
-}
-#T_42119_row7_col2 {
-  background-color: #dd3d2d;
-  color: #f1f1f1;
-}
-#T_42119_row7_col4 {
-  background-color: #e95538;
-  color: #f1f1f1;
-}
-#T_42119_row8_col0 {
-  background-color: #e9f6a1;
-  color: #000000;
-}
-#T_42119_row8_col1 {
-  background-color: #fee08b;
-  color: #000000;
-}
-#T_42119_row8_col2 {
-  background-color: #51b35e;
-  color: #f1f1f1;
-}
-#T_42119_row8_col3 {
-  background-color: #0d8044;
-  color: #f1f1f1;
-}
-#T_42119_row8_col4 {
-  background-color: #7ac665;
-  color: #000000;
-}
-#T_42119_row8_col5 {
-  background-color: #b7e075;
-  color: #000000;
-}
-</style>
-<table id="T_42119">
-  <thead>
-    <tr>
-      <th class="blank level0" >&nbsp;</th>
-      <th id="T_42119_level0_col0" class="col_heading level0 col0" >Baserunning Rating</th>
-      <th id="T_42119_level0_col1" class="col_heading level0 col1" >Laserlikeness</th>
-      <th id="T_42119_level0_col2" class="col_heading level0 col2" >Continuation</th>
-      <th id="T_42119_level0_col3" class="col_heading level0 col3" >Base Thirst</th>
-      <th id="T_42119_level0_col4" class="col_heading level0 col4" >Indulgence</th>
-      <th id="T_42119_level0_col5" class="col_heading level0 col5" >Ground Friction</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_42119_level0_row0" class="row_heading level0 row0" >Clove Mahle</th>
-      <td id="T_42119_row0_col0" class="data row0 col0" >0.786590</td>
-      <td id="T_42119_row0_col1" class="data row0 col1" >0.943632</td>
-      <td id="T_42119_row0_col2" class="data row0 col2" >0.306468</td>
-      <td id="T_42119_row0_col3" class="data row0 col3" >1.038699</td>
-      <td id="T_42119_row0_col4" class="data row0 col4" >0.899865</td>
-      <td id="T_42119_row0_col5" class="data row0 col5" >0.423076</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row1" class="row_heading level0 row1" >Will Statter Jr.</th>
-      <td id="T_42119_row1_col0" class="data row1 col0" >0.211211</td>
-      <td id="T_42119_row1_col1" class="data row1 col1" >0.267074</td>
-      <td id="T_42119_row1_col2" class="data row1 col2" >0.951897</td>
-      <td id="T_42119_row1_col3" class="data row1 col3" >0.021921</td>
-      <td id="T_42119_row1_col4" class="data row1 col4" >0.039305</td>
-      <td id="T_42119_row1_col5" class="data row1 col5" >0.158526</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row2" class="row_heading level0 row2" >Doc Anice</th>
-      <td id="T_42119_row2_col0" class="data row2 col0" >0.768114</td>
-      <td id="T_42119_row2_col1" class="data row2 col1" >1.145746</td>
-      <td id="T_42119_row2_col2" class="data row2 col2" >0.259479</td>
-      <td id="T_42119_row2_col3" class="data row2 col3" >0.781079</td>
-      <td id="T_42119_row2_col4" class="data row2 col4" >0.841527</td>
-      <td id="T_42119_row2_col5" class="data row2 col5" >0.212299</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row3" class="row_heading level0 row3" >Ruslan Greatness</th>
-      <td id="T_42119_row3_col0" class="data row3 col0" >1.047124</td>
-      <td id="T_42119_row3_col1" class="data row3 col1" >1.388207</td>
-      <td id="T_42119_row3_col2" class="data row3 col2" >0.639122</td>
-      <td id="T_42119_row3_col3" class="data row3 col3" >0.734308</td>
-      <td id="T_42119_row3_col4" class="data row3 col4" >1.029890</td>
-      <td id="T_42119_row3_col5" class="data row3 col5" >0.636001</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row4" class="row_heading level0 row4" >Ed---d- ---d---</th>
-      <td id="T_42119_row4_col0" class="data row4 col0" >0.762457</td>
-      <td id="T_42119_row4_col1" class="data row4 col1" >0.685043</td>
-      <td id="T_42119_row4_col2" class="data row4 col2" >1.102715</td>
-      <td id="T_42119_row4_col3" class="data row4 col3" >0.584057</td>
-      <td id="T_42119_row4_col4" class="data row4 col4" >0.782992</td>
-      <td id="T_42119_row4_col5" class="data row4 col5" >0.872748</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row5" class="row_heading level0 row5" >August Obrien</th>
-      <td id="T_42119_row5_col0" class="data row5 col0" >0.663771</td>
-      <td id="T_42119_row5_col1" class="data row5 col1" >0.966470</td>
-      <td id="T_42119_row5_col2" class="data row5 col2" >0.140389</td>
-      <td id="T_42119_row5_col3" class="data row5 col3" >0.701812</td>
-      <td id="T_42119_row5_col4" class="data row5 col4" >0.481149</td>
-      <td id="T_42119_row5_col5" class="data row5 col5" >0.415344</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row6" class="row_heading level0 row6" >Jefferson Delacruz</th>
-      <td id="T_42119_row6_col0" class="data row6 col0" >0.753492</td>
-      <td id="T_42119_row6_col1" class="data row6 col1" >0.695563</td>
-      <td id="T_42119_row6_col2" class="data row6 col2" >0.653158</td>
-      <td id="T_42119_row6_col3" class="data row6 col3" >0.800811</td>
-      <td id="T_42119_row6_col4" class="data row6 col4" >0.978897</td>
-      <td id="T_42119_row6_col5" class="data row6 col5" >0.707650</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row7" class="row_heading level0 row7" >Ren Hunter</th>
-      <td id="T_42119_row7_col0" class="data row7 col0" >0.527101</td>
-      <td id="T_42119_row7_col1" class="data row7 col1" >0.699182</td>
-      <td id="T_42119_row7_col2" class="data row7 col2" >0.182550</td>
-      <td id="T_42119_row7_col3" class="data row7 col3" >0.267675</td>
-      <td id="T_42119_row7_col4" class="data row7 col4" >0.241345</td>
-      <td id="T_42119_row7_col5" class="data row7 col5" >0.840156</td>
-    </tr>
-    <tr>
-      <th id="T_42119_level0_row8" class="row_heading level0 row8" >Lotus Mango</th>
-      <td id="T_42119_row8_col0" class="data row8 col0" >0.833748</td>
-      <td id="T_42119_row8_col1" class="data row8 col1" >0.603281</td>
-      <td id="T_42119_row8_col2" class="data row8 col2" >1.241216</td>
-      <td id="T_42119_row8_col3" class="data row8 col3" >1.418844</td>
-      <td id="T_42119_row8_col4" class="data row8 col4" >1.151521</td>
-      <td id="T_42119_row8_col5" class="data row8 col5" >1.001602</td>
-    </tr>
-  </tbody>
-</table>
 
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -18309,324 +16415,32 @@ the Team ID, found in the URL of a team page on the blaseball website.</p>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>0</th>
+      <th>Unthwackability</th>
+      <th>Ruthlessness</th>
+      <th>Overpowerment</th>
+      <th>Shakespearianism</th>
+      <th>Coldness</th>
+      <th>Suppression</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>old_baserunning_stars</th>
-      <td>3.529782</td>
+      <th>Betsy Trombone</th>
+      <td>0.418548</td>
+      <td>0.725370</td>
+      <td>0.473664</td>
+      <td>0.474900</td>
+      <td>0.872849</td>
+      <td>0.021753</td>
     </tr>
     <tr>
-      <th>new_baserunning_stars</th>
-      <td>3.957378</td>
-    </tr>
-    <tr>
-      <th>change_in_baserunning_stars</th>
-      <td>0.427596</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Lastly, there's a few stragglers that modify and compare players specifically. Not all of these are very useful, but they are at least interesting!</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[99]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**Minimize Jaxon**&quot;</span><span class="p">))</span>
-<span class="n">bad_jaxon</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">jaxon</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;lineup&#39;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_batting_stlats</span><span class="p">([</span><span class="n">jaxon</span><span class="p">,</span> <span class="n">bad_jaxon</span><span class="p">]))</span>
-<span class="c1"># See also: maximize(), clone()</span>
-
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**Show players similar to Jaxon**&quot;</span><span class="p">))</span>
-<span class="c1"># This function compares relative attribute proportions rather than raw stars. These players will play similarly, though may not perform as well.</span>
-<span class="n">display</span><span class="p">(</span><span class="n">get_batting_stlats</span><span class="p">([</span><span class="n">jaxon</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">get_similar_player</span><span class="p">(</span><span class="n">jaxon</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output " data-mime-type="text/markdown">
-<p><strong>Minimize Jaxon</strong></p>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Batting Rating</th>
-      <th>Thwackability</th>
-      <th>Divinity</th>
-      <th>Musclitude</th>
-      <th>Moxie</th>
-      <th>Patheticism</th>
-      <th>Martyrdom</th>
-      <th>Tragicness</th>
-      <th>Buoyancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Jaxon Buckley</th>
-      <td>1.479213</td>
-      <td>1.782206</td>
-      <td>1.217104</td>
-      <td>1.907337</td>
-      <td>2.135263</td>
-      <td>0.001</td>
-      <td>2.141931</td>
-      <td>0.001</td>
-      <td>1.589857</td>
-    </tr>
-    <tr>
-      <th>Jaxon Buckley</th>
-      <td>0.025365</td>
-      <td>0.012206</td>
-      <td>0.010000</td>
-      <td>0.137337</td>
-      <td>0.365263</td>
-      <td>0.990</td>
-      <td>0.371931</td>
-      <td>0.990</td>
-      <td>0.010000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output " data-mime-type="text/markdown">
-<p><strong>Show players similar to Jaxon</strong></p>
-
-</div>
-
-</div>
-
-<div class="jp-OutputArea-child">
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Batting Rating</th>
-      <th>Thwackability</th>
-      <th>Divinity</th>
-      <th>Musclitude</th>
-      <th>Moxie</th>
-      <th>Patheticism</th>
-      <th>Martyrdom</th>
-      <th>Tragicness</th>
-      <th>Buoyancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Jaxon Buckley</th>
-      <td>1.479213</td>
-      <td>1.782206</td>
-      <td>1.217104</td>
-      <td>1.907337</td>
-      <td>2.135263</td>
-      <td>0.001000</td>
-      <td>2.141931</td>
-      <td>0.001000</td>
-      <td>1.589857</td>
-    </tr>
-    <tr>
-      <th>Scratch Deleuze</th>
-      <td>1.198361</td>
-      <td>1.446906</td>
-      <td>0.919169</td>
-      <td>1.549890</td>
-      <td>1.665905</td>
-      <td>0.001000</td>
-      <td>1.654790</td>
-      <td>0.001000</td>
-      <td>1.854528</td>
-    </tr>
-    <tr>
-      <th>Valentine Games</th>
-      <td>1.322240</td>
-      <td>1.237714</td>
-      <td>1.407875</td>
-      <td>1.829484</td>
-      <td>1.477367</td>
-      <td>0.001000</td>
-      <td>1.685680</td>
-      <td>0.001000</td>
-      <td>1.274472</td>
-    </tr>
-    <tr>
-      <th>------ --------</th>
-      <td>1.280706</td>
-      <td>1.179192</td>
-      <td>1.382201</td>
-      <td>1.743925</td>
-      <td>1.497285</td>
-      <td>0.001000</td>
-      <td>1.252948</td>
-      <td>0.001000</td>
-      <td>1.439472</td>
-    </tr>
-    <tr>
-      <th>--- ---------</th>
-      <td>1.033838</td>
-      <td>1.105076</td>
-      <td>0.815848</td>
-      <td>1.647144</td>
-      <td>1.350278</td>
-      <td>0.001000</td>
-      <td>1.620216</td>
-      <td>0.001000</td>
-      <td>0.983014</td>
-    </tr>
-    <tr>
-      <th>------- -----</th>
-      <td>1.068078</td>
-      <td>1.127427</td>
-      <td>0.901498</td>
-      <td>1.198225</td>
-      <td>1.997697</td>
-      <td>0.180210</td>
-      <td>1.262321</td>
-      <td>0.001000</td>
-      <td>1.576535</td>
-    </tr>
-    <tr>
-      <th>Goodwin Morin</th>
-      <td>1.116151</td>
-      <td>1.011205</td>
-      <td>1.054999</td>
-      <td>1.804185</td>
-      <td>1.724130</td>
-      <td>0.001000</td>
-      <td>1.146978</td>
-      <td>0.054253</td>
-      <td>1.040647</td>
-    </tr>
-    <tr>
-      <th>---- --------</th>
-      <td>1.932613</td>
-      <td>1.537011</td>
-      <td>0.959793</td>
-      <td>1.518096</td>
-      <td>0.741240</td>
-      <td>0.001000</td>
-      <td>1.704810</td>
-      <td>0.024832</td>
-      <td>1.335838</td>
-    </tr>
-    <tr>
-      <th>Joshua Watson</th>
-      <td>0.973482</td>
-      <td>1.067534</td>
-      <td>0.722373</td>
-      <td>1.437101</td>
-      <td>1.592859</td>
-      <td>0.001000</td>
-      <td>1.106470</td>
-      <td>0.001000</td>
-      <td>1.202896</td>
-    </tr>
-    <tr>
-      <th>---------- -----</th>
-      <td>0.942259</td>
-      <td>1.171344</td>
-      <td>0.671919</td>
-      <td>0.932026</td>
-      <td>1.479399</td>
-      <td>0.123232</td>
-      <td>1.407098</td>
-      <td>0.001000</td>
-      <td>1.350419</td>
-    </tr>
-    <tr>
-      <th>Brock Watson</th>
-      <td>1.247603</td>
-      <td>0.902515</td>
-      <td>1.695426</td>
-      <td>1.554135</td>
-      <td>1.603349</td>
-      <td>0.001000</td>
-      <td>1.217180</td>
-      <td>0.001000</td>
-      <td>1.514212</td>
+      <th>Betsy Trombone</th>
+      <td>0.088462</td>
+      <td>0.920057</td>
+      <td>0.591330</td>
+      <td>0.317521</td>
+      <td>0.629130</td>
+      <td>0.704190</td>
     </tr>
   </tbody>
 </table>
