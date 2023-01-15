@@ -119,6 +119,12 @@ HTML_end = """</div>
 </body>
 </html>"""
 
+# Generate redirect to Election Results Google Sheet
+with open(os.path.join(build_dir, 'election_results.html'), 'w', encoding='utf8') as fp:
+    fp.write("<head><meta http-equiv=\"refresh\" content=\"0;url=https://docs.google.com/spreadsheets/d/1qWaFoVoVm5CrJJn34DPkIc0R2N785wdGKlWeNhTYvNk\"></head><body>Redirecting</body>")
+output_files.append((Path("election_results.html"), "Election Vote Totals"))
+print("Wrote election_results.html")
+
 links = f"<a href={github_pages_url_base}/archives>Archives</a></br>\n"
 for file, title in output_files:
     file = github_pages_url_base + file.as_posix()
