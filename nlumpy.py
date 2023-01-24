@@ -11,19 +11,28 @@ VIBES_ATTRIBUTES = ("thrive", "survive", "drama")
 
 def parse_player(x):
     data = {"player_name": x["name"], "team_id": x["team"]["id"], "team_name": x["team"]["name"]}
-    for pos in x["rosterSlots"]:
-        data[f"position"] = pos["location"]
-        data[f"position_index"] = pos["orderIndex"]
-    data["batting_rating"] = mean([x["value"] for x in x["attributes"] if x["name"].lower() in BATTING_ATTRIBUTES])
-    data["pitching_rating"] = mean([x["value"] for x in x["attributes"] if x["name"].lower() in PITCHING_ATTRIBUTES])
-    data["defense_rating"] = mean([x["value"] for x in x["attributes"] if x["name"].lower() in DEFENSE_ATTRIBUTES])
-    data["running_rating"] = mean([x["value"] for x in x["attributes"] if x["name"].lower() in RUNNING_ATTRIBUTES])
-    data["vibes_rating"] = mean([x["value"] for x in x["attributes"] if x["name"].lower() in VIBES_ATTRIBUTES])
-    data["overall_rating"] = mean([data["batting_rating"], data["pitching_rating"], data["running_rating"], data["defense_rating"], data["vibes_rating"]])
+    data["overall"] = x["overallRating"]
+    # The way these work is they just append updates, so just go through the list and overwrite them as we find them
     for stat in x["categoryRatings"]:
         data[stat["name"].lower()] = stat["stars"]
     for stat in x["attributes"]:
         data[stat["name"].lower()] = stat["value"]
+    for pos in x["rosterSlots"]:
+        data["position"] = pos["location"]
+        data["position_index"] = pos["orderIndex"]
+        data["is_active"] = pos["active"]
+    for pos in x["positions"]:
+        data["location_x"] = pos["x"]
+        data["location_y"] = pos["y"]
+        data["location_name"] = pos["positionName"]
+    # Compute ratings manually
+    data["batting_rating"] = mean([x for k, x in data.items() if k in BATTING_ATTRIBUTES])
+    data["pitching_rating"] = mean([x for k, x in data.items() if k in PITCHING_ATTRIBUTES])
+    data["defense_rating"] = mean([x for k, x in data.items() if k in DEFENSE_ATTRIBUTES])
+    data["running_rating"] = mean([x for k, x in data.items() if k in RUNNING_ATTRIBUTES])
+    data["vibes_rating"] = mean([x for k, x in data.items() if k in VIBES_ATTRIBUTES])
+    data["overall_rating"] = mean([data["batting_rating"], data["pitching_rating"], data["running_rating"], data["defense_rating"], data["vibes_rating"]])
+
     return data
 
 
