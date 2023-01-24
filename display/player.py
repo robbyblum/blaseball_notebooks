@@ -48,35 +48,45 @@ def get_stars(table):
     x = table[['player_name', 'overall_rating', 'batting_rating', 'pitching_rating', 'running_rating',
                'defense_rating', 'vibes_rating']].set_index("player_name")
     x[['overall_rating', 'batting_rating', 'pitching_rating', 'running_rating', 'defense_rating', 'vibes_rating']] *= 5
-    return x
+    return x.rename({'overall_rating': "Overall", 'batting_rating': "Batting", 'pitching_rating': "Pitching",
+                     'running_rating': "Running", 'defense_rating': "Defense", 'vibes_rating': "Vibes",
+                     'player_name': "Name"}, axis=1)
 
 
 def get_batting_stlats(table, include_shadows=False):
     pos = ['LINEUP', ]
     if include_shadows:
         pos.append("SHADOWS")
-    return table[table['position'].isin(pos)].sort_values(by=['position_index'])[['player_name', 'batting_rating'] + BATTING_ATTRIBUTES].set_index("player_name")
+    table = table[table['position'].isin(pos)].sort_values(by=['position_index'])
+    table = table[['player_name', 'batting_rating'] + BATTING_ATTRIBUTES].set_index("player_name")
+    return table.rename({"player_name": "Name", "batting_rating": "Batting Rating"}, axis=1)
 
 
 def get_pitching_stlats(table, include_shadows=False):
     pos = ['ROTATION', ]
     if include_shadows:
         pos.append("SHADOWS")
-    return table[table['position'].isin(pos)].sort_values(by=['position_index'])[['player_name', 'pitching_rating'] + PITCHING_ATTRIBUTES].set_index("player_name")
+    table = table[table['position'].isin(pos)].sort_values(by=['position_index'])
+    table = table[['player_name', 'pitching_rating'] + PITCHING_ATTRIBUTES].set_index("player_name")
+    return table.rename({"player_name": "Name", "pitching_rating": "Pitching Rating"}, axis=1)
 
 
 def get_running_stlats(table, include_shadows=False):
     pos = ['LINEUP', ]
     if include_shadows:
         pos.append("SHADOWS")
-    return table[table['position'].isin(pos)].sort_values(by=['position_index'])[['player_name', 'running_rating'] + RUNNING_ATTRIBUTES].set_index("player_name")
+    table = table[table['position'].isin(pos)].sort_values(by=['position_index'])
+    table = table[['player_name', 'running_rating'] + RUNNING_ATTRIBUTES].set_index("player_name")
+    return table.rename({"player_name": "Name", "running_rating": "Running Rating"}, axis=1)
 
 
 def get_defense_stlats(table, include_shadows=False):
     pos = ['LINEUP', ]
     if include_shadows:
         pos.append("SHADOWS")
-    return table[table['position'].isin(pos)].sort_values(by=['position_index'])[['player_name', 'defense_rating'] + DEFENSE_ATTRIBUTES].set_index("player_name")
+    table = table[table['position'].isin(pos)].sort_values(by=['position_index'])
+    table = table[['player_name', 'defense_rating'] + DEFENSE_ATTRIBUTES].set_index("player_name")
+    return table.rename({"player_name": "Name", "defense_rating": "Defense Rating"}, axis=1)
 
 
 def plot_field_positions(table):
