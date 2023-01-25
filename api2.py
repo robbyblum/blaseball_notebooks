@@ -1,6 +1,6 @@
 import requests_cache
 
-MIRROR_URL = "https://api2.sibr.dev/mirror"
+CHRON_URL = "https://api2.sibr.dev/chronicler/v0"
 API_URL = "https://api2.blaseball.com"
 
 _SESSIONS_BY_EXPIRY = {}
@@ -24,7 +24,7 @@ def get_sim():
 
 
 def get_all_teams():
-    return _api_get(f"{MIRROR_URL}/teams", expiry=360)
+    return [x["data"] for x in _api_get(f"{CHRON_URL}/entities?kind=team", expiry=120)["items"]]
 
 
 def get_team(team_id):
@@ -35,7 +35,7 @@ def get_team(team_id):
 
 
 def get_all_players():
-    return _api_get(f"{MIRROR_URL}/players", expiry=360)
+    return [x["data"] for x in _api_get(f"{CHRON_URL}/entities?kind=player", expiry=120)["items"]]
 
 
 def get_player(player_id):
